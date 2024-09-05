@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/maincss.css">
+{% endblock %}
+
+{% block body %}
+{{ recipename }}
+<h5 class="title">Ingredients:</h5>
+<p class="text">{{ ingredients }}</p>
+
+    {% for i in item %}
+    <li>
+        {{ i }}
+    </li>
+{% endfor %}
+
+{% endblock %}

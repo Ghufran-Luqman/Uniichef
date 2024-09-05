@@ -1,0 +1,32 @@
+.container {
+    border: 2px solid black;
+    width: 740px;
+    height: 400px;
+    overflow-y: scroll;
+    padding: 7px;
+    font-family: Arial;
+    margin-top: 15px;
+}
+
+.container2 {
+    border: 2px solid rgba(71, 180, 61, 0.596);
+    overflow-y: scroll;
+    box-sizing: border-box;
+    height: 70px;
+    font-family: Arial;
+}
+
+.recipebutton {
+    height: 70px;
+    width: 735px;
+    background-color: transparent;
+    border: 0px;
+}
+
+.title {
+    font-size: 12px;
+}
+
+.text {
+    font-size: 10px;
+}
