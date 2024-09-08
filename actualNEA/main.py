@@ -60,10 +60,12 @@ def item(recipename):
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
     ingredients = c.fetchall()
+
+    ingredientlist = []
     for item in ingredients:
         item = item[0]
-        item = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=item)
+        ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 
 if __name__ == "__main__":
