@@ -72,14 +72,17 @@ c.execute("DELETE FROM tableofrecipes2 WHERE cook_time IS NULL")
 c.execute("DELETE FROM tableofrecipes2 WHERE total_time IS NULL")
 conn.commit()
 '''
-name = "Cherry Chicken"
-string = "3 tablespoons vegetable oil, 1 (4 pound) whole chicken, cut into 8 pieces, salt and pepper to taste, ½ cup all-purpose flour for dusting, 1 (15 ounce) can pitted dark cherries packed in water, ½ cup white sugar, 1 tablespoon cornstarch, 1 orange - with peel, quartered and thinly sliced, ½ cup slivered almonds, toasted"
+
+name = "Ma'amoul (Lebanese Date Cookies)"
+string = "2 cups semolina flour, 1 cup all-purpose flour, ½ teaspoon ground mahlab, ½ teaspoon salt, 1 cup clarified butter at room temperature, 5 tablespoons milk, 2 tablespoons white sugar, 1 teaspoon active dry yeast, 4 tablespoons orange blossom water or more as needed, 10 tablespoons date paste (such as Ziyad®), cut into small pieces, 2 tablespoons powdered sugar or to taste"
 c.execute("""UPDATE tableofrecipes2
             SET
-            ingredients = REPLACE(?, ?, "3 tablespoons vegetable oil, 1 (4 pound) whole chicken cut into 8 pieces, salt and pepper to taste, ½ cup all-purpose flour for dusting, 1 (15 ounce) can pitted dark cherries packed in water, ½ cup white sugar, 1 tablespoon cornstarch, 1 orange - with peel - quartered and thinly sliced, ½ cup slivered almonds - toasted")
+            ingredients = REPLACE(?, ?, "2 cups semolina flour, 1 cup all-purpose flour, ½ teaspoon ground mahlab, ½ teaspoon salt, 1 cup clarified butter at room temperature, 5 tablespoons milk, 2 tablespoons white sugar, 1 teaspoon active dry yeast, 4 tablespoons orange blossom water or more as needed, 10 tablespoons date paste (such as Ziyad®) cut into small pieces, 2 tablespoons powdered sugar or to taste")
             WHERE recipe_name=?""", (string, string, name,))
 conn.commit()
 
+#c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name='Cream Cheese Banana Bread'")
+#conn.commit()
 
 #c.execute("SELECT COUNT(*) FROM tableofrecipes2")
 #t = c.fetchall()

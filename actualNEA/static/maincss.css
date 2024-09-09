@@ -1,7 +1,7 @@
 .container {
     border: 2px solid black;
-    width: 740px;
-    height: 400px;
+    width: 1500px;
+    height: 850px;
     overflow-y: scroll;
     padding: 7px;
     font-family: Arial;
@@ -29,4 +29,23 @@
 
 .text {
     font-size: 10px;
+}
+
+.roundbutton {
+    width: 10px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    line-height: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.roundbutton:hover {
+    background-color: #45aa39;
+}
+
+.roundbutton:active {
+    background-color:#45ff39;
 }
