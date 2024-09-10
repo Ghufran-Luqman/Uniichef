@@ -6,11 +6,13 @@
 
 {% block body %}
 {{ recipename }}
-<h5 class="title">Ingredients:</h5>
+<h5 class="title" class="biggertext">Ingredients:</h5>
+<ul>
     {% for i in item %}
     <li>
-        {{ i }} <div><button class="roundbutton">+</button></div>
+        <span class="ingredients">{{ i }}</span><button class="roundbutton"><span class="biggertext">+</span></button>
     </li>
+</ul>
 {% endfor %}
 
 {% endblock %}
