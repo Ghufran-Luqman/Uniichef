@@ -70,8 +70,8 @@ def item(recipename):
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 @app.route('/test', methods=['GET', 'POST'])
-def test(name):
-    return render_template('test.html', name=name)
+def test():
+    return render_template('test.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
