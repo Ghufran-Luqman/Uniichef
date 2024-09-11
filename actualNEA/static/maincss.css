@@ -25,23 +25,18 @@
     border: 0px;
 }
 
-.title {
-    font-size: 12px;
-}
-
-.text {
-    font-size: 10px;
-}
 
 .roundbutton {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    border: none;
+    border-color: #999999;
+    border-style: solid;
     line-height: 10px;
     justify-content: center;
     align-items: center;
-    display: flex;
+    display: inline-flex;
+    background-color: #252525;
 }
 
 .roundbutton:hover {
@@ -59,12 +54,33 @@
     align-items: center;
     display: flex;
 }
+
+
+.button {
+    color: #32c88c;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+    display: inline;
+}
+
 .ingredients {
     color: #32c88c;
     font-size: 25px;
+    display: inline;
 }
 
 li::marker {
     color: green;
     font-size: 25px;
+}
+
+.left {
+    display: inline;
+}
+
+.title {
+    color: #32c88c;
+    font-size: 50px;
+    font-family: arial;
 }

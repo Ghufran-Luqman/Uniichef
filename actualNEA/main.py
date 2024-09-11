@@ -54,7 +54,7 @@ def index():
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
 
-@app.route('/<recipename>')
+@app.route('/<recipename>', methods=['GET', 'POST'])
 def item(recipename):
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
@@ -65,6 +65,9 @@ def item(recipename):
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+
+    if request.method == "POST":
+        ...
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 
