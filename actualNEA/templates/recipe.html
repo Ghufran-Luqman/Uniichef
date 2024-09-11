@@ -7,13 +7,12 @@
 {% block body %}
 <p class="title">{{ recipename }}:</p>
 <p class="ingredients">Ingredients:</p>
-<form method="POST">
+<form method="POST" action="/test">
     {% for i in item %}
-    <div class="left">
     <li style="text-align:left">
-        <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span><a href="/test"><button class="roundbutton" name="roundbutton" id="roundbutton"><span class="button">+</span></button></a>
+        <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span>
+        <button class="roundbutton" name="roundbutton" value="{{ i }}"><span class="ingredients">+</span></button>
     </li>
-    </div>
 {% endfor %}
 </form>
 {% endblock %}

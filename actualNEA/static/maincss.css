@@ -64,18 +64,12 @@ li {
 }
 
 
-.button {
-    color: #32c88c;
-    font-size: 25px;
-    justify-content: center;
-    align-items: center;
-    display: inline;
-}
-
 .ingredients {
     color: #32c88c;
     font-size: 25px;
     display: inline;
+    justify-content: center;
+    align-items: center;
 }
 
 li::marker {
@@ -83,9 +77,6 @@ li::marker {
     font-size: 25px;
 }
 
-.left {
-    display: inline;
-}
 
 .title {
     color: #32c88c;
