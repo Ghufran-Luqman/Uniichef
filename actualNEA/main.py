@@ -50,7 +50,6 @@ def index():
     if request.method == "POST":
         recipename = request.form.get('recipebutton')
         return render_template("recipe.html", recipename=recipename)
-
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
 
@@ -67,9 +66,13 @@ def item(recipename):
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
 
     if request.method == "POST":
-        ...
+        ingredient = request.form.get('roundbutton')
+        return render_template("test.html", ingredient=ingredient)
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
+@app.route('/test')
+def test(ingredient):
+    return render_template('test.html', ingredient=ingredient)
 
 if __name__ == "__main__":
     app.run(debug=True)
