@@ -61,7 +61,6 @@ def item(recipename):
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
-    
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 @app.route('/test', methods=['GET', 'POST'])
