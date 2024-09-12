@@ -66,6 +66,15 @@ def item(recipename):
 @app.route('/test', methods=['GET', 'POST'])
 def test():
     ingredient = request.form.get('roundbutton')
+    conn = sqlite3.connect('recipes.db')
+    c = conn.cursor()
+    c.execute("""INSERT INTO listofingredients (ingredient, status)
+              VALUES (?, ?)""", (ingredient, "False"))
+    conn.commit()
+    c.execute("SELECT * FROM listofingredients")
+    temp = c.fetchall()
+    print(temp)
+    conn.close()
     return render_template('test.html', ingredient=ingredient)
 
 if __name__ == "__main__":

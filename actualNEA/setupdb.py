@@ -72,7 +72,7 @@ c.execute("DELETE FROM tableofrecipes2 WHERE cook_time IS NULL")
 c.execute("DELETE FROM tableofrecipes2 WHERE total_time IS NULL")
 conn.commit()
 '''
-
+'''
 name = "Ma'amoul (Lebanese Date Cookies)"
 string = "2 cups semolina flour, 1 cup all-purpose flour, ½ teaspoon ground mahlab, ½ teaspoon salt, 1 cup clarified butter at room temperature, 5 tablespoons milk, 2 tablespoons white sugar, 1 teaspoon active dry yeast, 4 tablespoons orange blossom water or more as needed, 10 tablespoons date paste (such as Ziyad®), cut into small pieces, 2 tablespoons powdered sugar or to taste"
 c.execute("""UPDATE tableofrecipes2
@@ -80,7 +80,7 @@ c.execute("""UPDATE tableofrecipes2
             ingredients = REPLACE(?, ?, "2 cups semolina flour, 1 cup all-purpose flour, ½ teaspoon ground mahlab, ½ teaspoon salt, 1 cup clarified butter at room temperature, 5 tablespoons milk, 2 tablespoons white sugar, 1 teaspoon active dry yeast, 4 tablespoons orange blossom water or more as needed, 10 tablespoons date paste (such as Ziyad®) cut into small pieces, 2 tablespoons powdered sugar or to taste")
             WHERE recipe_name=?""", (string, string, name,))
 conn.commit()
-
+'''
 #c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name='Cream Cheese Banana Bread'")
 #conn.commit()
 
@@ -89,6 +89,16 @@ conn.commit()
 #print(t)
 #GET RID OF ROWS WITHOUT PREP TIME, COOK TIME AND TOTAL TIME.
 #CHECK FOR EVERY ONE OF THEM IF THE INGREDIENTS ARE OK WITH THE WEIRD COMMAS
+
+'''
+c.execute("""CREATE TABLE listofingredients (
+          ingredient text,
+          status boolean
+          )""")
+'''
+
+c.execute("SELECT * FROM listofingredients")
+print(c.fetchall())
 
 conn.commit()
 conn.close()
