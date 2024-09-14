@@ -63,7 +63,6 @@ li {
     display: flex;
 }
 
-
 .ingredients {
     color: #32c88c;
     font-size: 25px;
@@ -74,11 +73,15 @@ li {
 
 .checkmark {
     color: #32c88c;
-    font-size: 25px;
-    display: inline;
+    font-size: 17px;
+    display: inline-flex;
     line-height: 25px;
     justify-content: center;
     align-items: center;
+}
+
+.ingredients, .roundbutton, .checkmark {
+    vertical-align: middle;
 }
 
 li::marker {

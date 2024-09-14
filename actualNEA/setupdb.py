@@ -92,13 +92,16 @@ conn.commit()
 
 '''
 c.execute("""CREATE TABLE listofingredients (
+          user text,
           ingredient text,
           status boolean
           )""")
 '''
 
-c.execute("SELECT * FROM listofingredients")
-print(c.fetchall())
+#c.execute("DROP TABLE listofingredients")
+
+#c.execute("SELECT * FROM listofingredients")
+#print(c.fetchall())
 
 conn.commit()
 conn.close()

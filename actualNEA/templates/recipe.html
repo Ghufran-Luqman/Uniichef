@@ -7,7 +7,7 @@
 {% block body %}
 <p class="title">{{ recipename }}:</p>
 <p class="ingredients">Ingredients:</p>
-<form method="POST" action="/test">
+<form method="POST" action="/test" target="hiddeniframe">
     {% for i in item %}
     <li style="text-align:left">
         <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span>
@@ -15,5 +15,9 @@
         <button class="roundbutton" name="checkmark" value="{{ i }}"><span class="checkmark">✓</span></button>
     </li>
 {% endfor %}
+</form>
+<iframe name="hiddeniframe" style="display:none"></iframe>
+<form action="/test">
+    <button>See List</button>
 </form>
 {% endblock %}

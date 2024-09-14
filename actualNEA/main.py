@@ -61,21 +61,39 @@ def item(recipename):
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    conn.close()
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    ingredient = request.form.get('roundbutton')
+    wantingredient = request.form.get('roundbutton')
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
-    c.execute("""INSERT INTO listofingredients (ingredient, status)
-              VALUES (?, ?)""", (ingredient, "False"))
-    conn.commit()
+    if wantingredient:
+        c.execute("""INSERT INTO listofingredients (user, ingredient, status)
+                VALUES (?, ?, ?)""", ('default', wantingredient, "False"))
+        conn.commit()
+    haveingredient = request.form.get('checkmark')
+    if haveingredient:
+        c.execute("""INSERT INTO listofingredients (user, ingredient, status)
+                VALUES (?, ?, ?)""", ("default", haveingredient, "True",))
+        conn.commit()
     c.execute("SELECT * FROM listofingredients")
-    temp = c.fetchall()
-    print(temp)
+    listt = c.fetchall()
+    print(listt)
+    list2 = []
+    for item in listt:
+        item1 = f"{item[0]}, {item[1]}, {item[2]}"
+        list2.append(item1)
+        print(list2)
+    print(f"list2: {list2}")
+    if request.method == "POST":
+        t = "default"
+        c.execute("DELETE * FROM listofingredients WHERE user=?", (t,))
+        conn.commit()
+
     conn.close()
-    return render_template('test.html', ingredient=ingredient)
+    return render_template('test.html', wantingredient=wantingredient, haveingredient=haveingredient, list=list2)
 
 if __name__ == "__main__":
     app.run(debug=True)
