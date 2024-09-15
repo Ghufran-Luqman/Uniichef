@@ -88,8 +88,9 @@ def test():
         print(list2)
     print(f"list2: {list2}")
     if request.method == "POST":
+        print(f"deleting...")
         t = "default"
-        c.execute("DELETE * FROM listofingredients WHERE user=?", (t,))
+        c.execute("DELETE FROM listofingredients WHERE user=?", (t,))
         conn.commit()
 
     conn.close()
