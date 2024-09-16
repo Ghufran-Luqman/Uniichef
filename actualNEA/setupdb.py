@@ -1,7 +1,7 @@
 import sqlite3
 
-conn = sqlite3.connect("recipes.db")
-c = conn.cursor()
+#conn = sqlite3.connect("recipes.db")
+#c = conn.cursor()
 
 '''
 c.execute("""CREATE TABLE tableofrecipes (
@@ -102,6 +102,18 @@ c.execute("""CREATE TABLE listofingredients (
 
 #c.execute("SELECT * FROM listofingredients")
 #print(c.fetchall())
+
+conn = sqlite3.connect('userdata.db')
+c = conn.cursor()
+
+'''
+c.execute("""CREATE TABLE ingredientdata (
+          ingredientlist text,
+          status boolean
+          )""")
+'''
+c.execute("SELECT * FROM ingredientdata")
+print(c.fetchall())
 
 conn.commit()
 conn.close()

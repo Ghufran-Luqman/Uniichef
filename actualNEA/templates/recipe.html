@@ -6,12 +6,13 @@
 
 {% block body %}
 <p class="title">{{ recipename }}:</p>
-<p class="ingredients">Ingredients:</p>
+<form>
+<p class="ingredients">Ingredients:</p> <button class="roundbutton" name="roundbutton" value="button"><span class="ingredients">+</span></button>
+</form>
 <form method="POST" action="">
     {% for i in item %}
     <li style="text-align:left">
         <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span>
-        <button class="roundbutton" name="roundbutton" value="{{ i }}"><span class="ingredients">+</span></button>
         <button class="roundbutton" name="checkmark" value="{{ i }}"><span class="checkmark">✓</span></button>
     </li>
 {% endfor %}

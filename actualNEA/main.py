@@ -63,15 +63,8 @@ def item(recipename):
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
 
     if request.method == "POST":
-        wantingredient = request.form.get('roundbutton')
         haveingredient = request.form.get('checkmark')
-        print(f"wantingredient:{wantingredient}")
         print(f"haveingredient:{haveingredient}")
-        if wantingredient:
-            print(f"inserting wantingredient")
-            c.execute("""INSERT INTO listofingredients (user, ingredient, status)
-                      VALUES (?, ?, ?)""", ("default", wantingredient, "False",))
-            conn.commit()
         if haveingredient:
             print(f"inserting haveingredient")
             c.execute("""INSERT INTO listofingredients (user, ingredient, status)
@@ -86,6 +79,27 @@ def item(recipename):
             list2.append(item1)
         print(f"list2: {list2}")
     conn.close()
+    addlist = request.args.get("roundbutton")
+    if addlist == 'button':
+        conn = sqlite3.connect('recipes.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM listofingredients")
+        listt = c.fetchall()
+        list2 = []
+        for item in listt:
+            item1 = f"{item[0]}, {item[1]}, {item[2]}"
+            list2.append(item1)
+        print(f"list2: {list2}")
+        conn.close()
+
+        conn = sqlite3.connect('userdata.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO ingredientdata (ingredientlist, status) VALUES (?, ?)", (str(list2), "False"))
+        conn.commit()
+        c.execute("SELECT * FROM ingredientdata")
+        print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
+        conn.close()
+        return redirect(url_for('item', recipename=recipename))
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
 @app.route('/test', methods=['GET', 'POST'])
