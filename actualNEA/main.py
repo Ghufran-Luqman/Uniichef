@@ -89,14 +89,13 @@ def item(recipename):
         for item in listt:
             item1 = f"{item[0]}, {item[1]}, {item[2]}"
             list2.append(item1)
-        print(f"list2: {list2}")
-        conn.close()
+        #print(f"list2: {list2}")
 
-        conn = sqlite3.connect('userdata.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO ingredientdata (ingredientlist, status) VALUES (?, ?)", (str(list2), "False"))
+
+        for item in ingredientlist:
+            c.execute("INSERT INTO listofingredients (user, ingredient, status) VALUES (?, ?, ?)", ('default', item, 'False'))
         conn.commit()
-        c.execute("SELECT * FROM ingredientdata")
+        c.execute("SELECT * FROM listofingredients")
         print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
         conn.close()
         return redirect(url_for('item', recipename=recipename))
@@ -112,14 +111,14 @@ def test():
         t = "default"
         c.execute("DELETE FROM listofingredients WHERE user=?", (t,))
         conn.commit()
-    c.execute("SELECT * FROM listofingredients")
+    c.execute("SELECT ingredient FROM listofingredients")
     listt = c.fetchall()
-    print(f"initial list:{listt}")
+    #print(f"initial list:{listt}")
     list2 = []
     for item in listt:
-        item1 = f"{item[0]}, {item[1]}, {item[2]}"
+        item1 = f"{item[0]}"
         list2.append(item1)
-    print(f"list2: {list2}")
+    #print(f"list2: {list2}")
     conn.close()
 
     return render_template('test.html', list=list2)
