@@ -6,10 +6,11 @@
 
 {% block body %}
 
-<form method="GET" action="/">
-    <input type="text" autocomplete="off" autofocus name="Query">
-    <input type="submit" value="Search">
+<form method="GET" action="/" spellcheck="false">
+    <input type="text" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
+    <input type="submit" value="Search" class="submit" hidden>
 </form>
+
 
 <form method="POST">
 <div class="container">
