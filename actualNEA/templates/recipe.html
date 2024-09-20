@@ -12,8 +12,7 @@
 <form method="POST" action="">
     {% for i in item %}
     <li style="text-align:left">
-        <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span>
-        <button class="roundbutton" name="checkmark" value="{{ i }}"><span class="checkmark">✓</span></button>
+        <span class="ingredients" id="ingredient" name="ingredient">{{ i }}</span>
     </li>
 {% endfor %}
 </form>

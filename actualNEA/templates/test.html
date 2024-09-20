@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
 {% block head %}
-
+<link rel="stylesheet" href="../static/maincss.css">
 {% endblock %}
 
-
+list item
 {% block body %}
 <h1 style="color: green;">TEST</h1>
-<p style="color: green;">
 
-    {% for item in list %}
-        <li>{{ item }}</li>
+    {% for i in list %}
+        <li style="text-align:left">
+            <span class="ingredients" id="ingredient" name="ingredient">{{ i }} </span><button class="invis"><button class="roundbutton" name="checkmark" value="{{ i }}"><span class="checkmark">✔</span></button></button>
+        </li>
     {% endfor %}
-</p>
-
+<br>
 <form method="POST">
     <button name="delete" id="delete">Delete List</button>
 </form>
