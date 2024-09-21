@@ -6,21 +6,22 @@
 
 {% block body %}
 
-<form method="GET" action="/">
-    <input type="text" autocomplete="off" autofocus name="Query">
-    <input type="submit" value="Search">
+
+<form method="GET" action="/" spellcheck="false">
+    <input type="text" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
+    <input type="submit" value="Search" class="submit" hidden>
 </form>
 
+<div class="temp">
 <form method="POST">
-<div class="container">
 {% for item in newrecipelist %}
     <div class="container2" style="overflow:hidden">
         <a href="/{{ item }}">
-            <button id="recipebutton" class="recipebutton" name="recipebutton" type="button">{{ item }}</button>
+            <button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p></button>
         </a>
     </div>
     <br>
 {% endfor %}
-</div>
 </form>
+</div>
 {% endblock %}

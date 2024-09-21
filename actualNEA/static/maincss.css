@@ -1,32 +1,157 @@
-.container {
-    border: 2px solid black;
-    width: 740px;
-    height: 400px;
-    overflow-y: scroll;
-    padding: 7px;
-    font-family: Arial;
-    margin-top: 15px;
+@font-face {
+    font-family: Mona-Sans;
+    src: url("Mona-Sans.ttf");
+}
+
+@font-face {
+    font-family: "Source-Serif-4";
+    src: url("SourceSerif4-VariableFont_opsz,wght.ttf") format("truetype");
+    font-weight: 1 1000; /* Specify the range of weights supported */
+}
+
+::selection {
+  background: #ECFFBC;
+}
+
+body {
+    padding-top: 5px
+}
+
+.temp {
+    margin-top: 65px;
 }
 
 .container2 {
-    border: 2px solid rgba(71, 180, 61, 0.596);
+    border: 2px solid #4ea64e; /*#67bf67*/
     overflow-y: scroll;
     box-sizing: border-box;
-    height: 70px;
-    font-family: Arial;
+    height: 125px;
+    font-family: "Source-Serif-4";
+    font-weight: 400;
+    background-color: black;
+    margin-left: 5px;
 }
 
 .recipebutton {
-    height: 70px;
-    width: 735px;
-    background-color: transparent;
+    height: 135px;
+    width: 2000px;
+    background-color: #dbcca9; /* #dbcca9 */
     border: 0px;
+    transition: transform 250ms;
+    z-index: 10;
 }
+
+
+.recipebutton:hover {
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 70%, rgba(0, 0, 0, 0.5) 100%);
+    transform: translateY(-2px);
+}
+
+.roundbutton {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-color: #317f2f;
+    border-style: solid;
+    line-height: 10px;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    background-color: transparent;
+}
+
+.roundbutton:hover {
+    background-color: #45aa39;
+}
+
+.roundbutton:active {
+    background-color: #45ff39;
+}
+
+ul {
+    text-align: left;
+}
+
+li {
+    text-align: left;
+}
+
+.biggertext {
+    color: #033201;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: Helvetica;
+    font-weight: 400;
+}
+
+.ingredients {
+    color: #317f2f;
+    font-size: 25px;
+    display: inline;
+    justify-content: center;
+    align-items: center;
+    font-family: "Source-Serif-4";
+}
+
+.invis {
+    background-color: transparent;
+    border-width: 0px;
+}
+
+.checkmark {
+    color: #317f2f;
+    font-size: 17px;
+    display: inline-flex;
+    line-height: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+.ingredients,
+.roundbutton,
+.checkmark {
+    vertical-align: middle;
+}
+
+li::marker {
+    color: green;
+    font-size: 25px;
+}
+
 
 .title {
-    font-size: 12px;
+    color: #0D220C;
+    font-size: 50px;
+    font-family: "Source-Serif-4";
 }
 
-.text {
-    font-size: 10px;
+.search {
+    border-style: solid;
+    font-family: Mona-Sans;
+    border-radius:9999999px;
+    border-color: transparent;
+    outline: none;
+    height: 40px;
+    text-align: center;
+    width: 215px;
+    margin-bottom: 90px;
+    margin-left: 75px;
+    position: fixed;
+    z-index: 90;
+    transition: 0.3s;
+    transition-delay: 25ms;
+}
+
+.search:hover {
+    border-color: #69c98e;
+}
+
+.search:focus {
+    border-color: #69c98e;
+}
+
+::placeholder {
+   text-align: center; 
 }

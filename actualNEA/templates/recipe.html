@@ -5,14 +5,18 @@
 {% endblock %}
 
 {% block body %}
-{{ recipename }}
-<h5 class="title">Ingredients:</h5>
-<p class="text">{{ ingredients }}</p>
-
+<p class="title">{{ recipename }}:</p>
+<form>
+<p class="ingredients">Ingredients:</p> <button class="roundbutton" name="roundbutton" value="button"><span class="ingredients">+</span></button>
+</form>
+<form method="POST" action="">
     {% for i in item %}
-    <li>
-        {{ i }}
+    <li style="text-align:left">
+        <span class="ingredients" id="ingredient" name="ingredient">{{ i }}</span>
     </li>
 {% endfor %}
-
+</form>
+<form action="/test">
+    <button>See List</button>
+</form>
 {% endblock %}
