@@ -56,12 +56,10 @@ def item(recipename):
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
     ingredients = c.fetchall()
-
     ingredientlist = []
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
-
     if request.method == "POST":
         haveingredient = request.form.get('checkmark')
         print(f"haveingredient:{haveingredient}")
@@ -120,6 +118,7 @@ def test():
         list2.append(item1)
     #print(f"list2: {list2}")
     conn.close()
+    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
 
     return render_template('test.html', list=list2)
 
