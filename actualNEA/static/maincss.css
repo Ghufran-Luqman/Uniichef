@@ -29,12 +29,20 @@ body {
     font-family: "Source-Serif-4";
     font-weight: 400;
     background-color: black;
-    margin-left: 5px;
+    margin-left: 500px;
+}
+
+.container2 a {
+    text-decoration: none;
+    color: #4ea64e
 }
 
 .recipebutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 135px;
-    width: 2000px;
+    width: 100%;
     background-color: #dbcca9; /* #dbcca9 */
     border: 0px;
     transition: transform 250ms;
@@ -80,11 +88,9 @@ li {
 .biggertext {
     color: #033201;
     font-size: 25px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
     font-family: Helvetica;
     font-weight: 400;
+    text-align: center;
 }
 
 .ingredients {
@@ -137,7 +143,7 @@ li::marker {
     text-align: center;
     width: 215px;
     margin-bottom: 90px;
-    margin-left: 75px;
+    margin-left: 500px;
     position: fixed;
     z-index: 90;
     transition: border-color 0.3s;
@@ -158,38 +164,6 @@ li::marker {
     transition: border-color 0.05s;
 }
 
-.menu {
-    width: 50px;
-    height: 50px;
-    border-radius: 20px;
-    align-items: center;   
-    border-color: #69c98e;
-    border-style: solid;
-    position: fixed;
-    z-index: 90;
-    border-color: transparent;
-    transition: border-color 0.3s;
-    transition-delay: 10ms;
-}
-
-.menu:hover {
-    border-color: #69c98e;
-}
-
-.menu:focus {
-    border-color: #69c98e;
-    transition: border-color 0.1s;
-}
-
-.menu:active {
-    border-color: transparent;
-    transition: border-color 0.1s;
-}
-
-.search, .menu {
-    vertical-align: middle;
-}
-
 ::placeholder {
    text-align: center; 
 }
@@ -201,38 +175,5 @@ li::marker {
     border-radius: 32px;
     position: absolute;
     top: 500px;
-    right: 10px
+    right: 20px;
 }
-
-/**/
-/** Sidebar styles **/
-aside {
-    width: 250px;
-    height: 100vh;
-    background: blueviolet;
-    position: fixed;
-    top: 0;
-    left: -250px; /* Start off-screen */
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    transition: left 0.3s ease; /* Smooth transition */
-}
-
-.aside-wrapper {
-    padding: 0 40px;
-    box-sizing: border-box;
-}
-
-.logo-text {
-    font-size: 32px;
-}
-
-/* Show sidebar when checkbox is checked */
-.invis:checked ~ aside {
-    left: 0; /* Move sidebar into view */
-}
-
-/* Other styles remain unchanged */
-/**/

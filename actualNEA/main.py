@@ -76,7 +76,6 @@ def item(recipename):
             item1 = f"{item[0]}, {item[1]}, {item[2]}"
             list2.append(item1)
         print(f"list2: {list2}")
-    conn.close()
     addlist = request.args.get("roundbutton")
     if addlist == 'button':
         conn = sqlite3.connect('recipes.db')
@@ -95,9 +94,14 @@ def item(recipename):
         conn.commit()
         c.execute("SELECT * FROM listofingredients")
         print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
-        conn.close()
         return redirect(url_for('item', recipename=recipename))
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
+    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
+    image = c.fetchall()
+    if image:
+        image = image[0]
+        image = image[0]
+
+    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

@@ -104,5 +104,13 @@ c.execute("""CREATE TABLE listofingredients (
 #print(c.fetchall())
 
 
+c.execute("SELECT img_src FROM tableofrecipes2")
+t = c.fetchmany(1)
+
+r = t[0]
+
+r[0]
+
+
 conn.commit()
 conn.close()

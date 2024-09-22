@@ -7,29 +7,14 @@
 {% block body %}
 
 <input type="checkbox" id="toggler" class="invis"/>
-
 <form method="GET" action="/" spellcheck="false">
-    <button class="menu" value="hello" name="menu" id="menu" type="submit" onclick="document.getElementById('toggler').click(); return false;">☰</button>
-    <input type="text" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
+    <input type="text" id="search" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
     <input type="submit" value="Search" class="submit" hidden>
 </form>
 
 
 
-<!---->
-
-<aside class="aside-wrapper">
-    <h1 class="logo-text">Menu</h1>
-    <ul>
-        <li>Home</li>
-        <li>Recipes</li>
-        <li>Contact</li>
-    </ul>
-</aside>
-
-<!---->
-
-<div class="temp">
+<div class="temp" id="recipes">
 <form method="POST">
 {% for item in newrecipelist %}
     <div class="container2" style="overflow:hidden">
