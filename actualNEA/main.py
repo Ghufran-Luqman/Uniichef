@@ -118,8 +118,6 @@ def test():
         list2.append(item1)
     #print(f"list2: {list2}")
     conn.close()
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist)
-
     return render_template('test.html', list=list2)
 
 if __name__ == "__main__":

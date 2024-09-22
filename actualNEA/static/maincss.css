@@ -47,6 +47,7 @@ body {
     transform: translateY(-2px);
 }
 
+
 .roundbutton {
     width: 20px;
     height: 20px;
@@ -96,8 +97,7 @@ li {
 }
 
 .invis {
-    background-color: transparent;
-    border-width: 0px;
+    display: none;
 }
 
 .checkmark {
@@ -140,8 +140,9 @@ li::marker {
     margin-left: 75px;
     position: fixed;
     z-index: 90;
-    transition: 0.3s;
-    transition-delay: 25ms;
+    transition: border-color 0.3s;
+    transition-delay: 35ms;
+    pointer-events: auto;
 }
 
 .search:hover {
@@ -152,6 +153,86 @@ li::marker {
     border-color: #69c98e;
 }
 
+.search:active {
+    border-color: transparent;
+    transition: border-color 0.05s;
+}
+
+.menu {
+    width: 50px;
+    height: 50px;
+    border-radius: 20px;
+    align-items: center;   
+    border-color: #69c98e;
+    border-style: solid;
+    position: fixed;
+    z-index: 90;
+    border-color: transparent;
+    transition: border-color 0.3s;
+    transition-delay: 10ms;
+}
+
+.menu:hover {
+    border-color: #69c98e;
+}
+
+.menu:focus {
+    border-color: #69c98e;
+    transition: border-color 0.1s;
+}
+
+.menu:active {
+    border-color: transparent;
+    transition: border-color 0.1s;
+}
+
+.search, .menu {
+    vertical-align: middle;
+}
+
 ::placeholder {
    text-align: center; 
 }
+
+.recipeimg {
+    height: auto;
+    max-width: 300px;
+    float: right;
+    border-radius: 32px;
+    position: absolute;
+    top: 500px;
+    right: 10px
+}
+
+/**/
+/** Sidebar styles **/
+aside {
+    width: 250px;
+    height: 100vh;
+    background: blueviolet;
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start off-screen */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    transition: left 0.3s ease; /* Smooth transition */
+}
+
+.aside-wrapper {
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.logo-text {
+    font-size: 32px;
+}
+
+/* Show sidebar when checkbox is checked */
+.invis:checked ~ aside {
+    left: 0; /* Move sidebar into view */
+}
+
+/* Other styles remain unchanged */
+/**/
