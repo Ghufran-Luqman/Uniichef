@@ -19,7 +19,16 @@ def loadnames():
         count += 1
     return recipenames
 
-
+def loadingr():
+    conn = sqlite3.connect('recipes.db')
+    c = conn.cursor()
+    c.execute("SELECT ingredients FROM tableofrecipes2")
+    ingredients = c.fetchall()
+    ingredientlist = []
+    for item in ingredients:
+        item = item[0]
+        ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    return ingredientlist
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -46,6 +55,11 @@ def index():
         if item:#checks if its empty
             if query.upper() in item.upper():#converts the query to uppercase and each name in the list to uppercase and sees if the name contains the query
                 newrecipelist.append(item)#if it does, it adds it to the list
+
+    querying = request.args.get("querying")
+    ingredientlist = loadingr()
+    print(ingredientlist)
+
 
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 

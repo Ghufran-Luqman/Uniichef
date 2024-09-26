@@ -133,12 +133,47 @@ li::marker {
     font-family: "Source-Serif-4";
 }
 
+.searchwing {
+    border-style: solid;
+    font-family: Mona-Sans;
+    border-radius: 9999999px;
+    border-color: transparent;
+    border-width: 1px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
+    height: 30px;
+    text-align: center;
+    width: 200px;
+    margin-top: 23px;
+    margin-left: 23px;
+    z-index: 99;
+    transition: border-color 0.3s;
+    transition-delay: 35ms;
+    pointer-events: auto;
+}
+
+.searchwing:hover {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.searchwing:focus {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.searchwing:active {
+    border-color: transparent;
+    transition: border-color 0.05s;
+}
+
 .search {
     border-style: solid;
     font-family: Mona-Sans;
-    border-radius:9999999px;
+    border-radius: 9999999px;
     border-color: transparent;
     outline: none;
+    box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
     height: 40px;
     text-align: center;
     width: 215px;
@@ -176,4 +211,14 @@ li::marker {
     position: absolute;
     top: 500px;
     right: 20px;
+}
+
+.sidebox {
+    border: 2px solid black;
+    border-width: 0 2px 0 0;
+    position: fixed;
+    width: 491px;
+    top: 0px;
+    height: 9999px;
+    left: 0px;
 }

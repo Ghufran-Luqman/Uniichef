@@ -6,13 +6,16 @@
 
 {% block body %}
 
+<div class="sidebox">
+    <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
+    <input type="submit" value="Ingredient" hidden>
+</div>
+
 <input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/" spellcheck="false">
     <input type="text" id="search" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
-    <input type="submit" value="Search" class="submit" hidden>
+    <input type="submit" value="Search" hidden>
 </form>
-
-
 
 <div class="temp" id="recipes">
 <form method="POST">
