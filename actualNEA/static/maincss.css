@@ -144,8 +144,8 @@ li::marker {
     height: 30px;
     text-align: center;
     width: 200px;
-    margin-top: 23px;
-    margin-left: 23px;
+    margin-top: 10px;
+    margin-left: 10px;
     z-index: 99;
     transition: border-color 0.3s;
     transition-delay: 35ms;

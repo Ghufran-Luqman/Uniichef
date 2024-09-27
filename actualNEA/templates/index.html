@@ -7,8 +7,10 @@
 {% block body %}
 
 <div class="sidebox">
+    <form method="GET" action="/" spellcheck="false">
     <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
-    <input type="submit" value="Ingredient" hidden>
+    <input type="submit" hidden>
+    </form>
 </div>
 
 <input type="checkbox" id="toggler" class="invis"/>

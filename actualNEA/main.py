@@ -23,11 +23,11 @@ def loadingr():
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2")
-    ingredients = c.fetchall()
+    t = c.fetchall()
+
     ingredientlist = []
-    for item in ingredients:
-        item = item[0]
-        ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    for item in t:
+        ingredientlist.append(item)
     return ingredientlist
 
 @app.route('/', methods=['GET', 'POST'])
@@ -58,8 +58,16 @@ def index():
 
     querying = request.args.get("querying")
     ingredientlist = loadingr()
-    print(ingredientlist)
-
+    if querying:
+        count = 0
+        for item in ingredientlist:#('hgffgffgh, jhjygjgyjg',)
+            item = list(item)
+            print(item)
+            #print(ingredientlist)
+            #ingredientlist = [ingredient.strip() for ingredient in item.split(',')]
+            #print(ingredientlist)
+            break
+            
 
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 

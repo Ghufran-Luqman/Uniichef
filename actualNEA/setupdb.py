@@ -106,9 +106,10 @@ c.execute("""CREATE TABLE listofingredients (
 
 c.execute("SELECT ingredients FROM tableofrecipes2")
 t = c.fetchmany(3)
-print(t)
-print("\n")
-print(f"HELLO: {t[0]}")
 
+newlist = []
+for item in t:
+          newlist.append(item)
+print(newlist)
 conn.commit()
 conn.close()
