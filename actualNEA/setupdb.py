@@ -106,10 +106,10 @@ c.execute("""CREATE TABLE listofingredients (
 
 c.execute("SELECT ingredients FROM tableofrecipes2")
 t = c.fetchmany(3)
-
-newlist = []
+e = "('8 small Granny Smith apples or as needed, ½ cup unsalted butter, 3 tablespoons all-purpose flour, ½ cup white sugar, ½ cup packed brown sugar, ¼ cup water, 1 (9 inch) double-crust pie pastry thawed',)"
 for item in t:
-          newlist.append(item)
-print(newlist)
+    item = str(item)
+    if e == item:
+        print("YOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 conn.commit()
 conn.close()

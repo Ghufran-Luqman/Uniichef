@@ -23,12 +23,23 @@ def loadingr():
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2")
-    t = c.fetchall()
+    t = c.fetchmany(3)
 
     ingredientlist = []
     for item in t:
         ingredientlist.append(item)
     return ingredientlist
+
+def getrecipename(ingredientlist):
+    ingredientlist = ", ".join(ingredientlist)
+
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+
+    
+    c.execute("SELECT recipe_name FROM tableofrecipes2 WHERE ingredients=?", (ingredientlist,))
+    name = c.fetchall()[0][0]
+    return name
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,7 +48,6 @@ def index():
 
     c.execute("SELECT recipe_name FROM tableofrecipes2")
     row = c.fetchall()
-    conn.close()
     row = list(row)
     count = 0
     newlist = []
@@ -58,17 +68,31 @@ def index():
 
     querying = request.args.get("querying")
     ingredientlist = loadingr()
+    anotherlist = []
+    anotherrlist = []
+    count = 0
+    importance = 0
     if querying:
-        count = 0
         for item in ingredientlist:#('hgffgffgh, jhjygjgyjg',)
             item = list(item)
-            print(item)
-            #print(ingredientlist)
-            #ingredientlist = [ingredient.strip() for ingredient in item.split(',')]
-            #print(ingredientlist)
+            item = item[0]
+            anotherlist = [ingredient.strip() for ingredient in item.split(',')]
+            anotherrlist.append(anotherlist)
+            #count += 1
+            #if count == 3 or count > 3:
+                #break
+        for item in anotherrlist:
+            print(anotherrlist)
+            for ingredient in item:
+                if querying.upper() in ingredient.upper():
+                    #importance += 1
+                    recipename = getrecipename(item)#get recipe name
+                    print(recipename)
             break
+                    
+                    
             
-
+    conn.close()
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
 
