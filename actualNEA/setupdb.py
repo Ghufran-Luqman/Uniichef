@@ -2,7 +2,6 @@ import sqlite3
 
 conn = sqlite3.connect("recipes.db")
 c = conn.cursor()
-
 '''
 c.execute("""CREATE TABLE tableofrecipes (
           id text,
@@ -26,13 +25,11 @@ c.execute("""CREATE TABLE tableofrecipes (
 #i = c.fetchall()
 #print(i)
 
-
 #c.execute("SELECT * FROM tableofrecipes WHERE recipe_name='Caramel Apples'")
 #duplicates = c.fetchall()
 #print(f"These are duplicates: {duplicates}")
 
 #tableofrecipes has a bunch of duplicates in so im making a second table that removes all the duplicates
-
 '''
 c.execute("""CREATE TABLE tableofrecipes2 (
           id text,
@@ -81,6 +78,20 @@ c.execute("""UPDATE tableofrecipes2
             WHERE recipe_name=?""", (string, string, name,))
 conn.commit()
 '''
+c.execute("SELECT ingredients FROM tableofrecipes2")
+te = c.fetchall()
+a = te
+a = a[2][0]
+t = a.strip()
+t = tuple(t.split("''"))
+#if t == te[2]:
+          #print("yes")
+#else:
+          #print("no")
+c.execute("""UPDATE tableofrecipes2
+          SET
+          ingredients = REPLACE(?, ?, ?)
+          """)
 #c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name='Cream Cheese Banana Bread'")
 #conn.commit()
 
@@ -89,7 +100,6 @@ conn.commit()
 #print(t)
 #GET RID OF ROWS WITHOUT PREP TIME, COOK TIME AND TOTAL TIME.
 #CHECK FOR EVERY ONE OF THEM IF THE INGREDIENTS ARE OK WITH THE WEIRD COMMAS
-
 '''
 c.execute("""CREATE TABLE listofingredients (
           user text,
@@ -102,14 +112,20 @@ c.execute("""CREATE TABLE listofingredients (
 
 #c.execute("SELECT * FROM listofingredients")
 #print(c.fetchall())
+'''
+e = 'Fig and Honey Jam with Walnuts'
+c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (e, ))
+a = "4 cups Mission figs - stemmed, 2 cups honey, 1 cup water, ¼ cup butter, 3 tablespoons lemon juice, 2 teaspoons ground cinnamon, 1 ½ teaspoons vanilla extract, 1 teaspoon ground cloves, 1 teaspoon salt, ½ teaspoon grated fresh ginger , 1 cup chopped walnuts"
+t = c.fetchall()[0][0]
+print(t)
+#t = t.strip()
+if a == t:
+          print(t.strip())
+          print("yes")
+else:
+          print("no")
+'''
 
 
-c.execute("SELECT ingredients FROM tableofrecipes2")
-t = c.fetchmany(3)
-e = "('8 small Granny Smith apples or as needed, ½ cup unsalted butter, 3 tablespoons all-purpose flour, ½ cup white sugar, ½ cup packed brown sugar, ¼ cup water, 1 (9 inch) double-crust pie pastry thawed',)"
-for item in t:
-    item = str(item)
-    if e == item:
-        print("YOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 conn.commit()
 conn.close()
