@@ -23,7 +23,7 @@ def loadingr():
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2")
-    t = c.fetchmany(3)
+    t = c.fetchall()
 
     ingredientlist = []
     for item in t:
@@ -36,10 +36,12 @@ def getrecipename(ingredientlist):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
-    
+    print(ingredientlist)
     c.execute("SELECT recipe_name FROM tableofrecipes2 WHERE ingredients=?", (ingredientlist,))
-    name = c.fetchall()[0][0]
-    return name
+    try:
+        return c.fetchall()[0][0]
+    except:
+        pass
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -82,15 +84,15 @@ def index():
             #if count == 3 or count > 3:
                 #break
         for item in anotherrlist:
-            print(anotherrlist)
             for ingredient in item:
-                if querying.upper() in ingredient.upper():
+                if querying.upper() in ingredient.upper():#if user input is in an ingredient
                     #importance += 1
                     recipename = getrecipename(item)#get recipe name
-                    print(recipename)
-            break
-                    
-                    
+                    if recipename == None:
+                        print("norecipe")
+                    else:
+                        print(recipename)
+                    break
             
     conn.close()
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
