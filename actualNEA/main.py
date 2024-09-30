@@ -63,36 +63,46 @@ def index():
     query = request.args.get("Query", '')#the '' is a default value.
     recipenames = loadnames()
     newrecipelist = []
+    splitwords = query.upper().split()
     for item in recipenames:
         if item:#checks if its empty
-            if query.upper() in item.upper():#converts the query to uppercase and each name in the list to uppercase and sees if the name contains the query
+            wordsfound = True
+            #if all(word in item.upper() for word in splitwords):
+            for word in splitwords:
+                if word not in item.upper():
+                    wordsfound = False
+                    break
+            if wordsfound:
+            #if query.upper() in item.upper():#converts the query to uppercase and each name in the list to uppercase and sees if the name contains the query
                 newrecipelist.append(item)#if it does, it adds it to the list
 
     querying = request.args.get("querying")
     ingredientlist = loadingr()
     anotherlist = []
     anotherrlist = []
+    forwebsite = []
     count = 0
-    importance = 0
     if querying:
         for item in ingredientlist:#('hgffgffgh, jhjygjgyjg',)
             item = list(item)
             item = item[0]
             anotherlist = [ingredient.strip() for ingredient in item.split(',')]
             anotherrlist.append(anotherlist)
-            #count += 1
-            #if count == 3 or count > 3:
-                #break
         for item in anotherrlist:
             for ingredient in item:
                 if querying.upper() in ingredient.upper():#if user input is in an ingredient
-                    #importance += 1
                     recipename = getrecipename(item)#get recipe name
                     if recipename == None:
-                        print("norecipe")
+                        pass
                     else:
                         print(recipename)
+                        forwebsite.append(recipename)
                     break
+    try:
+        x = forwebsite[0]
+        return render_template("index.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=querying)
+    except:
+        pass
             
     conn.close()
     return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)

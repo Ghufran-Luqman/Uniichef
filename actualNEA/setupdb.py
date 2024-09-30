@@ -78,20 +78,30 @@ c.execute("""UPDATE tableofrecipes2
             WHERE recipe_name=?""", (string, string, name,))
 conn.commit()
 '''
+'''
 c.execute("SELECT ingredients FROM tableofrecipes2")
 te = c.fetchall()
 a = te
-a = a[2][0]
-t = a.strip()
-t = tuple(t.split("''"))
+count2 = 0
+for item in a:#item is the ingredient string
+    item = item[0]
+    t = item.strip()
+    #t = tuple(t.split("''"))#t is the tuple ready to be put back in
+    tee = te[count2][0]#tee is the original currently in db
+    count2 += 1
+    print(tee)
+    c.execute("""UPDATE tableofrecipes2
+            SET
+            ingredients = REPLACE(?, ?, ?)
+            WHERE ingredients=?""", (tee, tee, t, tee))
+    conn.commit()
+'''    
+
 #if t == te[2]:
           #print("yes")
 #else:
           #print("no")
-c.execute("""UPDATE tableofrecipes2
-          SET
-          ingredients = REPLACE(?, ?, ?)
-          """)
+
 #c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name='Cream Cheese Banana Bread'")
 #conn.commit()
 
@@ -125,7 +135,9 @@ if a == t:
 else:
           print("no")
 '''
-
-
+t = "Grilled Brie and Pear Sandwich"
+#c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (t,))
+#print(c.fetchall())
+c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name=?", (t,))
 conn.commit()
 conn.close()
