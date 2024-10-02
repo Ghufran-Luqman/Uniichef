@@ -135,9 +135,18 @@ if a == t:
 else:
           print("no")
 '''
-t = "Grilled Brie and Pear Sandwich"
+#t = "Grilled Brie and Pear Sandwich"
 #c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (t,))
 #print(c.fetchall())
-c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name=?", (t,))
+#c.execute("DELETE FROM tableofrecipes2 WHERE recipe_name=?", (t,))
+
+t = "Apple Crisp"
+c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (t,))
+y = c.fetchall()[0]
+y = list(y)
+y = y[0]
+a = [ingredient.strip() for ingredient in y.split(',')]
+print(a)
+
 conn.commit()
 conn.close()
