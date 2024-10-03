@@ -154,5 +154,29 @@ t = "Ma'amoul (Lebanese Date Cookies)"
 c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (t,))
 print(c.fetchall())
 '''
+'''
+c.execute("""CREATE TABLE users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT UNIQUE NOT NULL,
+          password TEXT NOT NULL
+          )""")
+'''
+'''
+c.execute("""CREATE TABLE userspecrecipes (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          userid INTEGER NOT NULL,
+          recipe_name TEXT NOT NULL,
+          FOREIGN KEY (userid) REFERENCES users (id)
+          )""")
+'''
+'''
+c.execute("""CREATE TABLE ingredients (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          recipeid INTEGER NOT NULL,
+          ingredient_name TEXT NOT NULL,
+          state BOOLEAN NOT NULL DEFAULT FALSE,
+          FOREIGN KEY (recipeid) REFERENCES userspecrecipes (id)
+          )""")
+'''
 conn.commit()
 conn.close()
