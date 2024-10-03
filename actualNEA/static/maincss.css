@@ -173,6 +173,7 @@ li::marker {
     border-radius: 9999999px;
     border-color: transparent;
     border-width: 1px;
+    background-color: white;
     outline: none;
     box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
     height: 30px;
@@ -193,8 +194,6 @@ li::marker {
     border-color: #02c94f;
     border-width: 1px;
 }
-
-
 
 .search {
     border-style: solid;
@@ -255,4 +254,86 @@ li::marker {
 
 .querying {
     top: 150px
+}
+
+.signin {
+    border-style: solid;
+    font-family: Mona-Sans;
+    border-radius: 9999999px;
+    border-color: transparent;
+    border-width: 1px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
+    height: 30px;
+    text-align: center;
+    width: 200px;
+    margin-top: 10px;
+    padding: 5px;
+    margin-left: 10px;
+    z-index: 99;
+    transition: border-color 0.3s;
+    transition-delay: 35ms;
+    pointer-events: auto;
+}
+
+.signin:hover {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.signin:focus {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.signin:active {
+    border-color: transparent;
+    transition: border-color 0.05s;
+}
+
+.defaultbutton {
+    border-style: solid;
+    font-family: Mona-Sans;
+    border-radius: 9999999px;
+    border-color: transparent;
+    border-width: 1px;
+    background-color: white;
+    bottom: 5px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
+    height: 45px;
+    text-align: center;
+    width: 150px;
+    z-index: 99;
+    transition: border-color 0.3s;
+    transition-delay: 35ms;
+    pointer-events: auto;
+}
+
+.defaultbutton:hover {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.defaultbutton:focus {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.container {
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+    margin-top: 200px;
+}
+
+.submit {
+    width: 70px;
+    height: 25px;
+    margin-left: 10px;
+}
+
+.signupbtn {
+    bottom: 50px;
+    width: 150px;
 }

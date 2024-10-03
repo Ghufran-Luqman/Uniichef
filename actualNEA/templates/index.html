@@ -1,37 +1,16 @@
 {% extends "layout.html" %}
+
 {% block head %}
-<title>Home Page</title>
 <link rel="stylesheet" href="../static/maincss.css">
+<title>index</title>
 {% endblock %}
 
+
 {% block body %}
+<h1>index</h1>
 
-<div class="sidebox">
-    <form method="GET" action="/" spellcheck="false">
-        <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
-        <input type="submit" hidden>
-        <button id="reset" name="reset" value="reset" type="submit" class="reset">Reset</button>
-        <p class="querying">{{ querying }}</p>
-    </form>
-</div>
-
-
-<input type="checkbox" id="toggler" class="invis"/>
-<form method="GET" action="/" spellcheck="false">
-    <input type="text" id="search" autocomplete="off" name="Query" class="search" placeholder="Search recipe...">
-    <input type="submit" value="Search" hidden>
-</form>
-
-<div class="temp" id="recipes">
-<form method="POST">
-{% for item in newrecipelist %}
-    <div class="container2" style="overflow:hidden">
-        <a href="/{{ item }}">
-            <button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p></button>
-        </a>
-    </div>
-    <br>
-{% endfor %}
-</form>
+<div class="container">
+<a href="/sign-up"><button class="defaultbutton">Sign-Up</button></a>
+<a href="/login"><button class="defaultbutton">Login</button></a>
 </div>
 {% endblock %}

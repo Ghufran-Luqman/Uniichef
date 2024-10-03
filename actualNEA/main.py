@@ -44,6 +44,18 @@ def getrecipename(ingredientlist):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    return render_template("index.html")
+
+@app.route('/sign-up', methods=['GET', 'POST'])
+def sign_up():
+    return render_template("signup.html")
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template("login.html")
+
+@app.route('/home', methods=['GET', 'POST'])
+def home():
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
@@ -212,12 +224,12 @@ def index():
 
         try:
             x = forwebsite[0]
-            return render_template("index.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'])
+            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'])
         except:
             pass
             
     conn.close()
-    return render_template("index.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
