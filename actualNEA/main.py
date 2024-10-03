@@ -112,20 +112,36 @@ def index():
         print(f"tempcount: {tempcount}")
         anothertemplist = []
         tempvar = []
-        for abc in session['search_history']:
-            print(f"abc: {abc}")
-        for abc in session['search_history']:#OR list
+        if tempcount <= 1:
+            for abc in session['search_history']:
+                print(f"abc: {abc}")
+            for abc in session['search_history']:#OR list
+                for item in anotherrlist:
+                        for ingredient in item:
+                            if abc.upper() in ingredient.upper():
+                                recipename = getrecipename(item)
+                                if recipename == None:
+                                    pass
+                                else:
+                                    anothertemplist.append(recipename)
+                                break
+        elif tempcount > 1:
+            firstquery = session['search_history'][0]
             for item in anotherrlist:
-                    for ingredient in item:
-                        if abc.upper() in ingredient.upper():
-                            recipename = getrecipename(item)
-                            if recipename == None:
-                                pass
-                            else:
-                                anothertemplist.append(recipename)
+                for ingredient in item:
+                    if firstquery.upper() in ingredient.upper():
+                        recipename = getrecipename(item)
+                        if recipename == None:
+                            pass
+                        else:
+                            anothertemplist.append(recipename)
                             break
-        if tempcount > 1:
+        if tempcount > 1:#if there's more than one query item
+            print(f"anothertemplist: {anothertemplist}")
             for item in anothertemplist:#for every recipe in this list of recipes
+                print(f"session['search_history']: {session['search_history']}")
+                print(f"anothertemplist: {anothertemplist}")
+                print("a")
                 c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (item,))#gets recipes original ings
                 recipesings = c.fetchall()[0]
                 recipesings = list(recipesings)
@@ -134,9 +150,12 @@ def index():
                 a = len(tempvar)#length of list of ingredients
                 temporarycount = 0
                 while temporarycount != a:
+                    print("b")
                     tempcount2 = 0
                     getout = 0
-                    while tempcount2 != tempcount and getout <= tempcount:
+                    temp = 0
+                    while tempcount2 != tempcount:
+                        print("c")
                         print(f"recipename: {item}")
                         print(f"session['search_history'][tempcount2].upper(): {session['search_history'][tempcount2].upper()}")
                         print(f"temporarycount: {temporarycount}")
@@ -145,23 +164,40 @@ def index():
                         if session['search_history'][tempcount2].upper() in tempvar[temporarycount].upper():#if queried ingredient is in an ingredient of the recipe
                             print(f"yes")
                             tempcount2 += 1
+                            for ingredientquery in session['search_history']:#cycles through all the queries
+                                for aningredient in tempvar:
+                                    if ingredientquery.upper() in aningredient.upper():#if queried ingredient is in the recipe ingredient list
+                                        print("adding")
+                                        temp += 1
+                            if temp == len(session['search_history']):#if all queries are in the recipe ingredients
+                                print(f"adding {item} to forwebsite...")
+                                forwebsite.append(item)#adds them to be displayed on the website
+                                break
+                                        
+                            '''
                             for aningredient in tempvar:
                                 print(f"tempcount2: {tempcount2}")
                                 if session['search_history'][tempcount2].upper() in aningredient.upper():
                                     print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                                     forwebsite.append(item)#add them to be displayed on the website
-                        else:
+                            '''
+                                    
+                        else:#if the first queried item is not in the recipe list then break
                             print(f"no")
-                        if tempcount2 == 0:
                             print(f"breaking")
                             break
                         print(f"herenow")
-                        getout += 1
 
-                    if tempcount2 == tempcount:
-                        print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                        forwebsite.append(item)#add them to be displayed on the website
-                    temporarycount += 1
+                    #if tempcount2 == tempcount:
+                        #print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                        #forwebsite.append(item)#add them to be displayed on the website
+                    temporarycount += 1#cycle to the next ingredient in the recipe ingredient list
+                    print(f"temporarycount: {temporarycount}")
+        elif tempcount == 1:#if there's only one query item
+            for recipe in anothertemplist:
+                forwebsite.append(recipe)
+
+                    
 
         print(f"forwebsite: {forwebsite}")
         print(f"sessicon search history: {session['search_history']}")
