@@ -167,6 +167,35 @@ li::marker {
     transition: border-color 0.05s;
 }
 
+.reset {
+    border-style: solid;
+    font-family: Mona-Sans;
+    border-radius: 9999999px;
+    border-color: transparent;
+    border-width: 1px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(64, 201, 117, 0.3);
+    height: 30px;
+    text-align: center;
+    width: 50px;
+    z-index: 99;
+    transition: border-color 0.3s;
+    transition-delay: 35ms;
+    pointer-events: auto;
+}
+
+.reset:hover {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+.reset:focus {
+    border-color: #02c94f;
+    border-width: 1px;
+}
+
+
+
 .search {
     border-style: solid;
     font-family: Mona-Sans;
@@ -221,4 +250,9 @@ li::marker {
     top: 0px;
     height: 9999px;
     left: 0px;
+}
+
+
+.querying {
+    top: 150px
 }

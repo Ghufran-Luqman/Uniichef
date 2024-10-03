@@ -8,16 +8,17 @@
 
 <div class="sidebox">
     <form method="GET" action="/" spellcheck="false">
-    <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
-    <input type="submit" hidden>
-    {{ querying }}
-    <button id="reset" name=reset value="reset">Reset</button>
+        <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
+        <input type="submit" hidden>
+        <button id="reset" name="reset" value="reset" type="submit" class="reset">Reset</button>
+        <p class="querying">{{ querying }}</p>
     </form>
 </div>
 
+
 <input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/" spellcheck="false">
-    <input type="text" id="search" autocomplete="off" autofocus name="Query" class="search" placeholder="Search recipe...">
+    <input type="text" id="search" autocomplete="off" name="Query" class="search" placeholder="Search recipe...">
     <input type="submit" value="Search" hidden>
 </form>
 
