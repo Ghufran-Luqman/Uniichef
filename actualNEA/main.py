@@ -165,10 +165,17 @@ def index():
                             print(f"yes")
                             tempcount2 += 1
                             for ingredientquery in session['search_history']:#cycles through all the queries
+                                print(f"session['search_history']:{session['search_history']}")
+                                print(f"ingredientquery: {ingredientquery}")
                                 for aningredient in tempvar:
+                                    print(f"tempvar: {tempvar}")
+                                    print(f"aningredient: {aningredient}")
                                     if ingredientquery.upper() in aningredient.upper():#if queried ingredient is in the recipe ingredient list
-                                        print("adding")
+                                        print(f"adding, ingredientquery: {ingredientquery.upper()}, aningredient: {aningredient.upper()}")
                                         temp += 1
+                                        print(f"temp (which has increased by 1): {temp}")
+                                        break
+
                             if temp == len(session['search_history']):#if all queries are in the recipe ingredients
                                 print(f"adding {item} to forwebsite...")
                                 forwebsite.append(item)#adds them to be displayed on the website
