@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/maincss.css">
+<title>sign-up</title>
+{% endblock %}
+
+
+{% block body %}
+<h1>sign-up</h1>
+<input type="text" id="username" name="username" class="signin" placeholder="Username" autofocus><br>
+<input type="password" id="password" name="password" class="signin" placeholder="Password"><br><br>
+<input type="submit" class="defaultbutton submit"><br>
+
+<div class="container">
+<a href="/login"><button class="defaultbutton signupbtn">Go to login page</button></a>
+</div>
+{% endblock %}
