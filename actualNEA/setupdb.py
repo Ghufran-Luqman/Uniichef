@@ -178,5 +178,9 @@ c.execute("""CREATE TABLE ingredients (
           FOREIGN KEY (recipeid) REFERENCES userspecrecipes (id)
           )""")
 '''
+#c.execute("""INSERT INTO users (username, password)
+          #VALUES (?, ?)""", ("test", "test"))
+c.execute("SELECT * FROM users")
+print(c.fetchall())
 conn.commit()
 conn.close()

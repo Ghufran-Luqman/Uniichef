@@ -48,7 +48,23 @@ def index():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    return render_template("signup.html")
+    flashmessage = False
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    username = request.args.get('username')
+    password = request.args.get('password')
+    username4len = str(username)
+    password4len = str(password)
+    if username and password:
+        c.execute("""INSERT INTO users (username, password)
+        VALUES (?, ?)""", (username, password))
+        c.execute("SELECT * FROM users")
+        print(f"All values in database: {c.fetchall()}.")
+        conn.commit()
+        conn.close()
+    elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
+        flashmessage = True
+    return render_template("signup.html", flashmessage=flashmessage)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

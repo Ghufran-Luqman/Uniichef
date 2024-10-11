@@ -8,9 +8,16 @@
 
 {% block body %}
 <h1>sign-up</h1>
-<input type="text" id="username" name="username" class="signin" placeholder="Username" autofocus><br>
-<input type="password" id="password" name="password" class="signin" placeholder="Password"><br><br>
+{% if flashmessage == True %}
+  <script>
+    alert("Please fully fill out *both* the username and password forms.")
+  </script>
+{% endif %}
+<form>
+<input type="text" id="username" name="username" class="signin" autofill="off" placeholder="Username" autofocus><br>
+<input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br><br>
 <input type="submit" class="defaultbutton submit"><br>
+</form>
 
 <div class="container">
 <a href="/login"><button class="defaultbutton signupbtn">Go to login page</button></a>
