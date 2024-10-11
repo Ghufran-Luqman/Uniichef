@@ -9,6 +9,7 @@ def loadnames():
     c = conn.cursor()
     c.execute("SELECT recipe_name FROM tableofrecipes2")
     list = c.fetchall()
+    c.close()
     conn.close()
     recipenames = []
     count = 0
@@ -24,6 +25,8 @@ def loadingr():
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2")
     t = c.fetchall()
+    c.close()
+    conn.close()
 
     ingredientlist = []
     for item in t:
@@ -38,7 +41,10 @@ def getrecipename(ingredientlist):
 
     c.execute("SELECT recipe_name FROM tableofrecipes2 WHERE ingredients=?", (ingredientlist,))
     try:
-        return c.fetchall()[0][0]
+        tempreturn = c.fetchall()[0][0]
+        c.close()
+        conn.close()
+        return tempreturn
     except:
         pass
 
@@ -56,11 +62,13 @@ def sign_up():
     username4len = str(username)
     password4len = str(password)
     if username and password:
+        #do conn.close() as soon as possible
         c.execute("""INSERT INTO users (username, password)
         VALUES (?, ?)""", (username, password))
         c.execute("SELECT * FROM users")
         print(f"All values in database: {c.fetchall()}.")
         conn.commit()
+        c.close()
         conn.close()
     elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
         flashmessage = True
@@ -243,7 +251,8 @@ def home():
             return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'])
         except:
             pass
-            
+
+    c.close()
     conn.close()
     return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
@@ -298,7 +307,9 @@ def item(recipename):
     if image:
         image = image[0]
         image = image[0]
-
+    
+    c.close()
+    conn.close()
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image)
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -319,6 +330,7 @@ def test():
         item1 = f"{item[0]}"
         list2.append(item1)
     #print(f"list2: {list2}")
+    c.close()
     conn.close()
     return render_template('test.html', list=list2)
 
