@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 app = Flask(__name__)
@@ -57,11 +58,12 @@ def sign_up():
     flashmessage = 'False'
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    username = request.args.get('username')
-    password = request.args.get('password')
+    username = request.form.get('username')
+    password = request.form.get('password')
     username4len = str(username)
     password4len = str(password)
     if username and password:
+        password = generate_password_hash(password)
         #do conn.close() as soon as possible
         try:
             c.execute("""INSERT INTO users (username, password)
@@ -83,8 +85,8 @@ def login():
     flashmessage = False
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    username = request.args.get('username')
-    password = request.args.get('password')
+    username = request.form.get('username')
+    password = request.form.get('password')
     username4len = str(username)
     password4len = str(password)
     if username and password:
@@ -92,7 +94,7 @@ def login():
         listofusernames = c.fetchall()
         for item in listofusernames:
             if item[0].lower() == username.lower():#if usernames match
-                if item[1] == password:#if passwords of that username match
+                if check_password_hash(item[1], password):#if passwords of that username match
                     login = True
                     break
                 elif item[1] != password:

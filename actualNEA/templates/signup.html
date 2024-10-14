@@ -17,7 +17,7 @@
     alert("There is another account with the same username. Please choose another username.")
   </script>
 {% endif %}
-<form>
+<form action="/sign-up" method="POST">
 <input type="text" id="username" name="username" class="signin" autofill="off" placeholder="Username" autofocus><br>
 <input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br><br>
 <input type="submit" class="defaultbutton submit"><br>

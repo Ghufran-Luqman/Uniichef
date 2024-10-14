@@ -180,11 +180,7 @@ c.execute("""CREATE TABLE ingredients (
 '''
 #c.execute("""INSERT INTO users (username, password)
           #VALUES (?, ?)""", ("test", "test"))
-c.execute("SELECT username, password FROM users")
-t = c.fetchall()
-i = t[0]
 
-for item in t:
-          print(item)
+
 conn.commit()
 conn.close()
