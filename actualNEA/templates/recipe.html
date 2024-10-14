@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block body %}
-<p class="title">{{ recipename }}:</p>
-<form>
-<p class="ingredients">Ingredients:</p> <button class="roundbutton" name="roundbutton" value="button"><span class="ingredients">+</span></button>
-</form>
+<div class="recipetitle">
+<p class="title">{{ recipename }}:</p><button class="reset saverecipe" name="roundbutton" value="button"><span class="ingredients buttontext">Add recipe</span></button>
+</div>
+
+<p class="ingredients">Ingredients:</p>
 <form method="POST" action="">
     {% for i in item %}
     <li style="text-align:left">

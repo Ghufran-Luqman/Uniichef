@@ -103,7 +103,8 @@ def login():
                     print("unknown error")
                     flashmessage = 'unknownerror'
         if login == True:
-            return redirect(url_for('home', username=username))
+            session['username'] = username
+            return redirect(url_for('home'))
         else:
             flashmessage = 'incorrect'
     elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
@@ -112,6 +113,12 @@ def login():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    if 'username' not in session:#if they're username isnt actually saved
+        return redirect(url_for('login'))#redirects them back to the login page.
+    
+    username = session['username']
+    print(username)
+
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
@@ -288,6 +295,10 @@ def home():
     conn.close()
     return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
 
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect(url_for('login'))
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
 def item(recipename):
