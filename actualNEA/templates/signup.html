@@ -8,9 +8,13 @@
 
 {% block body %}
 <h1>sign-up</h1>
-{% if flashmessage == True %}
+{% if flashmessage == 'notfilledout' %}
   <script>
     alert("Please fully fill out *both* the username and password forms.")
+  </script>
+{% elif flashmessage == 'sameusername' %}
+  <script>
+    alert("There is another account with the same username. Please choose another username.")
   </script>
 {% endif %}
 <form>

@@ -8,10 +8,25 @@
 
 {% block body %}
 <h1>login</h1>
-
+{% if flashmessage == 'notfilledout' %}
+  <script>
+    alert("Please fully fill out *both* the username and password forms.")
+  </script>
+{% elif flashmessage == 'incorrect' %}
+  <script>
+    alert("Username or password is incorrect.")
+  </script>
+{% elif flashmessage == 'unknownerror' %}
+<script>
+  alert("Unknown Error")
+</script>
+{% endif %}
+<form>
 <input type="text" id="username" autofill="off" name="username" class="signin" placeholder="Username" autofocus><br>
 <input type="password" id="password" autofill="off" name="password" class="signin" placeholder="Password"><br><br>
 <input type="submit" class="defaultbutton submit"><br>
+</form>
+
 
 <div class="container">
 <a href="/sign-up"><button class="defaultbutton signupbtn">Go to sign-up page</button></a>

@@ -54,7 +54,7 @@ def index():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    flashmessage = False
+    flashmessage = 'False'
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     username = request.args.get('username')
@@ -63,20 +63,50 @@ def sign_up():
     password4len = str(password)
     if username and password:
         #do conn.close() as soon as possible
-        c.execute("""INSERT INTO users (username, password)
-        VALUES (?, ?)""", (username, password))
-        c.execute("SELECT * FROM users")
-        print(f"All values in database: {c.fetchall()}.")
-        conn.commit()
-        c.close()
-        conn.close()
+        try:
+            c.execute("""INSERT INTO users (username, password)
+            VALUES (?, ?)""", (username, password))
+            c.execute("SELECT * FROM users")
+            print(f"All values in database: {c.fetchall()}.")
+            conn.commit()
+            c.close()
+            conn.close()
+        except:
+            flashmessage = 'sameusername'
     elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
-        flashmessage = True
+        flashmessage = 'notfilledout'
     return render_template("signup.html", flashmessage=flashmessage)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    login = False
+    flashmessage = False
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    username = request.args.get('username')
+    password = request.args.get('password')
+    username4len = str(username)
+    password4len = str(password)
+    if username and password:
+        c.execute("SELECT username, password FROM users")
+        listofusernames = c.fetchall()
+        for item in listofusernames:
+            if item[0].lower() == username.lower():#if usernames match
+                if item[1] == password:#if passwords of that username match
+                    login = True
+                    break
+                elif item[1] != password:
+                    flashmessage = 'incorrect'
+                else:
+                    print("unknown error")
+                    flashmessage = 'unknownerror'
+        if login == True:
+            return redirect(url_for('home', username=username))
+        else:
+            flashmessage = 'incorrect'
+    elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
+        flashmessage = 'notfilledout'
+    return render_template("login.html", flashmessage=flashmessage)
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
