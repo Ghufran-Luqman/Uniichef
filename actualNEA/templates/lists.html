@@ -1,8 +1,22 @@
 {% extends "layout.html" %}
 {% block head %}
-
+<title>Lists</title>
+<link rel="stylesheet" href="../static/maincss.css">
 {% endblock %}
 
 {% block body %}
+<h1 class="title">Saved Lists</h1>
 
+<div class="temp" id="recipes">
+    <form method="POST">
+    {% for item in newrecipelist %}
+        <div class="container2" style="overflow:hidden">
+            <a href="/{{ username }}/{{ item }}">
+                <button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p></button>
+            </a>
+        </div>
+        <br>
+    {% endfor %}
+    </form>
+    </div>
 {% endblock %}

@@ -104,6 +104,7 @@ def login():
                     print("unknown error")
                     flashmessage = 'unknownerror'
         if login == True:
+            username = username.title()
             session['username'] = username
             return redirect(url_for('home'))
         else:
@@ -118,14 +119,17 @@ def home():
         return redirect(url_for('login'))#redirects them back to the login page.
     
     username = session['username']
-    print(username)
+    #print(username)
 
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
     c.execute("SELECT recipe_name FROM tableofrecipes2")
     row = c.fetchall()
-    row = list(row)
+    try:
+        row = list(row)
+    except:
+        pass
     count = 0
     newlist = []
     for item in row:
@@ -294,7 +298,6 @@ def home():
 
     c.close()
     conn.close()
-    print(username)
     return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username)
 
 @app.route('/logout')
@@ -304,6 +307,7 @@ def logout():
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
 def item(recipename):
+    alert = ""
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
@@ -333,30 +337,61 @@ def item(recipename):
         print("clicked on button")
         username = session['username']
         print(f"username: {username}")
-        c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
-                    VALUES (?, ?)""", (username, recipename))
-        c.execute("SELECT * FROM userspecrecipes")
-        print(f"all in userspecrecipes: {c.fetchall()}")
-        '''
-        conn = sqlite3.connect('recipes.db')
-        c = conn.cursor()
-        c.execute("SELECT * FROM listofingredients")
-        listt = c.fetchall()
-        list2 = []
-        for item in listt:
-            item1 = f"{item[0]}, {item[1]}, {item[2]}"
-            list2.append(item1)
-        #print(f"list2: {list2}")
+        
+        c.execute("SELECT recipe_name FROM userspecrecipes")
+        name = c.fetchall()
+        length = len(name)
+        count = 0
+        duplicates = False
+        while count < length:
+            try:
+                first = name[count][0]
+                second = name[count+1][0]
+            except:
+                print("no duplicates")
+                duplicates = False
+                break
+            if first == second:
+                print("there are duplicates")
+                duplicates = True
+                break
+            count += 1
+        if duplicates == False:
+            c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
+                        VALUES (?, ?)""", (username, recipename))
+            conn.commit()
+            c.execute("SELECT * FROM userspecrecipes")
+            print(f"all in userspecrecipes: {c.fetchall()}")
+            c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ?", (recipename,))
+            id = c.fetchall()[0][0]
+            for i in ingredientlist:
+                c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
+                        VALUES (?, ?)""", (id, i))
+                conn.commit()
+            c.execute("SELECT * FROM ingredients")
+            print(c.fetchall())
+            '''
+            conn = sqlite3.connect('recipes.db')
+            c = conn.cursor()
+            c.execute("SELECT * FROM listofingredients")
+            listt = c.fetchall()
+            list2 = []
+            for item in listt:
+                item1 = f"{item[0]}, {item[1]}, {item[2]}"
+                list2.append(item1)
+            #print(f"list2: {list2}")
         
 
 
-        for item in ingredientlist:
-            c.execute("INSERT INTO listofingredients (user, ingredient, status) VALUES (?, ?, ?)", ('default', item, 'False'))
-        conn.commit()
-        c.execute("SELECT * FROM listofingredients")
-        print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
-        return redirect(url_for('item', recipename=recipename))
-        '''
+            for item in ingredientlist:
+                c.execute("INSERT INTO listofingredients (user, ingredient, status) VALUES (?, ?, ?)", ('default', item, 'False'))
+            conn.commit()
+            c.execute("SELECT * FROM listofingredients")
+            print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
+            return redirect(url_for('item', recipename=recipename))
+            '''
+        elif duplicates == True:
+            alert = "duplicates"
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
     if image:
@@ -365,11 +400,35 @@ def item(recipename):
     
     c.close()
     conn.close()
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image)
+    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image, alert=alert)
 
 @app.route('/list')
 def list():
-    return render_template("lists.html")
+    username = session['username']
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
+    recipes = c.fetchall()
+    if recipes[0][0]:
+        recipelist = []
+        for recipe in recipes:
+            print(recipe[0])
+            recipelist.append(recipe[0])
+        print(f"recipelist: {recipelist}")
+        for recipe in recipelist:
+            ingredientlist = []
+            c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipe,))
+            id = c.fetchall()[0][0]
+            print(f"id: {id}")
+            c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
+            ingredients = c.fetchall()
+            print(f"ingredients: {ingredients}")
+    else:
+        print("no recipes")
+
+    c.close()
+    conn.close()
+    return render_template("lists.html", username=username)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

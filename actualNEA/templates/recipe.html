@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block body %}
+{% if alert == "duplicates" %}
+    <script>
+    alert("You have already saved this recipe!")
+    </script>
+{% endif %}
+
 <div class="recipetitle">
 <form>
 <p class="title">{{ recipename }}:</p><button class="reset saverecipe" name="saverecipe" id="saverecipe" value="button"><span class="ingredients buttontext">Add recipe</span></button>
@@ -22,7 +28,9 @@
 <form action="/test">
     <button>See List</button>
 </form>
-
+<form action="/home">
+    <button class="defaultbutton pos">Home</button>
+</form>
 <img class="recipeimg" src="{{ image }}" alt="NOT WORKING">
 
 {% endblock %}

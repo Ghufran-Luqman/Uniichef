@@ -156,30 +156,40 @@ print(c.fetchall())
 '''
 '''
 c.execute("""CREATE TABLE users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL
+          id integer PRIMARY KEY AUTOINCREMENT,
+          username text UNIQUE NOT NULL,
+          password text NOT NULL
           )""")
 '''
 '''
 c.execute("""CREATE TABLE userspecrecipes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          userid INTEGER NOT NULL,
-          recipe_name TEXT NOT NULL,
-          FOREIGN KEY (userid) REFERENCES users (id)
+          id integer PRIMARY KEY AUTOINCREMENT,
+          userid text NOT NULL,
+          recipe_name text NOT NULL
           )""")
 '''
 '''
 c.execute("""CREATE TABLE ingredients (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          recipeid INTEGER NOT NULL,
-          ingredient_name TEXT NOT NULL,
-          state BOOLEAN NOT NULL DEFAULT FALSE,
+          id integer PRIMARY KEY AUTOINCREMENT,
+          recipeid integer NOT NULL,
+          ingredient_name text NOT NULL,
+          state boolean NOT NULL DEFAULT FALSE,
           FOREIGN KEY (recipeid) REFERENCES userspecrecipes (id)
           )""")
 '''
 #c.execute("""INSERT INTO users (username, password)
           #VALUES (?, ?)""", ("test", "test"))
+'''
+c.execute("DROP TABLE userspecrecipes")
+conn.commit()
+c.execute("DROP TABLE ingredients")
+conn.commit()
+'''
+
+c.execute("SELECT id FROM userspecrecipes")
+print(c.fetchall())
+c.execute("SELECT * FROM ingredients")
+print(c.fetchall())
 
 
 conn.commit()
