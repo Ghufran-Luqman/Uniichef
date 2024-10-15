@@ -9,13 +9,13 @@ def loadnames():
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     c.execute("SELECT recipe_name FROM tableofrecipes2")
-    list = c.fetchall()
+    list2 = c.fetchall()
     c.close()
     conn.close()
     recipenames = []
     count = 0
-    for item in list:
-        item = list[count]
+    for item in list2:
+        item = list2[count]
         item = item[0]
         recipenames.append(item)
         count += 1
@@ -173,7 +173,10 @@ def home():
 
         #for querying in session['search_history']:
         for item in ingredientlist:
-            item = list(item)
+            newitemlist = []
+            for ing in item:
+                newitemlist.append(ing)
+            item = newitemlist
             item = item[0]
             anotherlist = [ingredient.strip() for ingredient in item.split(',')]
             anotherrlist.append(anotherlist)

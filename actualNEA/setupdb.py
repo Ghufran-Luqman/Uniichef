@@ -185,12 +185,14 @@ conn.commit()
 c.execute("DROP TABLE ingredients")
 conn.commit()
 '''
-
+'''
 c.execute("SELECT id FROM userspecrecipes")
 print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
-
-
+'''
+tuple = ('8 small Granny Smith apples or as needed, ½ cup unsalted butter, 3 tablespoons all-purpose flour, ½ cup white sugar, ½ cup packed brown sugar, ¼ cup water, 1 (9 inch) double-crust pie pastry thawed',)
+list = list(tuple)
+print(list)
 conn.commit()
 conn.close()
