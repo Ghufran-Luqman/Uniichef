@@ -363,3 +363,10 @@ li::marker {
 .buttontext {
     font-family: Mona-Sans;
 }
+
+.username {
+    left: 2px;
+    position: absolute;
+    top: 35px;
+    z-index: 999;
+}

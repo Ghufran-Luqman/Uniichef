@@ -73,6 +73,7 @@ def sign_up():
             conn.commit()
             c.close()
             conn.close()
+            return redirect(url_for('login'))
         except:
             flashmessage = 'sameusername'
     elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
@@ -287,13 +288,14 @@ def home():
 
         try:
             x = forwebsite[0]
-            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'])
+            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'], username=username)
         except:
             pass
 
     c.close()
     conn.close()
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist)
+    print(username)
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username)
 
 @app.route('/logout')
 def logout():
@@ -326,8 +328,16 @@ def item(recipename):
             item1 = f"{item[0]}, {item[1]}, {item[2]}"
             list2.append(item1)
         print(f"list2: {list2}")
-    addlist = request.args.get("roundbutton")
-    if addlist == 'button':
+    addlist = request.args.get("saverecipe")
+    if addlist == 'button':#if user clicks on this button
+        print("clicked on button")
+        username = session['username']
+        print(f"username: {username}")
+        c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
+                    VALUES (?, ?)""", (username, recipename))
+        c.execute("SELECT * FROM userspecrecipes")
+        print(f"all in userspecrecipes: {c.fetchall()}")
+        '''
         conn = sqlite3.connect('recipes.db')
         c = conn.cursor()
         c.execute("SELECT * FROM listofingredients")
@@ -337,6 +347,7 @@ def item(recipename):
             item1 = f"{item[0]}, {item[1]}, {item[2]}"
             list2.append(item1)
         #print(f"list2: {list2}")
+        
 
 
         for item in ingredientlist:
@@ -345,6 +356,7 @@ def item(recipename):
         c.execute("SELECT * FROM listofingredients")
         print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
         return redirect(url_for('item', recipename=recipename))
+        '''
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
     if image:
@@ -354,6 +366,10 @@ def item(recipename):
     c.close()
     conn.close()
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image)
+
+@app.route('/list')
+def list():
+    return render_template("lists.html")
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

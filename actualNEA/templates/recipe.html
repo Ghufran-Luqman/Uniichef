@@ -6,7 +6,9 @@
 
 {% block body %}
 <div class="recipetitle">
-<p class="title">{{ recipename }}:</p><button class="reset saverecipe" name="roundbutton" value="button"><span class="ingredients buttontext">Add recipe</span></button>
+<form>
+<p class="title">{{ recipename }}:</p><button class="reset saverecipe" name="saverecipe" id="saverecipe" value="button"><span class="ingredients buttontext">Add recipe</span></button>
+</form>
 </div>
 
 <p class="ingredients">Ingredients:</p>
