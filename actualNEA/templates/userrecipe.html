@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>Recipes</title>
+<link rel="stylesheet" href="../static/maincss.css">
+{% endblock %}
+
+{% block body %}
+<p class="title">{{ recipename }}:</p>
+<p class="ingredients">Ingredients:</p>
+<form method="POST" action="">
+    {% for i in item %}
+    <li style="text-align:left">
+        <span class="ingredients" id="ingredient" name="ingredient">{{ i }}</span>
+    </li>
+{% endfor %}
+</form>
+<form action="/home">
+    <button class="defaultbutton pos">Home</button>
+</form>
+<img class="recipeimg" src="{{ image }}" alt="NOT WORKING">
+{% endblock %}

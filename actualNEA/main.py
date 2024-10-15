@@ -415,20 +415,42 @@ def list():
             print(recipe[0])
             recipelist.append(recipe[0])
         print(f"recipelist: {recipelist}")
-        for recipe in recipelist:
+        '''for recipe in recipelist:
             ingredientlist = []
             c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipe,))
             id = c.fetchall()[0][0]
             print(f"id: {id}")
             c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
             ingredients = c.fetchall()
-            print(f"ingredients: {ingredients}")
+            print(f"ingredients: {ingredients}")'''
     else:
         print("no recipes")
 
     c.close()
     conn.close()
-    return render_template("lists.html", username=username)
+    return render_template("lists.html", username=username, recipelist=recipelist)
+
+@app.route('/<username>/<recipename>')
+def newrecipe(username, recipename):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    ingredientlist = []
+    c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipename,))
+    id = c.fetchall()[0][0]
+    c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
+    ingredients = c.fetchall()
+    for item in ingredients:
+        ingredientlist.append(item)
+    
+    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
+    image = c.fetchall()
+    if image:
+        image = image[0]
+        image = image[0]
+
+    c.close()
+    conn.close()
+    return render_template('userrecipe.html', recipename=recipename, username=username, item=ingredientlist, image=image)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
