@@ -173,10 +173,7 @@ def home():
 
         #for querying in session['search_history']:
         for item in ingredientlist:
-            newitemlist = []
-            for ing in item:
-                newitemlist.append(ing)
-            item = newitemlist
+            item = list(item)
             item = item[0]
             anotherlist = [ingredient.strip() for ingredient in item.split(',')]
             anotherrlist.append(anotherlist)
@@ -306,6 +303,7 @@ def home():
 @app.route('/logout')
 def logout():
     session.pop('username')
+    session.pop('search_history')
     return redirect(url_for('login'))
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
@@ -336,20 +334,27 @@ def item(recipename):
             list2.append(item1)
         print(f"list2: {list2}")
     addlist = request.args.get("saverecipe")
-    if addlist == 'button':#if user clicks on this button
+    while addlist == 'button':#if user clicks on this button
         print("clicked on button")
-        username = session['username']
+        try:
+            username = session['username']
+        except:
+            alert = "nousername"
+            break
         print(f"username: {username}")
-        
-        c.execute("SELECT recipe_name FROM userspecrecipes")
+            
+        c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
         name = c.fetchall()
+        print(f"name: {name}")
         length = len(name)
         count = 0
         duplicates = False
         while count < length:
             try:
                 first = name[count][0]
+                print(f"first: {first}")
                 second = name[count+1][0]
+                print(f"second: {second}")
             except:
                 print("no duplicates")
                 duplicates = False
@@ -363,16 +368,14 @@ def item(recipename):
             c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
                         VALUES (?, ?)""", (username, recipename))
             conn.commit()
-            c.execute("SELECT * FROM userspecrecipes")
-            print(f"all in userspecrecipes: {c.fetchall()}")
-            c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ?", (recipename,))
-            id = c.fetchall()[0][0]
+            c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))
+            e = c.fetchall()
+            id = e[0][0]
             for i in ingredientlist:
                 c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
                         VALUES (?, ?)""", (id, i))
                 conn.commit()
-            c.execute("SELECT * FROM ingredients")
-            print(c.fetchall())
+            alert = "success"
             '''
             conn = sqlite3.connect('recipes.db')
             c = conn.cursor()
@@ -383,10 +386,8 @@ def item(recipename):
                 item1 = f"{item[0]}, {item[1]}, {item[2]}"
                 list2.append(item1)
             #print(f"list2: {list2}")
-        
-
-
-            for item in ingredientlist:
+            
+                for item in ingredientlist:
                 c.execute("INSERT INTO listofingredients (user, ingredient, status) VALUES (?, ?, ?)", ('default', item, 'False'))
             conn.commit()
             c.execute("SELECT * FROM listofingredients")
@@ -395,6 +396,7 @@ def item(recipename):
             '''
         elif duplicates == True:
             alert = "duplicates"
+        addlist = ""
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
     if image:
@@ -405,15 +407,17 @@ def item(recipename):
     conn.close()
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image, alert=alert)
 
-@app.route('/list')
-def list():
+@app.route('/lists')
+def lists():
     username = session['username']
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
     recipes = c.fetchall()
-    if recipes[0][0]:
-        recipelist = []
+    recipelist = []
+    alert = ""
+    try:
+        testvar = recipes[0][0]
         for recipe in recipes:
             print(recipe[0])
             recipelist.append(recipe[0])
@@ -426,12 +430,13 @@ def list():
             c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
             ingredients = c.fetchall()
             print(f"ingredients: {ingredients}")'''
-    else:
+    except:
         print("no recipes")
+        alert = "norecipes"
 
     c.close()
     conn.close()
-    return render_template("lists.html", username=username, recipelist=recipelist)
+    return render_template("lists.html", username=username, recipelist=recipelist, alert=alert)
 
 @app.route('/<username>/<recipename>')
 def newrecipe(username, recipename):
@@ -442,6 +447,7 @@ def newrecipe(username, recipename):
     id = c.fetchall()[0][0]
     c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
     ingredients = c.fetchall()
+    print(f"ingredients: {ingredients}")
     for item in ingredients:
         ingredientlist.append(item)
     
@@ -451,6 +457,7 @@ def newrecipe(username, recipename):
         image = image[0]
         image = image[0]
 
+    print(f"ingredientlist: {ingredientlist}")
     c.close()
     conn.close()
     return render_template('userrecipe.html', recipename=recipename, username=username, item=ingredientlist, image=image)
@@ -475,7 +482,7 @@ def test():
     #print(f"list2: {list2}")
     c.close()
     conn.close()
-    return render_template('test.html', list=list2)
+    return render_template('test.html', list2=list2)
 
 
 if __name__ == "__main__":

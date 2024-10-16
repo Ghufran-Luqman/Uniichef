@@ -9,6 +9,15 @@
     <script>
     alert("You have already saved this recipe!")
     </script>
+{% elif alert == "nousername" %}
+    <script>
+    alert("You are not logged in!! Please login.")
+    window.location.href = "/login"
+    </script>
+{% elif alert == "success" %}
+    <script>
+    alert("Added recipe!")
+    </script>
 {% endif %}
 
 <div class="recipetitle">

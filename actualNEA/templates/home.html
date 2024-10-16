@@ -11,11 +11,18 @@
         <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
         <input type="submit" hidden>
         <button id="reset" name="reset" value="reset" type="submit" class="reset">Reset</button>
-        <p class="querying">{{ querying }}</p>
+        <p class="ingredients filtertitle">Filtered Ingredients:</p>
+        <div class="filtercontainer">
+        <ul>
+        {% for filter in querying %}
+            <li><p class="ingredients querying">{{ filter }}</p></li>
+        {% endfor %}
+        </ul>
+        </div>
     </form>
     <p class="ingredients username">Welcome, {{ username }}!</p>
-    <form action="/list">
-        <button class="reset seelists">See Lists</button>
+    <form action="/lists">
+        <button class="reset seelists">View Saved Recipes</button>
     </form>
 </div>
 

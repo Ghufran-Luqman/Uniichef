@@ -250,7 +250,10 @@ li::marker {
 
 
 .querying {
-    top: 150px
+    font-family: Mona-Sans;
+    top: 150px;
+    left: 50px;
+    font-size: 20px;
 }
 
 .signin {
@@ -374,8 +377,8 @@ li::marker {
 
 .seelists {
     position: absolute;
-    width: 70px;
-    top: 100px;
+    width: auto;
+    top: 110px;
     left: 5px;
 }
 
@@ -383,4 +386,20 @@ li::marker {
     position: absolute;
     top: 10px;
     left: 5px;
+}
+
+.filtercontainer {
+    display: flex;
+    width: auto;
+    top: 30px;
+    right: 50px;
+    position: absolute;
+}
+
+.filtertitle {
+    font-family: Mona-Sans;
+    font-size: 20px;
+    margin-top: 15px;
+    position: absolute;
+    right: 30px;
 }

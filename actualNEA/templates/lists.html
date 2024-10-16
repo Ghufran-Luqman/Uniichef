@@ -6,7 +6,16 @@
 
 {% block body %}
 <h1 class="title">Saved Lists</h1>
+<form action="/home">
+    <button class="defaultbutton pos">Home</button>
+</form>
 
+{% if alert == "norecipes" %}
+    <script>
+    alert("You have no recipes. Add some to view them!")
+    window.location.href = "/home"
+    </script>
+{% endif %}
 <div class="temp" id="recipes">
     <form method="POST">
     {% for item in recipelist %}
