@@ -7,7 +7,6 @@
 
 
 {% block body %}
-<h1>sign-up</h1>
 {% if flashmessage == 'notfilledout' %}
   <script>
     alert("Please fully fill out *both* the username and password forms.")
@@ -17,13 +16,20 @@
     alert("There is another account with the same username. Please choose another username.")
   </script>
 {% endif %}
-<form action="/sign-up" method="POST">
-<input type="text" id="username" name="username" class="signin" autofill="off" placeholder="Username" autofocus><br>
-<input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br><br>
-<input type="submit" class="defaultbutton submit"><br>
-</form>
-
 <div class="container">
-<a href="/login"><button class="defaultbutton signupbtn">Go to login page</button></a>
+<p class="title index">Sign-Up</p>
+<div class="loginandsignup fields">
+  <form action="/sign-up" method="POST">
+  <input type="text" id="username" name="username" class="signin" autocomplete="off" placeholder="Username" autofocus><br>
+  <input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br><br>
+  <input type="submit" class="defaultbutton submit"><br>
+  </form>
 </div>
+
+<div class="loginandsignup">
+  <a href="/login"><button class="defaultbutton signupbtn">Login</button></a>
+  <a href="/"><button class="defaultbutton signupbtn">Home</button></a>
+</div>
+</div>
+
 {% endblock %}

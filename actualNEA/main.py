@@ -64,7 +64,6 @@ def sign_up():
     password4len = str(password)
     if username and password:
         password = generate_password_hash(password)
-        #do conn.close() as soon as possible
         try:
             c.execute("""INSERT INTO users (username, password)
             VALUES (?, ?)""", (username, password))

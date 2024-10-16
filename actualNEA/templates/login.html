@@ -2,12 +2,11 @@
 
 {% block head %}
 <link rel="stylesheet" href="../static/maincss.css">
-<title>login</title>
+<title>Login</title>
 {% endblock %}
 
 
 {% block body %}
-<h1>login</h1>
 {% if flashmessage == 'notfilledout' %}
   <script>
     alert("Please fully fill out *both* the username and password forms.")
@@ -21,14 +20,20 @@
   alert("Unknown Error")
 </script>
 {% endif %}
+<div class="container">
+<p class="title index">Login</p>
+<div class="loginandsignup fields">
 <form action="/login" method="POST">
-<input type="text" id="username" autofill="off" name="username" class="signin" placeholder="Username" autofocus><br>
-<input type="password" id="password" autofill="off" name="password" class="signin" placeholder="Password"><br><br>
+<input type="text" id="username" autocomplete="off" name="username" class="signin" placeholder="Username" autofocus><br>
+<input type="password" id="password" autocomplete="off" name="password" class="signin" placeholder="Password"><br><br>
 <input type="submit" class="defaultbutton submit"><br>
 </form>
+</div>
 
 
-<div class="container">
-<a href="/sign-up"><button class="defaultbutton signupbtn">Go to sign-up page</button></a>
+<div class="loginandsignup">
+<a href="/sign-up"><button class="defaultbutton signupbtn">Sign-Up</button></a>
+<a href="/"><button class="defaultbutton signupbtn">Home</button></a>
+</div>
 </div>
 {% endblock %}
