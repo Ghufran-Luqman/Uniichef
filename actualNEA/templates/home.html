@@ -26,6 +26,12 @@
     </form>
 </div>
 
+{% if alert == "norecipes" %}
+<script>
+    alert("There are no recipes with that ingredient.")
+</script>
+
+{% endif %}
 
 <input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/home" spellcheck="false">

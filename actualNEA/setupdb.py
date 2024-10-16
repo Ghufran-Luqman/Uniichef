@@ -186,6 +186,14 @@ c.execute("DROP TABLE ingredients")
 conn.commit()
 '''
 
+t = '8 small Granny Smith apples or as needed'
+c.execute("""UPDATE ingredients 
+            set state = ?
+            WHERE ingredient_name = ?
+            """, (False, t))
+
+c.execute("SELECT * FROM users")
+print(c.fetchall())
 c.execute("SELECT * FROM userspecrecipes")
 print(c.fetchall())
 c.execute("SELECT * FROM ingredients")

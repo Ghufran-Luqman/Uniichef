@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import ast
 
 app = Flask(__name__)
 app.secret_key = 'ilikecooking'
@@ -60,27 +61,35 @@ def sign_up():
     c = conn.cursor()
     username = request.form.get('username')
     password = request.form.get('password')
-    username4len = str(username)
-    password4len = str(password)
-    if username and password:
-        password = generate_password_hash(password)
-        try:
-            c.execute("""INSERT INTO users (username, password)
-            VALUES (?, ?)""", (username, password))
-            c.execute("SELECT * FROM users")
-            print(f"All values in database: {c.fetchall()}.")
-            conn.commit()
-            c.close()
-            conn.close()
-            return redirect(url_for('login'))
-        except:
-            flashmessage = 'sameusername'
-    elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
-        flashmessage = 'notfilledout'
+    confirmpassword = request.form.get('confirmpassword')
+    if password:
+        if len(password) > 6:
+            username4len = str(username)
+            password4len = str(password)
+            if username and password and password == confirmpassword:
+                password = generate_password_hash(password)
+                try:
+                    c.execute("""INSERT INTO users (username, password)
+                    VALUES (?, ?)""", (username, password))
+                    c.execute("SELECT * FROM users")
+                    print(f"All values in database: {c.fetchall()}.")
+                    conn.commit()
+                    c.close()
+                    conn.close()
+                    return redirect(url_for('login'))
+                except:
+                    flashmessage = 'sameusername'
+            elif password != confirmpassword:
+                flashmessage = "passwords do not match"
+            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
+                flashmessage = 'notfilledout'
+        else:
+            flashmessage = "password too short"
     return render_template("signup.html", flashmessage=flashmessage)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session['alert'] = ""
     login = False
     flashmessage = False
     conn = sqlite3.connect("recipes.db")
@@ -123,6 +132,8 @@ def home():
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
+    session['alert'] = ""
+
     c.execute("SELECT recipe_name FROM tableofrecipes2")
     row = c.fetchall()
     try:
@@ -159,6 +170,7 @@ def home():
         
     if 'search_history' not in session or request.args.get('reset') == "reset":
         session['search_history'] = []
+        session['alert'] = ""
     
 
     ingredientlist = loadingr()
@@ -231,7 +243,6 @@ def home():
                 while temporarycount != a:
                     #print("b")
                     tempcount2 = 0
-                    getout = 0
                     temp = 0
                     while tempcount2 != tempcount:
                         #print("c")
@@ -291,18 +302,28 @@ def home():
 
         try:
             x = forwebsite[0]
-            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'], username=username)
+            if len(forwebsite) > 0:
+                session['alert'] == ""
+            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'], username=username, alert=session['alert'])
         except:
             pass
 
+
+    if len(forwebsite) > 0:
+        session['alert'] = ""
+    elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
+        print("no recipes")
+        session['alert'] = "norecipes"
+        session['search_history'] = []
     c.close()
     conn.close()
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username)
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'])
 
 @app.route('/logout')
 def logout():
     session.pop('username')
     session.pop('search_history')
+    session.pop('alert')
     return redirect(url_for('login'))
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
@@ -442,11 +463,10 @@ def newrecipe(username, recipename):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     ingredientlist = []
-    c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipename,))
+    c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=? AND userid=?", (recipename, username))
     id = c.fetchall()[0][0]
     c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
     ingredients = c.fetchall()
-    print(f"ingredients: {ingredients}")
     for item in ingredients:
         ingredientlist.append(item)
     
@@ -455,11 +475,86 @@ def newrecipe(username, recipename):
     if image:
         image = image[0]
         image = image[0]
+    '''
+    newingredientlist = []
+    for item in ingredientlist:
+        newinglist2 = []
+        if item[1] == 0:
+            newinglist2.append(item[0])
+            newinglist2.append(False)
+            newingredientlist.append(newinglist2)
+        elif item[1] == 1:
+            newinglist2.append(item[0])
+            newinglist2.append(True)
+            newingredientlist.append(newinglist2)
+        else:
+            raise KeyError
+    print(f"newingredientlist {newingredientlist}")
+    '''
 
-    print(f"ingredientlist: {ingredientlist}")
+    newingredientlist = []
+    for item in ingredientlist:
+        newinglist2 = []
+        if item[1] == 0:
+            newinglist2.append(item[0])
+            newinglist2.append(False)
+            newingredientlist.append(newinglist2)
+        elif item[1] == 1:
+            newinglist2.append(item[0])
+            newinglist2.append(True)
+            newingredientlist.append(newinglist2)
+        else:
+            raise KeyError
+
+    print(f"newinglist: {newingredientlist}")
+
+    ingredientpressed = request.args.get('pressed')
+    if ingredientpressed:
+        ingredientpressed = ast.literal_eval(ingredientpressed)
+        print(f"ingredientpressed: {ingredientpressed}")
+        for item in newingredientlist:
+            if item[0] == ingredientpressed[0] and ingredientpressed[1] == False:
+                c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
+                temp = c.fetchall()[0][0]
+                print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+                c.execute("""UPDATE ingredients 
+                            set state = ?
+                            WHERE ingredient_name = ? AND recipeid=?
+                            """, (True, temp, id))
+                c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
+                t = c.fetchall()
+                conn.commit()
+                print(f"\nALL: {t}\n")
+                ingredientpressed.pop(1)
+                ingredientpressed.append(True)
+                print(f"newingpressed {ingredientpressed}")
+                pos = newingredientlist.index(item)
+                newingredientlist[pos] = ingredientpressed
+                print(f"newinglistmodified: {newingredientlist}")
+            elif item[0] == ingredientpressed[0] and ingredientpressed[1] == True:
+                c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
+                temp = c.fetchall()[0][0]
+                print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+                c.execute("""UPDATE ingredients 
+                            set state = ?
+                            WHERE ingredient_name = ? AND recipeid=?
+                            """, (False, temp, id))
+                c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
+                t = c.fetchall()
+                conn.commit()
+                print(f"\nALL: {t}\n")
+                ingredientpressed.pop(1)
+                ingredientpressed.append(False)
+                print(f"newingpressed {ingredientpressed}")
+                pos = newingredientlist.index(item)
+                newingredientlist[pos] = ingredientpressed
+                print(f"newinglistmodified: {newingredientlist}")
+
+            
+
     c.close()
     conn.close()
-    return render_template('userrecipe.html', recipename=recipename, username=username, item=ingredientlist, image=image)
+    return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

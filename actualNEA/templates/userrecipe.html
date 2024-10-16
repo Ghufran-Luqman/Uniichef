@@ -7,13 +7,20 @@
 {% block body %}
 <p class="title">{{ recipename }}:</p>
 <p class="ingredients">Ingredients:</p>
-<form method="POST" action="">
-    {% for i in item %}
+
+<form>
+
+{% for i in item %}
     <li style="text-align:left">
-        <span class="ingredients" id="ingredient" name="ingredient">{{ i }}</span>
+        {% if i[1] == False %}
+            <span class="ingredients" id="ingredient" name="ingredient">{{ i[0] }}</span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">+</button>
+        {% elif i[1] == True %}
+            <span class="ingredients ticked" id="ingredient" name="ingredient">{{ i[0] }}</span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">✓</button>
+        {% endif %}
     </li>
 {% endfor %}
 </form>
+
 <form action="/home">
     <button class="defaultbutton pos">Home</button>
 </form>

@@ -442,3 +442,6 @@ li::marker {
     top: 400px;
 }
 
+.ticked {
+    text-decoration: line-through;
+}
