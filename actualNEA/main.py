@@ -318,7 +318,14 @@ def home():
         session['alert'] = "norecipes"
         session['search_history'] = []
     
+    preptime = request.args.get('preptime')
+    cooktime = request.args.get('cooktime')
+    totaltime = request.args.get('totaltime')
 
+    if preptime:
+        c.execute("SELECT prep_time FROM tableofrecipes2")
+        allpreptime = c.fetchall()
+        print(f"ALLPREPTIME: {allpreptime}")
 
     c.close()
     conn.close()
