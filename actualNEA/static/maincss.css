@@ -445,3 +445,15 @@ li::marker {
 .ticked {
     text-decoration: line-through;
 }
+
+.leftt {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+}
+
+.rightt {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+}

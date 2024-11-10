@@ -563,28 +563,6 @@ def newrecipe(username, recipename):
     conn.close()
     return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image)
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    conn = sqlite3.connect('recipes.db')
-    c = conn.cursor()
-
-    if request.method == "POST":
-        print(f"deleting...")
-        t = "default"
-        c.execute("DELETE FROM listofingredients WHERE user=?", (t,))
-        conn.commit()
-    c.execute("SELECT ingredient FROM listofingredients")
-    listt = c.fetchall()
-    #print(f"initial list:{listt}")
-    list2 = []
-    for item in listt:
-        item1 = f"{item[0]}"
-        list2.append(item1)
-    #print(f"list2: {list2}")
-    c.close()
-    conn.close()
-    return render_template('test.html', list2=list2)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
