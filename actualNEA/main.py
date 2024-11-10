@@ -253,9 +253,11 @@ def home():
                         else:
                             anothertemplist.append(recipename)
                             break
+        print(f"anothertemplist: {anothertemplist}")
         if tempcount > 1:#if there's more than one query item
             #print(f"anothertemplist: {anothertemplist}")
             for item in anothertemplist:#for every recipe in this list of recipes
+                tobreak = False
                 #print(f"session['ingrsearch_history']: {session['ingrsearch_history']}")
                 #print(f"anothertemplist: {anothertemplist}")
                 #print("a")
@@ -264,13 +266,14 @@ def home():
                 recipesings = list(recipesings)
                 recipesings = recipesings[0]
                 tempvar = [ingredient.strip() for ingredient in recipesings.split(',')]#puts original ings into list separated by the comma
+                #tempvar is the ingredient list (all cleaned up) for this specific recipe
                 a = len(tempvar)#length of list of ingredients
                 temporarycount = 0
-                while temporarycount != a:
+                while temporarycount != a and tobreak == False:
                     #print("b")
                     tempcount2 = 0
                     temp = 0
-                    while tempcount2 != tempcount:
+                    while tempcount2 != tempcount and tobreak == False:#tempcount is how many queries there are
                         #print("c")
                         #print(f"recipename: {item}")
                         #print(f"session['ingrsearch_history'][tempcount2].upper(): {session['ingrsearch_history'][tempcount2].upper()}")
@@ -295,6 +298,7 @@ def home():
                             if temp == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
                                 #print(f"adding {item} to forwebsite...")
                                 forwebsite.append(item)#adds them to be displayed on the website
+                                tobreak = True
                                 break
                                         
                             '''
@@ -307,9 +311,10 @@ def home():
                                     
                         else:#if the first queried item is not in the recipe list then break
                             #print(f"no")
-                            #print(f"breaking")
+                            print(f"breaking")
                             break
                         #print(f"herenow")
+
 
                     #if tempcount2 == tempcount:
                         #print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
