@@ -337,22 +337,6 @@ def item(recipename):
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
-    if request.method == "POST":
-        haveingredient = request.form.get('checkmark')
-        print(f"haveingredient:{haveingredient}")
-        if haveingredient:
-            print(f"inserting haveingredient")
-            c.execute("""INSERT INTO listofingredients (user, ingredient, status)
-                VALUES (?, ?, ?)""", ("default", haveingredient, "True",))
-            conn.commit()
-        c.execute("SELECT * FROM listofingredients")
-        listt = c.fetchall()
-        print(f"initial list:{listt}")
-        list2 = []
-        for item in listt:
-            item1 = f"{item[0]}, {item[1]}, {item[2]}"
-            list2.append(item1)
-        print(f"list2: {list2}")
     addlist = request.args.get("saverecipe")
     while addlist == 'button':#if user clicks on this button
         print("clicked on button")
