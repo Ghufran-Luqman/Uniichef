@@ -348,8 +348,6 @@ def item(recipename):
         for string in splitup:
             if string.strip():
                 instructionlist.append(string)
-        instructionlist[-1] = f"By: {instructionlist[-1]}"
-        #print(f"instructionlist: {instructionlist}")
         
 
     addlist = request.args.get("saverecipe")
