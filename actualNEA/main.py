@@ -165,6 +165,8 @@ def home():
             if wordsfound:
             #if query.upper() in item.upper():#converts the query to uppercase and each name in the list to uppercase and sees if the name contains the query
                 newrecipelist.append(item)#if it does, it adds it to the list
+    if len(newrecipelist) == 0:
+        session['alert'] = 'norecipessearch'
 
     query2 = request.args.get("querying")
         
@@ -315,6 +317,9 @@ def home():
         print("no recipes")
         session['alert'] = "norecipes"
         session['search_history'] = []
+    
+
+
     c.close()
     conn.close()
     return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'])

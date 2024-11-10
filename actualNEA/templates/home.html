@@ -18,17 +18,31 @@
             <li><p class="ingredients querying">{{ filter }}</p></li>
         {% endfor %}
         </ul>
+
+        <div class="time">
+        <p class="ingredients">Time:</p>
+        <input class="searchwing preptime" placeholder="Filter by prep-time..." name="preptime" id="preptime" autocomplete="off">
+        <input class="searchwing cooktime" placeholder="Filter by cook-time..." name="cooktime" id="cooktime" autocomplete="off">
+        <input class="searchwing totaltime" placeholder="Filter by total-time..." name="totaltime" id="totaltime" autocomplete="off">
+        </div>
         </div>
     </form>
-    <p class="ingredients username">Welcome, {{ username }}!</p>
     <form action="/lists">
         <button class="reset seelists">View Saved Recipes</button>
     </form>
+
 </div>
 
 {% if alert == "norecipes" %}
 <script>
     alert("There are no recipes with that ingredient.")
+    window.location.href = "/home"
+</script>
+
+{% elif alert == "norecipessearch" %}
+<script>
+    alert("There are no recipes with that name.")
+    window.location.href = "/home"
 </script>
 
 {% endif %}
@@ -38,6 +52,8 @@
     <input type="text" id="search" autocomplete="off" name="Query" class="search" placeholder="Search recipe...">
     <input type="submit" value="Search" hidden>
 </form>
+
+<p class="ingredients username">Welcome, {{ username }}!</p>
 
 <form action="logout">
 <button class="reset logout" id="logout" type='submit' name="logout">Logout</button>

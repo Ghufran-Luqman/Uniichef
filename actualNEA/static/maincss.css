@@ -346,7 +346,8 @@ li::marker {
 .logout {
     right: 25px;
     position: absolute;
-    width: 80px
+    width: 80px;
+    top: 18px;
 }
 
 .saverecipe {
@@ -373,12 +374,13 @@ li::marker {
 }
 
 .username {
-    left: 5px;
     position: absolute;
-    top: 30px;
     z-index: 999;
-    display: absolute
+    display: absolute;
+    top: -5px;
+    margin-left: 1120px;
 }
+
 
 .seelists {
     position: absolute;
@@ -461,7 +463,7 @@ li::marker {
 
 
 .ingredientlist {
-    border: 1px solid green;
+    border: 0px solid green;
     width: 450px;
     position: absolute;
     top: 130px;
@@ -475,7 +477,7 @@ li::marker {
     left: 475px;
     top: 130px;
     position: absolute;
-    border: 1px solid green;
+    border: 0px solid green;
     width: 1000px;
 }
 
@@ -485,4 +487,13 @@ li::marker {
 
 .saved {
     top: 130px;
+}
+
+.time {
+    border: 0px solid green;
+    height: auto;
+    width: 230px;
+    position: absolute;
+    top: 130px;
+    left: -395px;
 }
