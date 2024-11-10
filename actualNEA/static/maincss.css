@@ -461,7 +461,7 @@ li::marker {
 
 
 .ingredientlist {
-    border: 0px solid green;
+    border: 1px solid green;
     width: 450px;
     position: absolute;
     top: 130px;
@@ -475,10 +475,14 @@ li::marker {
     left: 475px;
     top: 130px;
     position: absolute;
-    border: 0px solid green;
+    border: 1px solid green;
     width: 1000px;
 }
 
 .by {
     font-size: 25px;
+}
+
+.saved {
+    top: 130px;
 }

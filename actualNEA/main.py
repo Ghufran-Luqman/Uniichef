@@ -473,6 +473,17 @@ def newrecipe(username, recipename):
     ingredients = c.fetchall()
     for item in ingredients:
         ingredientlist.append(item)
+
+    c.execute("SELECT directions FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
+    instructions = c.fetchall()
+    if instructions:
+        instructions = instructions[0][0]
+        splitup = instructions.split('\n')
+        instructionlist = []
+        for string in splitup:
+            if string.strip():
+                instructionlist.append(string)
+        instructionlist[-1] = f"By: {instructionlist[-1]}"
     
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
@@ -558,7 +569,7 @@ def newrecipe(username, recipename):
 
     c.close()
     conn.close()
-    return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image)
+    return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image, instructions=instructionlist)
 
 
 if __name__ == "__main__":
