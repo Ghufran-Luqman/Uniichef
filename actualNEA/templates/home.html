@@ -11,20 +11,25 @@
         <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
         <input type="submit" hidden>
         <button id="reset" name="reset" value="reset" type="submit" class="reset">Reset</button>
-        <p class="ingredients filtertitle">Filtered Ingredients:</p>
         <div class="filtercontainer">
+        <p class="ingredients filtertitle">Filtered Ingredients:</p>
         <ul>
         {% for filter in querying %}
             <li><p class="ingredients querying">{{ filter }}</p></li>
         {% endfor %}
         </ul>
+        </div>
+
+        <div class="namescontainer">
+        <p class="ingredients filtertitle names">Filtered Names:</p>
+        <p class="ingredients querying">{{ search_history }}</p>
+        </div>
 
         <div class="time">
         <p class="ingredients">Time:</p>
         <input class="searchwing preptime" placeholder="Filter by prep-time..." name="preptime" id="preptime" autocomplete="off">
         <input class="searchwing cooktime" placeholder="Filter by cook-time..." name="cooktime" id="cooktime" autocomplete="off">
         <input class="searchwing totaltime" placeholder="Filter by total-time..." name="totaltime" id="totaltime" autocomplete="off">
-        </div>
         </div>
     </form>
     <form action="/lists">
@@ -42,6 +47,12 @@
 {% elif alert == "norecipessearch" %}
 <script>
     alert("There are no recipes with that name.")
+    window.location.href = "/home"
+</script>
+
+{% elif alert == "nocriteria" %}
+<script>
+    alert("There are no recipes with that criteria.")
     window.location.href = "/home"
 </script>
 

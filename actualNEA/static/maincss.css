@@ -252,7 +252,7 @@ li::marker {
 
 .querying {
     font-family: Mona-Sans;
-    top: 150px;
+    top: 100px;
     left: 50px;
     font-size: 20px;
 }
@@ -379,6 +379,7 @@ li::marker {
     display: absolute;
     top: -5px;
     margin-left: 1120px;
+    font-family: Mona-Sans;
 }
 
 
@@ -397,10 +398,12 @@ li::marker {
 
 .filtercontainer {
     display: flex;
-    width: auto;
-    top: 30px;
-    right: 50px;
+    width: 249px;
+    height: 1000px;
+    top: 350px;
+    left: 0px;
     position: absolute;
+    border: 1px solid red;
 }
 
 .filtertitle {
@@ -494,6 +497,20 @@ li::marker {
     height: auto;
     width: 230px;
     position: absolute;
-    top: 130px;
-    left: -395px;
+    top: 170px;
+    left: 5px;
+}
+
+.namescontainer {
+    position: absolute;
+    border: 1px solid green;
+    width: 215px;
+    height: 1000px;
+    top: 350px;
+    left: 250px;
+}
+
+.names{
+    left: 0px;
+    top: 0px;
 }

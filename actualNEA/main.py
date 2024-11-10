@@ -126,8 +126,34 @@ def home():
     if 'username' not in session:#if they're username isnt actually saved
         return redirect(url_for('login'))#redirects them back to the login page.
     
+    row = ""
+    newlist = ""
+    newrecipelist = []
+    displayonwebsite = []
+    query = request.args.get("Query", '')#the '' is a default value.
+    query2 = request.args.get("querying")
+
+    if query:
+        session['query'] = query
+    if query2:
+        session['query2'] = query2
+
+    print(f"query: {query}")
+    print(f"query2: {query2}")
+    print(f"session['query']: {session['query']}")
+    print(f"session['query2']: {session['query2']}")
+
+
     username = session['username']
     #print(username)
+    t=0
+    #t=4
+    if 'ingrsearch_history' not in session or request.args.get('reset') == "reset" or t==4:
+            session['ingrsearch_history'] = []
+            session['alert'] = ""
+            session['query'] = ""
+            session['query2'] = ""
+            print(f"resettting")
 
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
@@ -150,10 +176,10 @@ def home():
     #print(f"finished list: {newlist}")#i have removed the tuples
 
 
-    query = request.args.get("Query", '')#the '' is a default value.
+    
     recipenames = loadnames()
     newrecipelist = []
-    splitwords = query.upper().split()
+    splitwords = session['query'].upper().split()
     for item in recipenames:
         if item:#checks if its empty
             wordsfound = True
@@ -167,24 +193,22 @@ def home():
                 newrecipelist.append(item)#if it does, it adds it to the list
     if len(newrecipelist) == 0:
         session['alert'] = 'norecipessearch'
+        session['query'] = ""
 
-    query2 = request.args.get("querying")
-        
-    if 'search_history' not in session or request.args.get('reset') == "reset":
-        session['search_history'] = []
-        session['alert'] = ""
-    
+
 
     ingredientlist = loadingr()
     anotherlist = []
     anotherrlist = []
     forwebsite = []
     count = 0
-    if query2:
-        session['search_history'].append(query2)
+    if session['query2']:
+        session['ingrsearch_history'].append(session['query2'])
         session.modified = True
 
-        #for querying in session['search_history']:
+        print(f"session['ingrsearch_history]: {session['ingrsearch_history']}")
+
+        #for querying in session['ingrsearch_history']:
         for item in ingredientlist:
             item = list(item)
             item = item[0]
@@ -201,14 +225,14 @@ def home():
                             forwebsite.append(recipename)
                         break
         '''
-        tempcount = len(session['search_history'])
+        tempcount = len(session['ingrsearch_history'])
         #print(f"tempcount: {tempcount}")
         anothertemplist = []
         tempvar = []
         if tempcount <= 1:
-            #for abc in session['search_history']:
+            #for abc in session['ingrsearch_history']:
                 #print(f"abc: {abc}")
-            for abc in session['search_history']:#OR list
+            for abc in session['ingrsearch_history']:#OR list
                 for item in anotherrlist:
                         for ingredient in item:
                             if abc.upper() in ingredient.upper():
@@ -219,7 +243,7 @@ def home():
                                     anothertemplist.append(recipename)
                                 break
         elif tempcount > 1:
-            firstquery = session['search_history'][0]
+            firstquery = session['ingrsearch_history'][0]
             for item in anotherrlist:
                 for ingredient in item:
                     if firstquery.upper() in ingredient.upper():
@@ -232,7 +256,7 @@ def home():
         if tempcount > 1:#if there's more than one query item
             #print(f"anothertemplist: {anothertemplist}")
             for item in anothertemplist:#for every recipe in this list of recipes
-                #print(f"session['search_history']: {session['search_history']}")
+                #print(f"session['ingrsearch_history']: {session['ingrsearch_history']}")
                 #print(f"anothertemplist: {anothertemplist}")
                 #print("a")
                 c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (item,))#gets recipes original ings
@@ -249,15 +273,15 @@ def home():
                     while tempcount2 != tempcount:
                         #print("c")
                         #print(f"recipename: {item}")
-                        #print(f"session['search_history'][tempcount2].upper(): {session['search_history'][tempcount2].upper()}")
+                        #print(f"session['ingrsearch_history'][tempcount2].upper(): {session['ingrsearch_history'][tempcount2].upper()}")
                         #print(f"temporarycount: {temporarycount}")
                         #print(f"tempvar: {tempvar}")
                         #print(f"tempvar[temporarycount].upper(): {tempvar[temporarycount].upper()}")
-                        if session['search_history'][tempcount2].upper() in tempvar[temporarycount].upper():#if queried ingredient is in an ingredient of the recipe
+                        if session['ingrsearch_history'][tempcount2].upper() in tempvar[temporarycount].upper():#if queried ingredient is in an ingredient of the recipe
                             #print(f"yes")
                             tempcount2 += 1
-                            for ingredientquery in session['search_history']:#cycles through all the queries
-                                #print(f"session['search_history']:{session['search_history']}")
+                            for ingredientquery in session['ingrsearch_history']:#cycles through all the queries
+                                #print(f"session['ingrsearch_history']:{session['ingrsearch_history']}")
                                 #print(f"ingredientquery: {ingredientquery}")
                                 for aningredient in tempvar:
                                     #print(f"tempvar: {tempvar}")
@@ -268,7 +292,7 @@ def home():
                                         #print(f"temp (which has increased by 1): {temp}")
                                         break
 
-                            if temp == len(session['search_history']):#if all queries are in the recipe ingredients
+                            if temp == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
                                 #print(f"adding {item} to forwebsite...")
                                 forwebsite.append(item)#adds them to be displayed on the website
                                 break
@@ -276,7 +300,7 @@ def home():
                             '''
                             for aningredient in tempvar:
                                 print(f"tempcount2: {tempcount2}")
-                                if session['search_history'][tempcount2].upper() in aningredient.upper():
+                                if session['ingrsearch_history'][tempcount2].upper() in aningredient.upper():
                                     print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                                     forwebsite.append(item)#add them to be displayed on the website
                             '''
@@ -299,14 +323,39 @@ def home():
                     
 
         #print(f"forwebsite: {forwebsite}")
-        #print(f"sessicon search history: {session['search_history']}")
+        #print(f"sessicon search history: {session['ingrsearch_history']}")
 
 
         try:
             x = forwebsite[0]
             if len(forwebsite) > 0:
                 session['alert'] == ""
-            return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['search_history'], username=username, alert=session['alert'])
+
+            if newrecipelist:
+                if newrecipelist == forwebsite:
+                    displayonwebsite = newrecipelist
+                else:
+                    for recipe in newrecipelist:
+                        for anotherrecipe in forwebsite:
+                            if recipe == anotherrecipe:
+                                alrthere = False
+                                for item in displayonwebsite:
+                                    if item == recipe:
+                                        alrthere = True
+                                if alrthere == False:
+                                    displayonwebsite.append(recipe)
+                                
+                #print(f"newrecipelist: {newrecipelist}")
+                #print(f"forwebsite: {forwebsite}")
+                #print(f"displayonwebsite: {displayonwebsite}")
+            if len(displayonwebsite) == 0:
+                session['alert'] = 'nocriteria'
+                session['query'] = ""
+                session['query2'] = ""
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'])
+            else:
+                print(f"top")
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'])
         except:
             pass
 
@@ -316,7 +365,7 @@ def home():
     elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
         print("no recipes")
         session['alert'] = "norecipes"
-        session['search_history'] = []
+        session['ingrsearch_history'] = []
     
     preptime = request.args.get('preptime')
     cooktime = request.args.get('cooktime')
@@ -327,14 +376,40 @@ def home():
         allpreptime = c.fetchall()
         print(f"ALLPREPTIME: {allpreptime}")
 
+    session['search_history'] = session['query']
+
+    if forwebsite:
+        if newrecipelist == forwebsite:
+            displayonwebsite = newrecipelist
+        else:
+            for recipe in newrecipelist:
+                for anotherrecipe in forwebsite:
+                    if recipe == anotherrecipe:
+                        alrthere = False
+                        for item in displayonwebsite:
+                            if item == recipe:
+                                alrthere = True
+                        if alrthere == False:
+                            displayonwebsite.append(recipe)
+        if len(displayonwebsite) == 0:
+                session['alert'] = 'nocriteria'
+                session['query'] = ""
+                session['query2'] = ""
+        #print(f"newrecipelist: {newrecipelist}")
+        #print(f"forwebsite: {forwebsite}")
+        print(f"displayonwebsite: {displayonwebsite}")
+        print(f"bottom")
+        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+
     c.close()
     conn.close()
+    print(f"vbottom")
     return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'])
 
 @app.route('/logout')
 def logout():
     session.pop('username')
-    session.pop('search_history')
+    session.pop('ingrsearch_history')
     session.pop('alert')
     return redirect(url_for('login'))
 
