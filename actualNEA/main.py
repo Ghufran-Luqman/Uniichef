@@ -366,6 +366,8 @@ def item(recipename):
         c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
         name = c.fetchall()
         print(f"name: {name}")
+        duplicates = False
+        '''
         length = len(name)
         count = 0
         duplicates = False
@@ -384,9 +386,14 @@ def item(recipename):
                 duplicates = True
                 break
             count += 1
-        if duplicates == False:
+        '''
+        #Cycle through previously saved recipes
+        for previousrecipe in name:
+            if previousrecipe[0] == recipename:
+                duplicates = True
+        if duplicates == False:# If they haven't added this recipe before
             c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
-                        VALUES (?, ?)""", (username, recipename))
+                        VALUES (?, ?)""", (username, recipename))#Insert into database
             conn.commit()
             c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))
             e = c.fetchall()
