@@ -6,8 +6,9 @@
 @font-face {
     font-family: "Source-Serif-4";
     src: url("SourceSerif4-VariableFont_opsz,wght.ttf") format("truetype");
-    font-weight: 1 1000; /* Specify the range of weights supported */
+    font-weight: 1 1000;
 }
+
 
 ::selection {
   background: #ECFFBC;
@@ -456,4 +457,28 @@ li::marker {
     position: absolute;
     top: 10px;
     right: 5px;
+}
+
+
+.ingredientlist {
+    border: 0px solid green;
+    width: 450px;
+    position: absolute;
+    top: 130px;
+}
+
+.ingrlistitem {
+    font-size: 20px;
+}
+
+.instructions {
+    left: 475px;
+    top: 130px;
+    position: absolute;
+    border: 0px solid green;
+    width: 1000px;
+}
+
+.by {
+    font-size: 25px;
 }

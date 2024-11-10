@@ -328,6 +328,7 @@ def logout():
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
 def item(recipename):
+    instructionlist = []
     alert = ""
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
@@ -337,6 +338,20 @@ def item(recipename):
     for item in ingredients:
         item = item[0]
         ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    
+    c.execute("SELECT directions FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
+    instructions = c.fetchall()
+    if instructions:
+        instructions = instructions[0][0]
+        splitup = instructions.split('\n')
+        instructionlist = []
+        for string in splitup:
+            if string.strip():
+                instructionlist.append(string)
+        instructionlist[-1] = f"By: {instructionlist[-1]}"
+        #print(f"instructionlist: {instructionlist}")
+        
+
     addlist = request.args.get("saverecipe")
     while addlist == 'button':#if user clicks on this button
         print("clicked on button")
@@ -416,7 +431,7 @@ def item(recipename):
     
     c.close()
     conn.close()
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image, alert=alert)
+    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image, alert=alert, instructions=instructionlist)
 
 @app.route('/lists')
 def lists():

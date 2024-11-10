@@ -26,14 +26,29 @@
 </form>
 </div>
 
+<div class="ingredientlist">
 <p class="ingredients">Ingredients:</p>
 <form method="POST" action="">
     {% for i in item %}
     <li style="text-align:left">
-        <span class="ingredients" id="ingredient" name="ingredient">{{ i }}</span>
+        <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i }}</span>
     </li>
 {% endfor %}
 </form>
+</div>
+
+<div class="ingredientlist instructions">
+<p class="ingredients">Instructions:</p>
+<form method="POST" action="">
+    <ol>
+    {% for step in instructions %}
+    <li style="text-align:left">
+        <span class="ingredients ingrlistitem">{{ step }}</span>
+    </li>
+    {% endfor %}
+    </ol>
+</form>
+</div>
 
 <form action="/home">
     <button class="defaultbutton pos">Home</button>
