@@ -252,8 +252,6 @@ li::marker {
 
 .querying {
     font-family: Mona-Sans;
-    top: 100px;
-    left: 50px;
     font-size: 20px;
 }
 
@@ -385,9 +383,10 @@ li::marker {
 
 .seelists {
     position: absolute;
-    width: auto;
-    top: 110px;
+    width: 150px;
+    top: 90px;
     left: 5px;
+    height: 30px;
 }
 
 .pos {
@@ -397,19 +396,17 @@ li::marker {
 }
 
 .filtercontainer {
-    display: flex;
+    position: absolute;
     width: 249px;
     height: 1000px;
     top: 350px;
     left: 0px;
-    position: absolute;
-    border: 1px solid red;
+    border: 0px solid red;
 }
 
 .filtertitle {
     font-family: Mona-Sans;
     font-size: 20px;
-    margin-top: 15px;
     position: absolute;
     right: 30px;
 }
@@ -503,7 +500,7 @@ li::marker {
 
 .namescontainer {
     position: absolute;
-    border: 1px solid green;
+    border: 0px solid green;
     width: 215px;
     height: 1000px;
     top: 350px;
@@ -513,4 +510,33 @@ li::marker {
 .names{
     left: 0px;
     top: 0px;
+}
+
+.resetbtn {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    height: 50px;
+    width: 150px;
+}
+
+.searchpos {
+    position: absolute;
+    top: 5px;
+    left: 270px;
+}
+
+.filtingrds {
+    position: absolute;
+    border: 0px solid blue;
+    width: 200px;
+    height: 200px;
+    top: 50px;
+    left: 50px;
+}
+
+.historysearch {
+    position: absolute;
+    top: 35px;
+    left: 10px;
 }

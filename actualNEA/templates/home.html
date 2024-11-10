@@ -8,21 +8,29 @@
 
 <div class="sidebox">
     <form method="GET" action="/home" spellcheck="false">
-        <input class="searchwing" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
+        <input class="searchwing searchpos" placeholder="Filter with ingredients..." name="querying" id="querying" autocomplete="off">
         <input type="submit" hidden>
-        <button id="reset" name="reset" value="reset" type="submit" class="reset">Reset</button>
+        <button id="reset" name="reset" value="reset" type="submit" class="reset resetbtn">Reset All Filters</button>
         <div class="filtercontainer">
         <p class="ingredients filtertitle">Filtered Ingredients:</p>
         <ul>
+        <div class="filtingrds">
         {% for filter in querying %}
             <li><p class="ingredients querying">{{ filter }}</p></li>
         {% endfor %}
+        </div>
         </ul>
         </div>
 
         <div class="namescontainer">
         <p class="ingredients filtertitle names">Filtered Names:</p>
-        <p class="ingredients querying">{{ search_history }}</p>
+        <div class="historysearch">
+        <ul>
+        {% if search_history %}
+        <li><p class="ingredients querying">{{ search_history }}</p></li>
+        {% endif %}
+        </ul>
+        </div>
         </div>
 
         <div class="time">

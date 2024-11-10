@@ -138,10 +138,10 @@ def home():
     if query2:
         session['query2'] = query2
 
-    print(f"query: {query}")
-    print(f"query2: {query2}")
-    print(f"session['query']: {session['query']}")
-    print(f"session['query2']: {session['query2']}")
+    #print(f"query: {query}")
+    #print(f"query2: {query2}")
+    #print(f"session['query']: {session['query']}")
+    #print(f"session['query2']: {session['query2']}")
 
 
     username = session['username']
@@ -153,7 +153,7 @@ def home():
             session['alert'] = ""
             session['query'] = ""
             session['query2'] = ""
-            print(f"resettting")
+            #print(f"resettting")
 
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
@@ -311,7 +311,7 @@ def home():
                                     
                         else:#if the first queried item is not in the recipe list then break
                             #print(f"no")
-                            print(f"breaking")
+                            #print(f"breaking")
                             break
                         #print(f"herenow")
 
@@ -357,10 +357,10 @@ def home():
                 session['alert'] = 'nocriteria'
                 session['query'] = ""
                 session['query2'] = ""
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'])
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
             else:
-                print(f"top")
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'])
+                #print(f"top")
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
         except:
             pass
 
@@ -368,7 +368,7 @@ def home():
     if len(forwebsite) > 0:
         session['alert'] = ""
     elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
-        print("no recipes")
+        #print("no recipes")
         session['alert'] = "norecipes"
         session['ingrsearch_history'] = []
     
@@ -402,14 +402,14 @@ def home():
                 session['query2'] = ""
         #print(f"newrecipelist: {newrecipelist}")
         #print(f"forwebsite: {forwebsite}")
-        print(f"displayonwebsite: {displayonwebsite}")
-        print(f"bottom")
+        #print(f"displayonwebsite: {displayonwebsite}")
+        #print(f"bottom")
         return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
 
     c.close()
     conn.close()
-    print(f"vbottom")
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'])
+    #print(f"vbottom")
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'])
 
 @app.route('/logout')
 def logout():
