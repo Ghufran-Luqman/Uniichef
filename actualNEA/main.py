@@ -133,6 +133,8 @@ def home():
     query = request.args.get("Query", '')#the '' is a default value.
     query2 = request.args.get("querying")
 
+    images = []
+    
     if query:
         session['query'] = query
     if query2:
@@ -367,14 +369,24 @@ def home():
                         imagefromdb = c.fetchall()
                         for image in imagefromdb:
                             images.append(image[0])
-
-                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images)
-
+                    #grab time
+                    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+                    times = c.fetchall()
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
             else:
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                #grab images
+                images = []
+                for recipe in forwebsite:
+                    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+                    imagefromdb = c.fetchall()
+                    for image in imagefromdb:
+                        images.append(image[0])
+                #grab time
+                c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+                times = c.fetchall()
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
         except:
             pass
-
 
     if len(forwebsite) > 0:
         session['alert'] = ""
@@ -415,12 +427,33 @@ def home():
         #print(f"forwebsite: {forwebsite}")
         #print(f"displayonwebsite: {displayonwebsite}")
         #print(f"bottom")
-        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+        #grab images
+        images = []
+        for recipe in displayonwebsite:
+            c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+            imagefromdb = c.fetchall()
+            for image in imagefromdb:
+                images.append(image[0])
+        #grab time
+        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+        times = c.fetchall()
+        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
 
+    
+    #print(f"vbottom")
+    #grab images
+    images = []
+    for recipe in newrecipelist:
+        c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        imagefromdb = c.fetchall()
+        for image in imagefromdb:
+            images.append(image[0])
+    #grab time
+    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+    times = c.fetchall()
     c.close()
     conn.close()
-    #print(f"vbottom")
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'])
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
 
 @app.route('/logout')
 def logout():
