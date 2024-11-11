@@ -349,17 +349,20 @@ def home():
                                         alrthere = True
                                 if alrthere == False:
                                     displayonwebsite.append(recipe)
-                                
-                #print(f"newrecipelist: {newrecipelist}")
-                #print(f"forwebsite: {forwebsite}")
-                #print(f"displayonwebsite: {displayonwebsite}")
-            if len(displayonwebsite) == 0:
-                session['alert'] = 'nocriteria'
-                session['query'] = ""
-                session['query2'] = ""
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                            
+                    #print(f"newrecipelist: {newrecipelist}")
+                    #print(f"forwebsite: {forwebsite}")
+                    #print(f"displayonwebsite: {displayonwebsite}")
+                if len(displayonwebsite) == 0:
+                    session['alert'] = 'nocriteria'
+                    session['query'] = ""
+                    session['query2'] = ""
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                else:
+                    #print(f"top")
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+
             else:
-                #print(f"top")
                 return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
         except:
             pass
