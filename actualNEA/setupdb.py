@@ -200,5 +200,9 @@ c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
 
+c.execute("SELECT img_src FROM tableofrecipes2")
+t = c.fetchall()
+print(t)
+
 conn.commit()
 conn.close()

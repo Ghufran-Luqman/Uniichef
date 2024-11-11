@@ -540,3 +540,7 @@ li::marker {
     top: 35px;
     left: 10px;
 }
+
+.image {
+    z-index: 99999px;
+}

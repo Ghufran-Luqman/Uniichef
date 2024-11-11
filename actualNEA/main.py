@@ -206,7 +206,7 @@ def home():
         session['ingrsearch_history'].append(session['query2'])
         session.modified = True
 
-        print(f"session['ingrsearch_history]: {session['ingrsearch_history']}")
+        #print(f"session['ingrsearch_history]: {session['ingrsearch_history']}")
 
         #for querying in session['ingrsearch_history']:
         for item in ingredientlist:
@@ -253,7 +253,7 @@ def home():
                         else:
                             anothertemplist.append(recipename)
                             break
-        print(f"anothertemplist: {anothertemplist}")
+        #print(f"anothertemplist: {anothertemplist}")
         if tempcount > 1:#if there's more than one query item
             #print(f"anothertemplist: {anothertemplist}")
             for item in anothertemplist:#for every recipe in this list of recipes
@@ -360,7 +360,15 @@ def home():
                     return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
-                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                    #grab images
+                    images = []
+                    for recipe in displayonwebsite:
+                        c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+                        imagefromdb = c.fetchall()
+                        for image in imagefromdb:
+                            images.append(image[0])
+
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images)
 
             else:
                 return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
