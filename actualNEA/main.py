@@ -35,26 +35,87 @@ def loadingr():
         ingredientlist.append(item)
     return ingredientlist
 
-def grab_thing(thing, displayonwebsite):
+def grab_image(displayonwebsite):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    
-    listofthing = []
+    listofimages = []
     for recipe in displayonwebsite:
-        c.execute("SELECT ? FROM tableofrecipes2 WHERE recipe_name=?", (thing, recipe))
+        c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
         imagefromdb = c.fetchall()
         for image in imagefromdb:
-            listofthing.append(image[0])
-    return listofthing
-    
-def grab_time():
+            listofimages.append(image[0])
+    return listofimages
+
+def grab_servings(displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    listofservings = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT servings FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        servingfromdb = c.fetchall()
+        for serving in servingfromdb:
+            listofservings.append(serving[0])
+    return listofservings
+
+def grab_rating(displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    listofratings = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT rating FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        ratingfromdb = c.fetchall()
+        for arating in ratingfromdb:
+            listofratings.append(arating[0])
+    return listofratings
+
+def grab_cuisine_path(displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    listofcuisinepaths = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT cuisine_path FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        cuisinepathfromdb = c.fetchall()
+        for acuisinepath in cuisinepathfromdb:
+            acuisinepath = acuisinepath[0]
+            newcuisinepath = acuisinepath.split('/')
+            acuisinepath = newcuisinepath[1]
+            listofcuisinepaths.append(acuisinepath)
+    return listofcuisinepaths
+
+def grab_nutrition(displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    listofnutritions = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT nutrition FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        nutritionfromdb = c.fetchall()
+        for nutrition in nutritionfromdb:
+            listofnutritions.append(nutrition[0])
+    return listofnutritions
+
+def grab_time(displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+
+    times = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        time4recipe = c.fetchall()#2D array, structured like: [(preptime, cooktime, totaltime)]
+        time4recipe = time4recipe[0]# (preptime, cooktime, totaltime)
+        times.append(time4recipe)
+    return times
+
+def grab_url(displayonwebsite):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     
-    #grab time
-    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-    times = c.fetchall()
-    return times
+    listofurls = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT url FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+        urlfromdb = c.fetchall()
+        for url in urlfromdb:
+            listofurls.append(url[0])
+    return listofurls
 
 def getrecipename(ingredientlist):
     ingredientlist = ", ".join(ingredientlist)
@@ -383,21 +444,23 @@ def home():
                     return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
-                    images = grab_thing('img_src', displayonwebsite)
-                    times = grab_time()
-                    servings = grab_thing('servings', displayonwebsite)
-                    rating = grab_thing('rating', displayonwebsite)
-                    cuisine_path = grab_thing('cuisine_path', displayonwebsite)
-                    nutrition = grab_thing('nutrition', displayonwebsite)
-                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
+                    images = grab_image(displayonwebsite)
+                    times = grab_time(displayonwebsite)
+                    servings = grab_servings(displayonwebsite)
+                    rating = grab_rating(displayonwebsite)
+                    cuisine_path = grab_cuisine_path(displayonwebsite)
+                    nutrition = grab_nutrition(displayonwebsite)
+                    url = grab_url(displayonwebsite)
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
-                images = grab_thing('img_src', forwebsite)
-                times = grab_time()
-                servings = grab_thing('servings', forwebsite)
-                rating = grab_thing('rating', displayonwebsite)
-                cuisine_path = grab_thing('cuisine_path', displayonwebsite)
-                nutrition = grab_thing('nutrition', displayonwebsite)
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
+                images = grab_image(forwebsite)
+                times = grab_time(forwebsite)
+                servings = grab_servings(forwebsite)
+                rating = grab_rating(forwebsite)
+                cuisine_path = grab_cuisine_path(forwebsite)
+                nutrition = grab_nutrition(forwebsite)
+                url = grab_url(forwebsite)
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
             pass
 
@@ -440,25 +503,27 @@ def home():
         #print(f"forwebsite: {forwebsite}")
         #print(f"displayonwebsite: {displayonwebsite}")
         #print(f"bottom")
-        images = grab_thing('img_src', displayonwebsite)
-        times = grab_time()
-        servings = grab_thing('servings', displayonwebsite)
-        rating = grab_thing('rating', displayonwebsite)
-        cuisine_path = grab_thing('cuisine_path', displayonwebsite)
-        nutrition = grab_thing('nutrition', displayonwebsite)
-        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
+        images = grab_image(displayonwebsite)
+        times = grab_time(displayonwebsite)
+        servings = grab_servings(displayonwebsite)
+        rating = grab_rating(displayonwebsite)
+        cuisine_path = grab_cuisine_path(displayonwebsite)
+        nutrition = grab_nutrition(displayonwebsite)
+        url = grab_url(displayonwebsite)
+        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
     #print(f"vbottom")
-    images = grab_thing('img_src', newrecipelist)
-    times = grab_time()
-    servings = grab_thing('servings', newrecipelist)
-    rating = grab_thing('rating', displayonwebsite)
-    cuisine_path = grab_thing('cuisine_path', displayonwebsite)
-    nutrition = grab_thing('nutrition', displayonwebsite)
+    images = grab_image(newrecipelist)
+    times = grab_time(newrecipelist)
+    servings = grab_servings(newrecipelist)
+    rating = grab_rating(newrecipelist)
+    cuisine_path = grab_cuisine_path(newrecipelist)
+    nutrition = grab_nutrition(newrecipelist)
+    url = grab_url(newrecipelist)
     c.close()
     conn.close()
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 @app.route('/logout')
 def logout():

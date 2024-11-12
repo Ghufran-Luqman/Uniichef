@@ -199,8 +199,8 @@ print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
-
-c.execute("SELECT servings, yield FROM tableofrecipes2")
+a = "Apple Pie by Grandma Ople"
+c.execute("SELECT nutrition FROM tableofrecipes2 WHERE recipe_name=?", (a,))
 t = c.fetchall()
 print(t)
 
