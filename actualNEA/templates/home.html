@@ -86,7 +86,19 @@
     {% set count.value = count.value + 1 %}
     <div class="container2" style="overflow:hidden">
         <a href="/{{ item }}">
-            <div class="tempp"><button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p><img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100"><p class="customfont preptime">Preparation Time: {{ times[count.value][0] }}</p><p class="customfont cooktime">Cooking Time: {{ times[count.value][1] }}</p><p class="customfont totaltime">Total time: {{ times[count.value][2] }}</p><p class="customfont servings">Servings: {{ servings[count.value] }}</p><p class="customfont rating">Rating: {{ rating[count.value] }}/5</p><p class="customfont cuisinepath">Category: {{ cuisine_path[count.value] }}</p><p class="customfont nutrition">Nutrition: {{ nutrition[count.value] }}</p><a href="{{ url[count.value] }}">Source</a></button></div>
+            <div class="tempp">
+                <button id="recipebutton" class="recipebutton" name="recipebutton" type="button">
+                    <p class="biggertext">{{ item }}</p>
+                    <img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100">
+                    <p class="customfont preptime">Preparation Time: {{ times[count.value][0] }}</p>
+                    <p class="customfont cooktime">Cooking Time: {{ times[count.value][1] }}</p>
+                    <p class="customfont totaltime">Total time: {{ times[count.value][2] }}</p>
+                    <p class="customfont servings">Servings: {{ servings[count.value] }}</p>
+                    <p class="customfont rating">Rating: {{ rating[count.value] }}/5</p>
+                    <p class="customfont cuisinepath">Category: {{ cuisine_path[count.value] }}</p>
+                    <p class="customfont nutrition">Nutrition: {{ nutrition[count.value] }}</p>
+                    <a href="{{ url[count.value] }}" class="source" target="_blank"><button class="reset sourcebtn">Source</button></a>
+                </button></div>
         </a>
     </div>
     <br>
