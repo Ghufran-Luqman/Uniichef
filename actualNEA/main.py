@@ -93,6 +93,173 @@ def grab_nutrition(displayonwebsite):
             listofnutritions.append(nutrition[0])
     return listofnutritions
 
+def convert2mins(addTime, minutescheck):
+    print(f"(convert2mins) passed in number: {addTime}")
+    print(f"(convert2mins) passed in number LENGTH: {len(str(addTime))}")
+    if minutescheck:
+        if minutescheck == True:
+            #only mins
+            print(f"only mins")
+            return addTime
+    if len(str(addTime)) == 1:
+        #this is hours only
+        print(f"This is hours only")
+        addTime = addTime * 60# converted into minutes
+    elif len(str(addTime)) == 2:
+        print(f"alr in mins so dont do anything")
+        #already in minutes therefore we don't need to do anything
+        pass
+    elif len(str(addTime)) == 3:
+        print(f"first digit is hours, last 2 are mins.")
+        #first digit is hours, last 2 are minutes
+        temp = int(addTime[0]) * 60#hours into mins
+        addTime = int(str(addTime)[1:])
+        addTime = addTime + temp#gets total mins
+    
+    elif len(str(addTime)) == 4:
+        print(f"first 2 digits are hours, last 2 are mins")
+        temp = int(addTime[0]) + int(addTime[1])
+        temp = temp * 60
+        addTime = int(str(addTime[2:]))
+        addTime = addTime + temp
+    else:
+        print(f"addTime: {addTime}")
+        print(f"length: {len(str(addTime))}")
+        raise ValueError#shouldnt happen but if it does then programmer/user will be alerted
+    return addTime
+
+def get_additional_time(time4recipe):
+    totaltime = time4recipe[2]
+    print(f"inital totaltime: {totaltime}")
+    print(f"lenght: {len(str(totaltime))}")
+    try:
+        print(f"{str(totaltime)[3]}")
+    except:
+        pass
+    addTime = []
+    for time in totaltime.split():
+        if time.isdigit():
+            addTime.append(int(time))
+    total = addTime[0]
+    print(f"addtime: {addTime}")
+    print(f"total: {total}")
+    try:
+        print(f"tried")
+        if str(totaltime)[3] == 'i':
+            print(f"its in mins3")
+            minutescheck = True
+            totaltime = convert2mins(total, minutescheck)
+            pass
+        elif str(totaltime)[4] == 'i':
+            print(f"its in mins4")
+            minutescheck = True
+            totaltime = convert2mins(total, minutescheck)
+            pass
+        else:
+            print(f"did else")
+            minutescheck = False
+            totaltime = convert2mins(total, minutescheck)
+    
+    except:
+        print(f"excepted")
+        minutescheck = False
+        totaltime = convert2mins(total, minutescheck)
+    print(f"length of add time: {len(addTime)}")
+    if len(addTime) > 1:
+        print(f"bigger than 1")
+        totaltime = int(totaltime) + int(addTime[1])
+
+    print(f"TOTALTIME IN MINUTES FULL: {totaltime}")
+    #now we've converted total time to minutes
+    #repeat for preptime
+    preptime = time4recipe[0]
+    print(f"inital preptime: {preptime}")
+    print(f"lenght: {len(str(preptime))}")
+    try:
+        print(f"{str(preptime)[3]}")
+    except:
+        pass
+    addTime = []
+    for time in preptime.split():
+        if time.isdigit():
+            addTime.append(int(time))
+    temppreptime = addTime[0]
+    try:
+        print(f"tried")
+        if str(preptime)[3] == 'i':
+            print(f"its in mins3")
+            minutescheck = True
+            preptime = convert2mins(temppreptime, minutescheck)
+            pass
+        elif str(preptime)[4] == 'i':
+            print(f"its in mins4")
+            minutescheck = True
+            preptime = convert2mins(temppreptime, minutescheck)
+            pass
+        else:
+            print(f"did else")
+            minutescheck = False
+            preptime = convert2mins(temppreptime, minutescheck)
+    
+    except:
+        print(f"excepted")
+        minutescheck = False
+        preptime = convert2mins(temppreptime, minutescheck)
+    if len(addTime) > 1:
+        preptime = int(preptime) + int(addTime[1])
+    print(f"preptime after conversion: {preptime}")
+
+    #repeat for cook time
+    cooktime = time4recipe[1]
+    print(f"inital cooktime: {cooktime}")
+    print(f"lenght: {len(str(cooktime))}")
+    try:
+        print(f"{str(cooktime)[3]}")
+    except:
+        pass
+    addTime = []
+    for time in cooktime.split():
+        if time.isdigit():
+            addTime.append(int(time))
+    tempcooktime = addTime[0]
+    try:
+        print(f"tried")
+        if str(cooktime)[3] == 'i':
+            print(f"its in mins3")
+            minutescheck = True
+            cooktime = convert2mins(tempcooktime, minutescheck)
+            pass
+        elif str(cooktime)[4] == 'i':
+            print(f"its in mins4")
+            minutescheck = True
+            cooktime = convert2mins(tempcooktime, minutescheck)
+            pass
+        else:
+            print(f"did else")
+            minutescheck = False
+            cooktime = convert2mins(tempcooktime, minutescheck)
+    
+    except:
+        print(f"excepted")
+        minutescheck = False
+        cooktime = convert2mins(tempcooktime, minutescheck)
+    if len(addTime) > 1:
+        cooktime = int(cooktime) + int(addTime[1])
+    print(f"cooktime after conversion: {cooktime}")
+
+    cookAndPrep = int(cooktime) + int(preptime)
+    print(f"cook and prep time added: {cookAndPrep}")
+    print(f"total time: {totaltime}")
+    addTime = totaltime - cookAndPrep
+    print(f"calculated addTIme from minusing them: {addTime}")
+
+    #convert addTime to hours and minutes
+    if addTime/60 > 1:
+        hours = addTime // 60
+        mins = addTime % 60
+        addTime = f"{hours} hrs {mins}"
+    return addTime
+
 def grab_time(displayonwebsite):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
@@ -102,6 +269,13 @@ def grab_time(displayonwebsite):
         c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
         time4recipe = c.fetchall()#2D array, structured like: [(preptime, cooktime, totaltime)]
         time4recipe = time4recipe[0]# (preptime, cooktime, totaltime)
+        # Calculate additional time
+        print(f"\n\nrecipename: {recipe}\n\n")
+        print(f"time4recipe: {time4recipe}")
+        addTime = get_additional_time(time4recipe)
+        print(f"final additional time: {addTime}")
+        time4recipe = list(time4recipe)
+        time4recipe.insert(2, addTime)# at index 2, insert additional time, so its like (preptime, cooktime, addtime, totaltime)
         times.append(time4recipe)
     return times
 

@@ -579,32 +579,39 @@ li::marker {
     bottom: 60%;
 }
 
-.totaltime {
+.addtime {
     position: absolute;
     font-size: 20px;
     left: 10px;
     bottom: 50%;
 }
 
-.servings {
+.totaltime {
     position: absolute;
     font-size: 20px;
     left: 10px;
     bottom: 40%;
 }
 
-.rating {
+.servings {
     position: absolute;
     font-size: 20px;
     left: 10px;
     bottom: 30%;
 }
 
-.cuisinepath {
+.rating {
     position: absolute;
     font-size: 20px;
     left: 10px;
     bottom: 20%;
+}
+
+.cuisinepath {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    bottom: 10%;
 }
 
 .nutrition {
@@ -631,4 +638,8 @@ li::marker {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.timefont {
+    font-family: Mona-Sans;
 }
