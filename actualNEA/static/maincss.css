@@ -11,7 +11,7 @@
 
 
 ::selection {
-  background: #ECFFBC;
+    background: #ECFFBC;
 }
 
 body {
@@ -23,7 +23,8 @@ body {
 }
 
 .container2 {
-    border: 2px solid #4ea64e; /*#67bf67*/
+    border: 2px solid #4ea64e;
+    /*#67bf67*/
     overflow-y: scroll;
     box-sizing: border-box;
     height: 300px;
@@ -31,6 +32,7 @@ body {
     font-weight: 400;
     background-color: black;
     margin-left: 500px;
+    border-radius: 24px;
 }
 
 .container2 a {
@@ -44,7 +46,8 @@ body {
     justify-content: center;
     height: 300px;
     width: 100%;
-    background-color: #dbcca9; /* #dbcca9 */
+    background-color: #dbcca9;
+    /* #dbcca9 */
     border: 0px;
     transition: transform 250ms;
     z-index: 10;
@@ -228,7 +231,7 @@ li::marker {
 }
 
 ::placeholder {
-   text-align: center; 
+    text-align: center;
 }
 
 .recipeimg {
@@ -360,7 +363,8 @@ li::marker {
     right: 50px;
 }
 
-.title, .saverecipe {
+.title,
+.saverecipe {
     vertical-align: middle;
 }
 
@@ -509,7 +513,7 @@ li::marker {
     left: 250px;
 }
 
-.names{
+.names {
     left: 0px;
     top: 0px;
 }
@@ -550,4 +554,29 @@ li::marker {
     right: 20px;
     position: absolute;
     border-radius: 32px;
+}
+
+.tempp {
+    position: relative;
+}
+
+.preptime {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    bottom: 50%
+}
+
+.cooktime {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    bottom: 40%
+}
+
+.totaltime {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    bottom: 30%
 }

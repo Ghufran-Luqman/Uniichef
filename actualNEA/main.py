@@ -35,6 +35,27 @@ def loadingr():
         ingredientlist.append(item)
     return ingredientlist
 
+def grab_thing(thing, displayonwebsite):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    
+    listofthing = []
+    for recipe in displayonwebsite:
+        c.execute("SELECT ? FROM tableofrecipes2 WHERE recipe_name=?", (thing, recipe))
+        imagefromdb = c.fetchall()
+        for image in imagefromdb:
+            listofthing.append(image[0])
+    return listofthing
+    
+def grab_time():
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    
+    #grab time
+    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+    times = c.fetchall()
+    return times
+
 def getrecipename(ingredientlist):
     ingredientlist = ", ".join(ingredientlist)
 
@@ -362,29 +383,21 @@ def home():
                     return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
-                    #grab images
-                    images = []
-                    for recipe in displayonwebsite:
-                        c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
-                        imagefromdb = c.fetchall()
-                        for image in imagefromdb:
-                            images.append(image[0])
-                    #grab time
-                    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-                    times = c.fetchall()
-                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
+                    images = grab_thing('img_src', displayonwebsite)
+                    times = grab_time()
+                    servings = grab_thing('servings', displayonwebsite)
+                    rating = grab_thing('rating', displayonwebsite)
+                    cuisine_path = grab_thing('cuisine_path', displayonwebsite)
+                    nutrition = grab_thing('nutrition', displayonwebsite)
+                    return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
             else:
-                #grab images
-                images = []
-                for recipe in forwebsite:
-                    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
-                    imagefromdb = c.fetchall()
-                    for image in imagefromdb:
-                        images.append(image[0])
-                #grab time
-                c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-                times = c.fetchall()
-                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
+                images = grab_thing('img_src', forwebsite)
+                times = grab_time()
+                servings = grab_thing('servings', forwebsite)
+                rating = grab_thing('rating', displayonwebsite)
+                cuisine_path = grab_thing('cuisine_path', displayonwebsite)
+                nutrition = grab_thing('nutrition', displayonwebsite)
+                return render_template("home.html", row=row, newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
         except:
             pass
 
@@ -427,33 +440,25 @@ def home():
         #print(f"forwebsite: {forwebsite}")
         #print(f"displayonwebsite: {displayonwebsite}")
         #print(f"bottom")
-        #grab images
-        images = []
-        for recipe in displayonwebsite:
-            c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
-            imagefromdb = c.fetchall()
-            for image in imagefromdb:
-                images.append(image[0])
-        #grab time
-        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-        times = c.fetchall()
-        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
+        images = grab_thing('img_src', displayonwebsite)
+        times = grab_time()
+        servings = grab_thing('servings', displayonwebsite)
+        rating = grab_thing('rating', displayonwebsite)
+        cuisine_path = grab_thing('cuisine_path', displayonwebsite)
+        nutrition = grab_thing('nutrition', displayonwebsite)
+        return render_template("home.html", row=row, newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
 
     
     #print(f"vbottom")
-    #grab images
-    images = []
-    for recipe in newrecipelist:
-        c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
-        imagefromdb = c.fetchall()
-        for image in imagefromdb:
-            images.append(image[0])
-    #grab time
-    c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-    times = c.fetchall()
+    images = grab_thing('img_src', newrecipelist)
+    times = grab_time()
+    servings = grab_thing('servings', newrecipelist)
+    rating = grab_thing('rating', displayonwebsite)
+    cuisine_path = grab_thing('cuisine_path', displayonwebsite)
+    nutrition = grab_thing('nutrition', displayonwebsite)
     c.close()
     conn.close()
-    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times)
+    return render_template("home.html", row=row, newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition)
 
 @app.route('/logout')
 def logout():

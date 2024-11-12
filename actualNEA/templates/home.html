@@ -35,9 +35,9 @@
 
         <div class="time">
         <p class="ingredients">Time:</p>
-        <input class="searchwing preptime" placeholder="Filter by prep-time..." name="preptime" id="preptime" autocomplete="off">
-        <input class="searchwing cooktime" placeholder="Filter by cook-time..." name="cooktime" id="cooktime" autocomplete="off">
-        <input class="searchwing totaltime" placeholder="Filter by total-time..." name="totaltime" id="totaltime" autocomplete="off">
+        <input class="searchwing" placeholder="Filter by prep-time..." name="preptime" id="preptime" autocomplete="off">
+        <input class="searchwing" placeholder="Filter by cook-time..." name="cooktime" id="cooktime" autocomplete="off">
+        <input class="searchwing" placeholder="Filter by total-time..." name="totaltime" id="totaltime" autocomplete="off">
         </div>
     </form>
     <form action="/lists">
@@ -86,7 +86,7 @@
     {% set count.value = count.value + 1 %}
     <div class="container2" style="overflow:hidden">
         <a href="/{{ item }}">
-            <button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p><img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100"><p>Preparation Time:{{ times[count.value][0] }}</p><p>Cooking Time: {{ times[count.value][1] }}</p><p>Total time: {{ times[count.value][2] }}</p></button>
+            <div class="tempp"><button id="recipebutton" class="recipebutton" name="recipebutton" type="button"><p class="biggertext">{{ item }}</p><img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100"><p class="preptime">Preparation Time:{{ times[count.value][0] }}</p><p class="cooktime">Cooking Time: {{ times[count.value][1] }}</p><p class="totaltime">Total time: {{ times[count.value][2] }}</p></button></div>
         </a>
     </div>
     <br>
