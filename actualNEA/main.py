@@ -457,15 +457,15 @@ def home():
 
     addlist = request.args.get('saveonhomepage')
     recipename = addlist
-    print(f"recipename: {recipename}")
+    #print(f"recipename: {recipename}")
     #print(f"addlist: {addlist}")
     if addlist:
         c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
         ingredientlist = c.fetchall()
         if ingredientlist:
             ingredientlist = ingredientlist[0]
-        print(f"ingredientlist: {ingredientlist}")
-        print(f"recipename: {recipename}")
+        #print(f"ingredientlist: {ingredientlist}")
+        #print(f"recipename: {recipename}")
         while addlist:#if user clicks on this button
             username = session['username']
             c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
