@@ -633,13 +633,23 @@ li::marker {
 .sourcebtn {
     z-index: 9999px;
     position: absolute;
-    top: -100px;
-    width: 100px;
-    left: 50%;
+    top: -275px;
+    width: auto;
+    right: -685px;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
 .timefont {
     font-family: Mona-Sans;
+}
+
+.saveonhomepage {
+    z-index: 9999px;
+    position: absolute;
+    top: 50%;
+    width: 135px;
+    height: 45px;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }

@@ -67,6 +67,19 @@
 
 {% endif %}
 
+{% if alert2 == "success" %}
+<script>
+    alert("Successfully saved recipe!")
+    window.location.href = "/home"
+</script>
+
+{% elif alert2 == "duplicates" %}
+<script>
+    alert("You have already saved this recipe.")
+</script>
+
+{% endif %}
+
 <input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/home" spellcheck="false">
     <input type="text" id="search" autocomplete="off" name="Query" class="search" placeholder="Search recipe...">
@@ -99,6 +112,9 @@
                     <p class="customfont cuisinepath">Category: {{ cuisine_path[count.value] }}</p>
                     <p class="customfont nutrition">Nutrition: {{ nutrition[count.value] }}</p>
                     <a href="#" onclick="window.open('{{ url[count.value] }}');return false;" class="source"><button class="reset sourcebtn">Source</button></a>
+                    <form>
+                    <button class="reset saveonhomepage" id="saveonhomepage" name="saveonhomepage" value="{{ item }}">Save Recipe</button>
+                    </form>
                 </button></div>
         </a>
     </div>
