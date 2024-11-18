@@ -65,21 +65,19 @@
     window.location.href = "/home"
 </script>
 
-{% endif %}
-
-{% if alert2 == "success" %}
+{% elif alert == "success" %}
 <script>
     alert("Successfully saved recipe!")
     window.location.href = "/home"
 </script>
 
-{% elif alert2 == "duplicates" %}
+{% elif alert == "duplicates" %}
 <script>
     alert("You have already saved this recipe.")
     window.location.href = "/home"
 </script>
-
 {% endif %}
+
 
 <input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/home" spellcheck="false">

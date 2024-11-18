@@ -392,7 +392,6 @@ def home():
     if ingredientsearch:
         session['ingredientsearch'] = ingredientsearch
 
-    alert2 = ""
     
     #print(f"recipesearch: {recipesearch}")
     #print(f"ingredientsearch: {ingredientsearch}")
@@ -402,9 +401,8 @@ def home():
 
     username = session['username']
     #print(username)
-    t=0
-    #t=4
-    if 'ingrsearch_history' not in session or request.args.get('reset') == "reset" or t==4:
+
+    if 'ingrsearch_history' not in session or request.args.get('reset') == "reset":
             session['ingrsearch_history'] = []
             session['alert'] = ""
             session['recipesearch'] = ""
@@ -464,9 +462,9 @@ def home():
                     c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
                             VALUES (?, ?)""", (id, i))
                     conn.commit()
-                alert2 = "success"
+                session['alert'] = "success"
             elif duplicates == True:
-                alert2 = "duplicates"
+                session['alert'] = "duplicates"
             addlist = ""
             
     ingredientlist = loadingr()
@@ -629,7 +627,7 @@ def home():
                     session['alert'] = 'nocriteria'
                     session['recipesearch'] = ""
                     session['ingredientsearch'] = ""
-                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], alert2=alert2)
+                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
                     images = grab_image(altlistofrecipes)
@@ -639,7 +637,7 @@ def home():
                     cuisine_path = grab_cuisine_path(altlistofrecipes)
                     nutrition = grab_nutrition(altlistofrecipes)
                     url = grab_url(altlistofrecipes)
-                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
                 images = grab_image(forwebsite)
                 times = grab_time(forwebsite)
@@ -648,7 +646,7 @@ def home():
                 cuisine_path = grab_cuisine_path(forwebsite)
                 nutrition = grab_nutrition(forwebsite)
                 url = grab_url(forwebsite)
-                return render_template("home.html", listofrecipes=forwebsite, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+                return render_template("home.html", listofrecipes=forwebsite, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
             pass
 
@@ -698,7 +696,7 @@ def home():
         cuisine_path = grab_cuisine_path(altlistofrecipes)
         nutrition = grab_nutrition(altlistofrecipes)
         url = grab_url(altlistofrecipes)
-        return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+        return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
     #print(f"vbottom")
@@ -711,7 +709,7 @@ def home():
     url = grab_url(listofrecipes)
     c.close()
     conn.close()
-    return render_template("home.html", listofrecipes=listofrecipes, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+    return render_template("home.html", listofrecipes=listofrecipes, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 @app.route('/logout')
 def logout():
