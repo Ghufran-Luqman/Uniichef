@@ -312,36 +312,34 @@ def index():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    flashmessage = 'False'
-    conn = sqlite3.connect("recipes.db")
-    c = conn.cursor()
-    username = request.form.get('username')
-    password = request.form.get('password')
-    confirmpassword = request.form.get('confirmpassword')
-    if password:
-        if len(password) > 6:
+    flashmessage = 'False'#avoids error for later
+    conn = sqlite3.connect("recipes.db")#connects to the database
+    c = conn.cursor()#makes it quicker to access database
+    username = request.form.get('username')#pull username inputted from user
+    password = request.form.get('password')#pull password inputted from user
+    confirmpassword = request.form.get('confirmpassword')#pull confirmation password from user
+    if password:#if they have inputted a password - helps check they have inputted everything
+        if len(password) > 6:#checks that password is at least 7 characters
             username4len = str(username)
-            password4len = str(password)
-            if username and password and password == confirmpassword:
-                password = generate_password_hash(password)
+            password4len = str(password)#putting both in the right form for comparison
+            if username and password and password == confirmpassword:#check all exist and check that confirmation password matches password
+                password = generate_password_hash(password)#securely hash password to avoid hacking
                 try:
                     c.execute("""INSERT INTO users (username, password)
-                    VALUES (?, ?)""", (username, password))
-                    c.execute("SELECT * FROM users")
-                    #print(f"All values in database: {c.fetchall()}.")
-                    conn.commit()
+                    VALUES (?, ?)""", (username, password))#at this point all checks have been passed, so 
+                    conn.commit()#save
                     c.close()
-                    conn.close()
-                    return redirect(url_for('login'))
-                except:
-                    flashmessage = 'sameusername'
-            elif password != confirmpassword:
-                flashmessage = "passwords do not match"
-            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
-                flashmessage = 'notfilledout'
-        else:
-            flashmessage = "password too short"
-    return render_template("signup.html", flashmessage=flashmessage)
+                    conn.close()#close connection (avoids errors)
+                    return redirect(url_for('login'))#redirect to login page as they are successful
+                except:#if an error occurs then it will move here
+                    flashmessage = 'sameusername'#if an error occurs it will be from inserting the data into the database. since the database is set up to have each username as unique, if the username is not unique, then it will return an error, leading here, where a variable is set to a specific string that will trigger a message to popup in the front end telling the user that their username is not unique.
+            elif password != confirmpassword:#if the password and confirmation password do not match. If confirmation password is empty then it will not match password.
+                flashmessage = "passwords do not match"#then this will lead to an error message being returned to the user
+            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:#if the user has filled out only password or only username then return error (if they have not filled out any, it is assumed that they are just loading the page, and so nothing will be done).
+                flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
+        else:#their password is shorter than 7 characters
+            flashmessage = "password too short"#therefore return to the user an error telling them to make their password longer.
+    return render_template("signup.html", flashmessage=flashmessage)#returns the signup page
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -379,7 +377,7 @@ def login():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    if 'username' not in session:#if they're username isnt actually saved
+    if 'username' not in session:#if they're not logged in (if they're not assigned a username) - username stored globally
         return redirect(url_for('login'))#redirects them back to the login page.
     
     row = ""
