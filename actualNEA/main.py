@@ -431,18 +431,18 @@ def home():
         session['alert'] = 'norecipessearch'
         session['recipesearch'] = ""
 
-    addlist = request.args.get('saveonhomepage')
-    recipename = addlist
+    savebutton = request.args.get('saveonhomepage')
+    recipename = savebutton
     #print(f"recipename: {recipename}")
-    #print(f"addlist: {addlist}")
-    if addlist:
+    #print(f"savebutton: {savebutton}")
+    if savebutton:#if user clicks on this button
         c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
         ingredientlist = c.fetchall()
         if ingredientlist:
             ingredientlist = ingredientlist[0]
         #print(f"ingredientlist: {ingredientlist}")
         #print(f"recipename: {recipename}")
-        while addlist:#if user clicks on this button
+        while savebutton:
             username = session['username']
             c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
             name = c.fetchall()
@@ -456,20 +456,20 @@ def home():
                             VALUES (?, ?)""", (username, recipename))
                 conn.commit()
                 c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))
-                e = c.fetchall()
-                id = e[0][0]
-                for i in ingredientlist:
+                temporaryvariable = c.fetchall()
+                id = temporaryvariable[0][0]
+                for ingredient in ingredientlist:
                     c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
-                            VALUES (?, ?)""", (id, i))
+                            VALUES (?, ?)""", (id, ingredient))
                     conn.commit()
                 session['alert'] = "success"
             elif duplicates == True:
                 session['alert'] = "duplicates"
-            addlist = ""
+            savebutton = ""
             
     ingredientlist = loadingr()
-    anotherlist = []
-    anotherrlist = []
+    temporarylist = []
+    temporaryingredientlist = []
     forwebsite = []
     count = 0
     if session['ingredientsearch']:
@@ -482,10 +482,10 @@ def home():
         for item in ingredientlist:
             item = list(item)
             item = item[0]
-            anotherlist = [ingredient.strip() for ingredient in item.split(',')]
-            anotherrlist.append(anotherlist)
+            temporarylist = [ingredient.strip() for ingredient in item.split(',')]
+            temporaryingredientlist.append(temporarylist)
         '''
-            for item in anotherrlist:
+            for item in temporaryingredientlist:
                 for ingredient in item:
                     if recipesearching.upper() in ingredient.upper():#if user input is in an ingredient
                         recipename = getrecipename(item)#get recipe name
@@ -503,7 +503,7 @@ def home():
             #for abc in session['ingrsearch_history']:
                 #print(f"abc: {abc}")
             for abc in session['ingrsearch_history']:#OR list
-                for item in anotherrlist:
+                for item in temporaryingredientlist:
                         for ingredient in item:
                             if abc.upper() in ingredient.upper():
                                 recipename = getrecipename(item)
@@ -514,7 +514,7 @@ def home():
                                 break
         elif tempcount > 1:
             firstrecipesearch = session['ingrsearch_history'][0]
-            for item in anotherrlist:
+            for item in temporaryingredientlist:
                 for ingredient in item:
                     if firstrecipesearch.upper() in ingredient.upper():
                         recipename = getrecipename(item)
@@ -742,8 +742,8 @@ def item(recipename):
                 instructionlist.append(string)
         
 
-    addlist = request.args.get("saverecipe")
-    while addlist == 'button':#if user clicks on this button
+    savebutton = request.args.get("saverecipe")
+    while savebutton == 'button':#if user clicks on this button
         #print("clicked on button")
         try:
             username = session['username']
@@ -785,11 +785,11 @@ def item(recipename):
                         VALUES (?, ?)""", (username, recipename))#Insert into database
             conn.commit()
             c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))
-            e = c.fetchall()
-            id = e[0][0]
-            for i in ingredientlist:
+            temporaryvariable = c.fetchall()
+            id = temporaryvariable[0][0]
+            for ingredient in ingredientlist:
                 c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
-                        VALUES (?, ?)""", (id, i))
+                        VALUES (?, ?)""", (id, ingredient))
                 conn.commit()
             alert = "success"
             '''
@@ -812,7 +812,7 @@ def item(recipename):
             '''
         elif duplicates == True:
             alert = "duplicates"
-        addlist = ""
+        savebutton = ""
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
     if image:
