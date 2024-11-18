@@ -380,8 +380,6 @@ def home():
     if 'username' not in session:#if they're not logged in (if they're not assigned a username) - username stored globally
         return redirect(url_for('login'))#redirects them back to the login page.
     
-    row = ""
-    newlist = ""
     newrecipelist = []
     displayonwebsite = []
     query = request.args.get("Query", '')#the '' is a default value.
@@ -417,23 +415,6 @@ def home():
     c = conn.cursor()
 
     session['alert'] = ""
-
-    c.execute("SELECT recipe_name FROM tableofrecipes2")
-    row = c.fetchall()
-    try:
-        row = list(row)
-    except:
-        pass
-    count = 0
-    newlist = []
-    for item in row:
-        item = row[count]
-        item = item[0]
-        newlist.append(item)
-        count += 1
-    #print(f"finished list: {newlist}")#i have removed the tuples
-
-
     
     recipenames = loadnames()
     newrecipelist = []
@@ -649,7 +630,7 @@ def home():
                     session['alert'] = 'nocriteria'
                     session['query'] = ""
                     session['query2'] = ""
-                    return render_template("home.html", newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], alert2=alert2)
+                    return render_template("home.html", newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], alert2=alert2)
                 else:
                     #print(f"top")
                     images = grab_image(displayonwebsite)
@@ -659,7 +640,7 @@ def home():
                     cuisine_path = grab_cuisine_path(displayonwebsite)
                     nutrition = grab_nutrition(displayonwebsite)
                     url = grab_url(displayonwebsite)
-                    return render_template("home.html", newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+                    return render_template("home.html", newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
             else:
                 images = grab_image(forwebsite)
                 times = grab_time(forwebsite)
@@ -668,7 +649,7 @@ def home():
                 cuisine_path = grab_cuisine_path(forwebsite)
                 nutrition = grab_nutrition(forwebsite)
                 url = grab_url(forwebsite)
-                return render_template("home.html", newlist=newlist, newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+                return render_template("home.html", newrecipelist=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
         except:
             pass
 
@@ -718,7 +699,7 @@ def home():
         cuisine_path = grab_cuisine_path(displayonwebsite)
         nutrition = grab_nutrition(displayonwebsite)
         url = grab_url(displayonwebsite)
-        return render_template("home.html", newlist=newlist, newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+        return render_template("home.html", newrecipelist=displayonwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
 
     
     #print(f"vbottom")
@@ -731,7 +712,7 @@ def home():
     url = grab_url(newrecipelist)
     c.close()
     conn.close()
-    return render_template("home.html", newlist=newlist, newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
+    return render_template("home.html", newrecipelist=newrecipelist, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url, alert2=alert2)
 
 @app.route('/logout')
 def logout():
