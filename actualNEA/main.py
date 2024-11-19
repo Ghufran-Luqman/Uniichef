@@ -536,9 +536,9 @@ def home():
                 recipesings = recipesings[0]
                 ingredientListWCommas = [ingredient.strip() for ingredient in recipesings.split(',')]#puts original ings into list separated by the comma
                 #ingredientListWCommas is the ingredient list (all cleaned up) for this specific recipe
-                a = len(ingredientListWCommas)#length of list of ingredients
+                lengthOfIngList = len(ingredientListWCommas)#length of list of ingredients
                 temporarycount = 0
-                while temporarycount != a and tobreak == False:
+                while temporarycount != lengthOfIngList and tobreak == False:
                     #print("b")
                     tempcount2 = 0
                     temp = 0
