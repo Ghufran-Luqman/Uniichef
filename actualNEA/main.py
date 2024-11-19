@@ -494,11 +494,11 @@ def home():
                             recipesFilteredByIngredient.append(recipename)
                         break
         '''
-        tempcount = len(session['ingrsearch_history'])
-        #print(f"tempcount: {tempcount}")
+        noOfPrevIngredients = len(session['ingrsearch_history'])
+        #print(f"noOfPrevIngredients: {noOfPrevIngredients}")
         anothertemplist = []
         tempvar = []
-        if tempcount <= 1:
+        if noOfPrevIngredients <= 1:
             #for abc in session['ingrsearch_history']:
                 #print(f"abc: {abc}")
             for abc in session['ingrsearch_history']:#OR list
@@ -511,7 +511,7 @@ def home():
                                 else:
                                     anothertemplist.append(recipename)
                                 break
-        elif tempcount > 1:
+        elif noOfPrevIngredients > 1:
             firstrecipesearch = session['ingrsearch_history'][0]
             for item in temporaryingredientlist:
                 for ingredient in item:
@@ -523,7 +523,7 @@ def home():
                             anothertemplist.append(recipename)
                             break
         #print(f"anothertemplist: {anothertemplist}")
-        if tempcount > 1:#if there's more than one recipesearch item
+        if noOfPrevIngredients > 1:#if there's more than one recipesearch item
             #print(f"anothertemplist: {anothertemplist}")
             for item in anothertemplist:#for every recipe in this list of recipes
                 tobreak = False
@@ -542,7 +542,7 @@ def home():
                     #print("b")
                     tempcount2 = 0
                     temp = 0
-                    while tempcount2 != tempcount and tobreak == False:#tempcount is how many queries there are
+                    while tempcount2 != noOfPrevIngredients and tobreak == False:#noOfPrevIngredients is how many queries there are
                         #print("c")
                         #print(f"recipename: {item}")
                         #print(f"session['ingrsearch_history'][tempcount2].upper(): {session['ingrsearch_history'][tempcount2].upper()}")
@@ -585,12 +585,12 @@ def home():
                         #print(f"herenow")
 
 
-                    #if tempcount2 == tempcount:
+                    #if tempcount2 == noOfPrevIngredients:
                         #print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                         #recipesFilteredByIngredient.append(item)#add them to be displayed on the website
                     temporarycount += 1#cycle to the next ingredient in the recipe ingredient list
                     #print(f"temporarycount: {temporarycount}")
-        elif tempcount == 1:#if there's only one recipesearch item
+        elif noOfPrevIngredients == 1:#if there's only one recipesearch item
             for recipe in anothertemplist:
                 recipesFilteredByIngredient.append(recipe)
 
