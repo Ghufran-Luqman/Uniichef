@@ -496,7 +496,7 @@ def home():
         '''
         noOfPrevIngredients = len(session['ingrsearch_history'])
         #print(f"noOfPrevIngredients: {noOfPrevIngredients}")
-        anothertemplist = []
+        recipesWMatchingIngs = []
         tempvar = []
         if noOfPrevIngredients <= 1:
             #for abc in session['ingrsearch_history']:
@@ -509,7 +509,7 @@ def home():
                                 if recipename == None:
                                     pass
                                 else:
-                                    anothertemplist.append(recipename)
+                                    recipesWMatchingIngs.append(recipename)
                                 break
         elif noOfPrevIngredients > 1:
             firstrecipesearch = session['ingrsearch_history'][0]
@@ -520,15 +520,15 @@ def home():
                         if recipename == None:
                             pass
                         else:
-                            anothertemplist.append(recipename)
+                            recipesWMatchingIngs.append(recipename)
                             break
-        #print(f"anothertemplist: {anothertemplist}")
+        #print(f"recipesWMatchingIngs: {recipesWMatchingIngs}")
         if noOfPrevIngredients > 1:#if there's more than one recipesearch item
-            #print(f"anothertemplist: {anothertemplist}")
-            for item in anothertemplist:#for every recipe in this list of recipes
+            #print(f"recipesWMatchingIngs: {recipesWMatchingIngs}")
+            for item in recipesWMatchingIngs:#for every recipe in this list of recipes
                 tobreak = False
                 #print(f"session['ingrsearch_history']: {session['ingrsearch_history']}")
-                #print(f"anothertemplist: {anothertemplist}")
+                #print(f"recipesWMatchingIngs: {recipesWMatchingIngs}")
                 #print("a")
                 c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (item,))#gets recipes original ings
                 recipesings = c.fetchall()[0]
@@ -591,7 +591,7 @@ def home():
                     temporarycount += 1#cycle to the next ingredient in the recipe ingredient list
                     #print(f"temporarycount: {temporarycount}")
         elif noOfPrevIngredients == 1:#if there's only one recipesearch item
-            for recipe in anothertemplist:
+            for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)
 
                     
