@@ -383,7 +383,7 @@ def home():
     listofrecipes = []
     altlistofrecipes = []
     recipesearch = request.args.get("recipesearch", '')#the '' is a default value.
-    ingredientsearch = request.args.get("recipesearching")
+    ingredientsearch = request.args.get("ingredientsearch")
 
     images = []
     
@@ -478,7 +478,7 @@ def home():
 
         #print(f"session['ingrsearch_history]: {session['ingrsearch_history']}")
 
-        #for recipesearching in session['ingrsearch_history']:
+        #for querying in session['ingrsearch_history']:
         for item in ingredientlist:
             item = list(item)
             item = item[0]
@@ -487,7 +487,7 @@ def home():
         '''
             for item in temporaryingredientlist:
                 for ingredient in item:
-                    if recipesearching.upper() in ingredient.upper():#if user input is in an ingredient
+                    if querying.upper() in ingredient.upper():#if user input is in an ingredient
                         recipename = getrecipename(item)#get recipe name
                         if recipename == None:
                             pass
@@ -627,7 +627,7 @@ def home():
                     session['alert'] = 'nocriteria'
                     session['recipesearch'] = ""
                     session['ingredientsearch'] = ""
-                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                    return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
                     images = grab_image(altlistofrecipes)
@@ -637,7 +637,7 @@ def home():
                     cuisine_path = grab_cuisine_path(altlistofrecipes)
                     nutrition = grab_nutrition(altlistofrecipes)
                     url = grab_url(altlistofrecipes)
-                    return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                    return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
                 images = grab_image(forwebsite)
                 times = grab_time(forwebsite)
@@ -646,13 +646,13 @@ def home():
                 cuisine_path = grab_cuisine_path(forwebsite)
                 nutrition = grab_nutrition(forwebsite)
                 url = grab_url(forwebsite)
-                return render_template("home.html", listofrecipes=forwebsite, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                return render_template("home.html", listofrecipes=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
             pass
 
     if len(forwebsite) > 0:
         session['alert'] = ""
-    elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('recipesearching') != None:#if they havent clicked the reset button and they havent just loaded the page
+    elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
         #print("no recipes")
         session['alert'] = "norecipes"
         session['ingrsearch_history'] = []
@@ -696,7 +696,7 @@ def home():
         cuisine_path = grab_cuisine_path(altlistofrecipes)
         nutrition = grab_nutrition(altlistofrecipes)
         url = grab_url(altlistofrecipes)
-        return render_template("home.html", listofrecipes=altlistofrecipes, recipesearching=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+        return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
     #print(f"vbottom")
