@@ -499,12 +499,12 @@ def home():
         recipesWMatchingIngs = []
         ingredientListWCommas = []
         if noOfPrevIngredients <= 1:
-            #for abc in session['ingrsearch_history']:
-                #print(f"abc: {abc}")
-            for abc in session['ingrsearch_history']:#OR list
+            #for previousIngredientFilter in session['ingrsearch_history']:
+                #print(f"previousIngredientFilter: {previousIngredientFilter}")
+            for previousIngredientFilter in session['ingrsearch_history']:#OR list
                 for item in temporaryingredientlist:
                         for ingredient in item:
-                            if abc.upper() in ingredient.upper():
+                            if previousIngredientFilter.upper() in ingredient.upper():
                                 recipename = getrecipename(item)
                                 if recipename == None:
                                     pass
