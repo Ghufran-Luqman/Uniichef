@@ -537,21 +537,21 @@ def home():
                 ingredientListWCommas = [ingredient.strip() for ingredient in recipesings.split(',')]#puts original ings into list separated by the comma
                 #ingredientListWCommas is the ingredient list (all cleaned up) for this specific recipe
                 lengthOfIngList = len(ingredientListWCommas)#length of list of ingredients
-                temporarycount = 0
-                while temporarycount != lengthOfIngList and tobreak == False:
+                count = 0
+                while count != lengthOfIngList and tobreak == False:
                     #print("b")
-                    tempcount2 = 0
-                    temp = 0
-                    while tempcount2 != noOfPrevIngredients and tobreak == False:#noOfPrevIngredients is how many queries there are
+                    count2 = 0
+                    queryCount = 0
+                    while count2 != noOfPrevIngredients and tobreak == False:#noOfPrevIngredients is how many queries there are
                         #print("c")
                         #print(f"recipename: {item}")
-                        #print(f"session['ingrsearch_history'][tempcount2].upper(): {session['ingrsearch_history'][tempcount2].upper()}")
-                        #print(f"temporarycount: {temporarycount}")
+                        #print(f"session['ingrsearch_history'][count2].upper(): {session['ingrsearch_history'][count2].upper()}")
+                        #print(f"count: {count}")
                         #print(f"ingredientListWCommas: {ingredientListWCommas}")
-                        #print(f"ingredientListWCommas[temporarycount].upper(): {ingredientListWCommas[temporarycount].upper()}")
-                        if session['ingrsearch_history'][tempcount2].upper() in ingredientListWCommas[temporarycount].upper():#if queried ingredient is in an ingredient of the recipe
+                        #print(f"ingredientListWCommas[count].upper(): {ingredientListWCommas[count].upper()}")
+                        if session['ingrsearch_history'][count2].upper() in ingredientListWCommas[count].upper():#if queried ingredient is in an ingredient of the recipe
                             #print(f"yes")
-                            tempcount2 += 1
+                            count2 += 1
                             for ingredientrecipesearch in session['ingrsearch_history']:#cycles through all the queries
                                 #print(f"session['ingrsearch_history']:{session['ingrsearch_history']}")
                                 #print(f"ingredientrecipesearch: {ingredientrecipesearch}")
@@ -560,11 +560,11 @@ def home():
                                     #print(f"aningredient: {aningredient}")
                                     if ingredientrecipesearch.upper() in aningredient.upper():#if queried ingredient is in the recipe ingredient list
                                         #print(f"adding, ingredientrecipesearch: {ingredientrecipesearch.upper()}, aningredient: {aningredient.upper()}")
-                                        temp += 1
-                                        #print(f"temp (which has increased by 1): {temp}")
+                                        queryCount += 1
+                                        #print(f"queryCount (which has increased by 1): {queryCount}")
                                         break
 
-                            if temp == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
+                            if queryCount == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
                                 #print(f"adding {item} to recipesFilteredByIngredient...")
                                 recipesFilteredByIngredient.append(item)#adds them to be displayed on the website
                                 tobreak = True
@@ -572,8 +572,8 @@ def home():
                                         
                             '''
                             for aningredient in ingredientListWCommas:
-                                print(f"tempcount2: {tempcount2}")
-                                if session['ingrsearch_history'][tempcount2].upper() in aningredient.upper():
+                                print(f"count2: {count2}")
+                                if session['ingrsearch_history'][count2].upper() in aningredient.upper():
                                     print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                                     recipesFilteredByIngredient.append(item)#add them to be displayed on the website
                             '''
@@ -585,11 +585,11 @@ def home():
                         #print(f"herenow")
 
 
-                    #if tempcount2 == noOfPrevIngredients:
+                    #if count2 == noOfPrevIngredients:
                         #print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                         #recipesFilteredByIngredient.append(item)#add them to be displayed on the website
-                    temporarycount += 1#cycle to the next ingredient in the recipe ingredient list
-                    #print(f"temporarycount: {temporarycount}")
+                    count += 1#cycle to the next ingredient in the recipe ingredient list
+                    #print(f"count: {count}")
         elif noOfPrevIngredients == 1:#if there's only one recipesearch item
             for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)
