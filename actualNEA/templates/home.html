@@ -94,7 +94,7 @@
 <div class="temp" id="recipes">
 <form>
 {% set count = namespace(value=-1) %}
-{% for item in listofrecipes %}
+{% for item in recipesFilteredByName %}
     {% set count.value = count.value + 1 %}
     <div class="container2" style="overflow:hidden">
         <a class="link" href="/{{ item }}">

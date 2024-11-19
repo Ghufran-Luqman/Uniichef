@@ -380,7 +380,7 @@ def home():
     if 'username' not in session:#if they're not logged in (if they're not assigned a username) - username stored globally
         return redirect(url_for('login'))#redirects them back to the login page.
     
-    listofrecipes = []
+    recipesFilteredByName = []
     altlistofrecipes = []
     recipesearch = request.args.get("recipesearch", '')#the '' is a default value.
     ingredientsearch = request.args.get("ingredientsearch")
@@ -414,9 +414,9 @@ def home():
 
     session['alert'] = ""
     
-    recipenames = loadnames()
+    allrecipenames = loadnames()
     splitwords = session['recipesearch'].upper().split()
-    for item in recipenames:
+    for item in allrecipenames:
         if item:#checks if its empty
             wordsfound = True
             #if all(word in item.upper() for word in splitwords):
@@ -426,8 +426,8 @@ def home():
                     break
             if wordsfound:
             #if recipesearch.upper() in item.upper():#converts the recipesearch to uppercase and each name in the list to uppercase and sees if the name contains the recipesearch
-                listofrecipes.append(item)#if it does, it adds it to the list
-    if len(listofrecipes) == 0:
+                recipesFilteredByName.append(item)#if it does, it adds it to the list
+    if len(recipesFilteredByName) == 0:
         session['alert'] = 'norecipessearch'
         session['recipesearch'] = ""
 
@@ -470,8 +470,7 @@ def home():
     ingredientlist = loadingr()
     temporarylist = []
     temporaryingredientlist = []
-    forwebsite = []
-    count = 0
+    recipesFilteredByIngredient = []
     if session['ingredientsearch']:
         session['ingrsearch_history'].append(session['ingredientsearch'])
         session.modified = True
@@ -492,7 +491,7 @@ def home():
                         if recipename == None:
                             pass
                         else:
-                            forwebsite.append(recipename)
+                            recipesFilteredByIngredient.append(recipename)
                         break
         '''
         tempcount = len(session['ingrsearch_history'])
@@ -566,8 +565,8 @@ def home():
                                         break
 
                             if temp == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
-                                #print(f"adding {item} to forwebsite...")
-                                forwebsite.append(item)#adds them to be displayed on the website
+                                #print(f"adding {item} to recipesFilteredByIngredient...")
+                                recipesFilteredByIngredient.append(item)#adds them to be displayed on the website
                                 tobreak = True
                                 break
                                         
@@ -576,7 +575,7 @@ def home():
                                 print(f"tempcount2: {tempcount2}")
                                 if session['ingrsearch_history'][tempcount2].upper() in aningredient.upper():
                                     print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                                    forwebsite.append(item)#add them to be displayed on the website
+                                    recipesFilteredByIngredient.append(item)#add them to be displayed on the website
                             '''
                                     
                         else:#if the first queried item is not in the recipe list then break
@@ -588,30 +587,30 @@ def home():
 
                     #if tempcount2 == tempcount:
                         #print("SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                        #forwebsite.append(item)#add them to be displayed on the website
+                        #recipesFilteredByIngredient.append(item)#add them to be displayed on the website
                     temporarycount += 1#cycle to the next ingredient in the recipe ingredient list
                     #print(f"temporarycount: {temporarycount}")
         elif tempcount == 1:#if there's only one recipesearch item
             for recipe in anothertemplist:
-                forwebsite.append(recipe)
+                recipesFilteredByIngredient.append(recipe)
 
                     
 
-        #print(f"forwebsite: {forwebsite}")
+        #print(f"recipesFilteredByIngredient: {recipesFilteredByIngredient}")
         #print(f"sessicon search history: {session['ingrsearch_history']}")
 
 
         try:
-            x = forwebsite[0]
-            if len(forwebsite) > 0:
+            x = recipesFilteredByIngredient[0]
+            if len(recipesFilteredByIngredient) > 0:
                 session['alert'] == ""
 
-            if listofrecipes:
-                if listofrecipes == forwebsite:
-                    altlistofrecipes = listofrecipes
+            if recipesFilteredByName:
+                if recipesFilteredByName == recipesFilteredByIngredient:
+                    altlistofrecipes = recipesFilteredByName
                 else:
-                    for recipe in listofrecipes:
-                        for anotherrecipe in forwebsite:
+                    for recipe in recipesFilteredByName:
+                        for anotherrecipe in recipesFilteredByIngredient:
                             if recipe == anotherrecipe:
                                 alrthere = False
                                 for item in altlistofrecipes:
@@ -620,14 +619,14 @@ def home():
                                 if alrthere == False:
                                     altlistofrecipes.append(recipe)
                             
-                    #print(f"listofrecipes: {listofrecipes}")
-                    #print(f"forwebsite: {forwebsite}")
+                    #print(f"recipesFilteredByName: {recipesFilteredByName}")
+                    #print(f"recipesFilteredByIngredient: {recipesFilteredByIngredient}")
                     #print(f"altlistofrecipes: {altlistofrecipes}")
                 if len(altlistofrecipes) == 0:
                     session['alert'] = 'nocriteria'
                     session['recipesearch'] = ""
                     session['ingredientsearch'] = ""
-                    return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                    return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     #print(f"top")
                     images = grab_image(altlistofrecipes)
@@ -637,22 +636,22 @@ def home():
                     cuisine_path = grab_cuisine_path(altlistofrecipes)
                     nutrition = grab_nutrition(altlistofrecipes)
                     url = grab_url(altlistofrecipes)
-                    return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                    return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
-                images = grab_image(forwebsite)
-                times = grab_time(forwebsite)
-                servings = grab_servings(forwebsite)
-                rating = grab_rating(forwebsite)
-                cuisine_path = grab_cuisine_path(forwebsite)
-                nutrition = grab_nutrition(forwebsite)
-                url = grab_url(forwebsite)
-                return render_template("home.html", listofrecipes=forwebsite, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                images = grab_image(recipesFilteredByIngredient)
+                times = grab_time(recipesFilteredByIngredient)
+                servings = grab_servings(recipesFilteredByIngredient)
+                rating = grab_rating(recipesFilteredByIngredient)
+                cuisine_path = grab_cuisine_path(recipesFilteredByIngredient)
+                nutrition = grab_nutrition(recipesFilteredByIngredient)
+                url = grab_url(recipesFilteredByIngredient)
+                return render_template("home.html", recipesFilteredByName=recipesFilteredByIngredient, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
             pass
 
-    if len(forwebsite) > 0:
+    if len(recipesFilteredByIngredient) > 0:
         session['alert'] = ""
-    elif len(forwebsite) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
+    elif len(recipesFilteredByIngredient) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
         #print("no recipes")
         session['alert'] = "norecipes"
         session['ingrsearch_history'] = []
@@ -668,12 +667,12 @@ def home():
 
     session['search_history'] = session['recipesearch']
 
-    if forwebsite:
-        if listofrecipes == forwebsite:
-            altlistofrecipes = listofrecipes
+    if recipesFilteredByIngredient:
+        if recipesFilteredByName == recipesFilteredByIngredient:
+            altlistofrecipes = recipesFilteredByName
         else:
-            for recipe in listofrecipes:
-                for anotherrecipe in forwebsite:
+            for recipe in recipesFilteredByName:
+                for anotherrecipe in recipesFilteredByIngredient:
                     if recipe == anotherrecipe:
                         alrthere = False
                         for item in altlistofrecipes:
@@ -685,8 +684,8 @@ def home():
                 session['alert'] = 'nocriteria'
                 session['recipesearch'] = ""
                 session['ingredientsearch'] = ""
-        #print(f"listofrecipes: {listofrecipes}")
-        #print(f"forwebsite: {forwebsite}")
+        #print(f"recipesFilteredByName: {recipesFilteredByName}")
+        #print(f"recipesFilteredByIngredient: {recipesFilteredByIngredient}")
         #print(f"altlistofrecipes: {altlistofrecipes}")
         #print(f"bottom")
         images = grab_image(altlistofrecipes)
@@ -696,20 +695,20 @@ def home():
         cuisine_path = grab_cuisine_path(altlistofrecipes)
         nutrition = grab_nutrition(altlistofrecipes)
         url = grab_url(altlistofrecipes)
-        return render_template("home.html", listofrecipes=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+        return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
     #print(f"vbottom")
-    images = grab_image(listofrecipes)
-    times = grab_time(listofrecipes)
-    servings = grab_servings(listofrecipes)
-    rating = grab_rating(listofrecipes)
-    cuisine_path = grab_cuisine_path(listofrecipes)
-    nutrition = grab_nutrition(listofrecipes)
-    url = grab_url(listofrecipes)
+    images = grab_image(recipesFilteredByName)
+    times = grab_time(recipesFilteredByName)
+    servings = grab_servings(recipesFilteredByName)
+    rating = grab_rating(recipesFilteredByName)
+    cuisine_path = grab_cuisine_path(recipesFilteredByName)
+    nutrition = grab_nutrition(recipesFilteredByName)
+    url = grab_url(recipesFilteredByName)
     c.close()
     conn.close()
-    return render_template("home.html", listofrecipes=listofrecipes, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+    return render_template("home.html", recipesFilteredByName=recipesFilteredByName, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 @app.route('/logout')
 def logout():
