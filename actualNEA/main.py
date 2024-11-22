@@ -556,7 +556,7 @@ def home():
                     rating = grab_rating(altlistofrecipes)
                     cuisine_path = grab_cuisine_path(altlistofrecipes)
                     nutrition = grab_nutrition(altlistofrecipes)
-                    url = grab_url(altlistofrecipes)
+                    url = grab_url(altlistofrecipes)#grab all the information to be displayed on the website
                     return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
                 images = grab_image(recipesFilteredByIngredient)
