@@ -568,14 +568,13 @@ def home():
                 url = grab_url(recipesFilteredByIngredient)
                 return render_template("home.html", recipesFilteredByName=recipesFilteredByIngredient, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
-            pass
+            pass#if an error is returned then it will pass
 
     if len(recipesFilteredByIngredient) > 0:
-        session['alert'] = ""
+        session['alert'] = ""#reset
     elif len(recipesFilteredByIngredient) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
-        #print("no recipes")
-        session['alert'] = "norecipes"
-        session['ingrsearch_history'] = []
+        session['alert'] = "norecipes"#alert to the user there are no recipes which match their criteria
+        session['ingrsearch_history'] = []#reset the ingredient search history
     
     preptime = request.args.get('preptime')
     cooktime = request.args.get('cooktime')
@@ -588,6 +587,7 @@ def home():
 
     session['search_history'] = session['recipesearch']
 
+    #same code as before, used again to check if there are any matching recipes between the filters in case an error was returned before.
     if recipesFilteredByIngredient:
         if recipesFilteredByName == recipesFilteredByIngredient:
             altlistofrecipes = recipesFilteredByName
@@ -605,10 +605,6 @@ def home():
                 session['alert'] = 'nocriteria'
                 session['recipesearch'] = ""
                 session['ingredientsearch'] = ""
-        #print(f"recipesFilteredByName: {recipesFilteredByName}")
-        #print(f"recipesFilteredByIngredient: {recipesFilteredByIngredient}")
-        #print(f"altlistofrecipes: {altlistofrecipes}")
-        #print(f"bottom")
         images = grab_image(altlistofrecipes)
         times = grab_time(altlistofrecipes)
         servings = grab_servings(altlistofrecipes)
@@ -619,7 +615,6 @@ def home():
         return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
-    #print(f"vbottom")
     images = grab_image(recipesFilteredByName)
     times = grab_time(recipesFilteredByName)
     servings = grab_servings(recipesFilteredByName)
@@ -628,7 +623,7 @@ def home():
     nutrition = grab_nutrition(recipesFilteredByName)
     url = grab_url(recipesFilteredByName)
     c.close()
-    conn.close()
+    conn.close()#close database connection to avoid errors from SQLite
     return render_template("home.html", recipesFilteredByName=recipesFilteredByName, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 @app.route('/logout')
