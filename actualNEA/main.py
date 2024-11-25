@@ -43,26 +43,14 @@ def home():
             alert = result
         else:
             return render_template("home.html", recipenames=result)#if there isn't then there must be a list of recipes, therefore return them
+        
+    recipename = request.form.get('recipebutton')
+    if recipename:
+        return redirect(url_for('recipe', recipename=recipename))
     return render_template("home.html", recipenames=recipenames, alert=alert)#return all the recipes if no query or if there are no recipes in the newrecipelist
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    query = request.args.get("Query", '')#get the user input for the search box
-    recipenames = loadnames()#get every recipe from database
-    newrecipelist = []#prepare a new list
-    for item in recipenames:#cycle through every recipe
-        if item:#checks if its empty
-            if query.upper() in item.upper():#converts the query to uppercase and each name in the list to uppercase and checks if the name contains the query
-                newrecipelist.append(item)#if it does, it adds it to the list
-
-    if request.method == "POST":
-        recipename = request.form.get('recipebutton')
-        return render_template("recipe.html", recipename=recipename)
-
-    return render_template("index.html", recipenames=newrecipelist)#returns list containing the query
-
 @app.route('/<recipename>')
-def item(recipename):
+def recipe(recipename):
     item=""
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
