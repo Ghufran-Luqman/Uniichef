@@ -10,10 +10,14 @@
     <input type="text" autocomplete="off" autofocus name="Query">
     <input type="submit" value="Search">
 </form>
-
+{% if alert == "no recipes" %}
+<script>
+    alert("No recipes match your query.")
+</script>
+{% endif %}
 <form method="POST">
 <div class="container">
-{% for item in newrecipelist %}
+{% for item in recipenames %}
     <div class="container2" style="overflow:hidden">
         <a href="/{{ item }}">
             <button id="recipebutton" class="recipebutton" name="recipebutton" type="button">{{ item }}</button>

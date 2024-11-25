@@ -20,10 +20,30 @@ def loadnames():
         count += 1#go to next tuple
     return formattedrecipes
 
+def filter_by_name(recipenames, query):
+    newrecipelist = []#prepare a new list
+    for recipe in recipenames:#cycle through all recipes
+        if recipe:#if the recipe is not empty
+            if query.upper() in recipe.upper():#formats the two to be the same and checks if the name contains the query
+                newrecipelist.append(recipe)#if it is, it adds it to the new list to be displayed on the website
+    if len(newrecipelist) > 0:#checks if there are any recipes which contain the query
+        return newrecipelist
+    else:
+        alert = "no recipes"#if there are not, it assigns a variable which will lead to a message alerting the user that no recipe match their query
+        return alert
+
 @app.route('/home')
 def home():
-    recipenames = loadnames()
-    return render_template("index.html", recipenames=recipenames)#return all the recipes (passing the list into the frontend)
+    alert = ""
+    recipenames = loadnames()#get all recipe names
+    query = request.args.get("Query")#gets user input
+    if query:#if they have inputted anything
+        result = filter_by_name(recipenames, query)
+        if result == "no recipes":#checks if there is an error message
+            alert = result
+        else:
+            return render_template("home.html", recipenames=result)#if there isn't then there must be a list of recipes, therefore return them
+    return render_template("home.html", recipenames=recipenames, alert=alert)#return all the recipes if no query or if there are no recipes in the newrecipelist
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -39,18 +59,20 @@ def index():
         recipename = request.form.get('recipebutton')
         return render_template("recipe.html", recipename=recipename)
 
-    return render_template("index.html", newrecipelist=newrecipelist)#returns list containing the query
+    return render_template("index.html", recipenames=newrecipelist)#returns list containing the query
 
 @app.route('/<recipename>')
 def item(recipename):
+    item=""
     conn = sqlite3.connect('recipes.db')
     c = conn.cursor()
     c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
     ingredients = c.fetchall()
+    ingredientlist = []
     for item in ingredients:
         item = item[0]
-        item = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
-    return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=item)
+        ingredientlist = [ingredient.strip() for ingredient in item.split(',')]#turns it into a list
+    return render_template('recipe.html', recipename=recipename, ingredientlist=ingredientlist)
 
 
 if __name__ == "__main__":

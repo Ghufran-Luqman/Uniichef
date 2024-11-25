@@ -7,9 +7,8 @@
 {% block body %}
 {{ recipename }}
 <h5 class="title">Ingredients:</h5>
-<p class="text">{{ ingredients }}</p>
 
-    {% for i in item %}
+    {% for i in ingredientlist %}
     <li>
         {{ i }}
     </li>
