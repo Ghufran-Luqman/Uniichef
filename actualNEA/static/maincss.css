@@ -55,8 +55,6 @@
 .biggertext {
     color: #32c88c;
     font-size: 25px;
-    justify-content: center;
-    align-items: center;
     display: flex;
 }
 .ingredients {
@@ -67,4 +65,8 @@
 li::marker {
     color: green;
     font-size: 25px;
+}
+
+.recipename {
+    color: green;
 }
