@@ -382,13 +382,13 @@ def home():
     
     recipesFilteredByName = []#prepare temporary lists
     altlistofrecipes = []
-    recipesearch = request.args.get("recipesearch", '')#Query that user has entered for the 'filter by names'
+    recipesearchname = request.args.get("recipesearchname", '')#Query that user has entered for the 'filter by names'
     ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
 
     images = []
     
-    if recipesearch:#if they have not submitted anything then this value will be empty
-        session['recipesearch'] = recipesearch#store variable globally
+    if recipesearchname:#if they have not submitted anything then this value will be empty
+        session['recipesearchname'] = recipesearchname#store variable globally
     if ingredientsearch:
         session['ingredientsearch'] = ingredientsearch
 
@@ -398,7 +398,7 @@ def home():
     if 'ingrsearch_history' not in session or request.args.get('reset') == "reset":#if they click the reset button
             session['ingrsearch_history'] = []
             session['alert'] = ""
-            session['recipesearch'] = ""
+            session['recipesearchname'] = ""
             session['ingredientsearch'] = ""
             #resets all filters
 
@@ -408,7 +408,7 @@ def home():
     session['alert'] = ""#default value, avoids errors
     
     allrecipenames = loadnames()#get all recipe names
-    splitwords = session['recipesearch'].upper().split()#format query
+    splitwords = session['recipesearchname'].upper().split()#format query
     for item in allrecipenames:#cycles through all recipe names
         if item:#checks if its empty
             wordsfound = True#assume query is in the recipe name
@@ -420,7 +420,7 @@ def home():
                 recipesFilteredByName.append(item)#if query is in a recipe name then add it to a list
     if len(recipesFilteredByName) == 0:#if there are no recipes which contain the query
         session['alert'] = 'norecipessearch'#sets a variable which will be used to return an error
-        session['recipesearch'] = ""#reset global variable
+        session['recipesearchname'] = ""#reset global variable
 
     savebutton = request.args.get('saveonhomepage')#pull whether or not they have clicked the 'save recipe' button
     recipename = savebutton
@@ -523,7 +523,7 @@ def home():
                         else:#if the first queried item is not in the recipe list then break
                             break
                     count += 1#cycle to the next ingredient in the recipe ingredient list
-        elif noOfPrevIngredients == 1:#if there's only one recipesearch item
+        elif noOfPrevIngredients == 1:#if there's only one recipesearchname item
             for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)#add it to list
         try:
@@ -546,7 +546,7 @@ def home():
                                     altlistofrecipes.append(recipe)#this recipe is not already there so therefore add it
                 if len(altlistofrecipes) == 0:#if there are no recipes which match both
                     session['alert'] = 'nocriteria'#return to user that their criteria doesn't match any recipes
-                    session['recipesearch'] = ""#reset
+                    session['recipesearchname'] = ""#reset
                     session['ingredientsearch'] = ""
                     return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
@@ -585,7 +585,7 @@ def home():
         allpreptime = c.fetchall()
         print(f"ALLPREPTIME: {allpreptime}")
 
-    session['search_history'] = session['recipesearch']
+    session['search_history'] = session['recipesearchname']
 
     #same code as before, used again to check if there are any matching recipes between the filters in case an error was returned before.
     if recipesFilteredByIngredient:
@@ -603,7 +603,7 @@ def home():
                             altlistofrecipes.append(recipe)
         if len(altlistofrecipes) == 0:
                 session['alert'] = 'nocriteria'
-                session['recipesearch'] = ""
+                session['recipesearchname'] = ""
                 session['ingredientsearch'] = ""
         images = grab_image(altlistofrecipes)
         times = grab_time(altlistofrecipes)
