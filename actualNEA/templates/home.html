@@ -6,7 +6,7 @@
 
 {% block body %}
 
-<form method="GET" action="/">
+<form method="GET" action="/home">
     <input type="text" autocomplete="off" autofocus name="Query">
     <input type="submit" value="Search">
 </form>
@@ -15,12 +15,12 @@
     alert("No recipes match your query.")
 </script>
 {% endif %}
-<form method="POST">
+<form>
 <div class="container">
 {% for item in recipenames %}
     <div class="container2" style="overflow:hidden">
         <a href="/{{ item }}">
-            <button id="recipebutton" class="recipebutton" name="recipebutton" type="button">{{ item }}</button>
+            <button class="recipebutton" type="button">{{ item }}</button>
         </a>
     </div>
     <br>

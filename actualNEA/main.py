@@ -22,14 +22,20 @@ def loadnames():
 
 def filter_by_name(recipenames, query):
     newrecipelist = []#prepare a new list
-    for recipe in recipenames:#cycle through all recipes
+    splitwords = query.upper().split()#format query by splitting with whitespace
+    for recipe in recipenames:#cycles through all recipe names
         if recipe:#if the recipe is not empty
-            if query.upper() in recipe.upper():#formats the two to be the same and checks if the name contains the query
-                newrecipelist.append(recipe)#if it is, it adds it to the new list to be displayed on the website
-    if len(newrecipelist) > 0:#checks if there are any recipes which contain the query
+            wordsfound = True#asume query is in the recipe name already
+            for word in splitwords:#cycles through queries
+                if word not in recipe.upper():#if the query is not in the recipe name
+                    wordsfound = False#query is not in the recipe name
+                    break#so no need to check if the query is in the recipe name
+            if wordsfound:#if it reaches this point then the recipe name contains both queries
+                newrecipelist.append(recipe)#therefore add them to the list
+    if len(newrecipelist) > 0:#checks if there are any recipes which contain the queries
         return newrecipelist
     else:
-        alert = "no recipes"#if there are not, it assigns a variable which will lead to a message alerting the user that no recipe match their query
+        alert = "no recipes"#if there are not, it assigns a variable which will lead to a message alerting the user that no recipes match their query being returned
         return alert
 
 @app.route('/home')
@@ -43,10 +49,6 @@ def home():
             alert = result
         else:
             return render_template("home.html", recipenames=result)#if there isn't then there must be a list of recipes, therefore return them
-        
-    recipename = request.form.get('recipebutton')
-    if recipename:
-        return redirect(url_for('recipe', recipename=recipename))
     return render_template("home.html", recipenames=recipenames, alert=alert)#return all the recipes if no query or if there are no recipes in the newrecipelist
 
 @app.route('/<recipename>')
