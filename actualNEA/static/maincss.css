@@ -670,3 +670,10 @@ li::marker {
     top: -20px;
     text-align: center;
 }
+
+.submitsearch {
+    position: fixed;
+    right: 1110px;
+    top: 21px;
+    width: 57px;
+}
