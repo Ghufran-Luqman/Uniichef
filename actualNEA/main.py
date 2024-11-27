@@ -332,10 +332,13 @@ def sign_up():
                     conn.close()#close connection (avoids errors)
                     return redirect(url_for('login'))#redirect to login page as they are successful
                 except:#if an error occurs then it will move here
-                    flashmessage = 'sameusername'#if an error occurs it will be from inserting the data into the database. since the database is set up to have each username as unique, if the username is not unique, then it will return an error, leading here, where a variable is set to a specific string that will trigger a message to popup in the front end telling the user that their username is not unique.
+                    flashmessage = 'sameusername'#if an error occurs it will be from inserting the data into the database. since the database is set up to have each username as unique,
+                    #if the username is not unique, then it will return an error, leading here, where a variable is set to a specific string that will trigger a message to popup in the
+                    #front end telling the user that their username is not unique.
             elif password != confirmpassword:#if the password and confirmation password do not match. If confirmation password is empty then it will not match password.
                 flashmessage = "passwords do not match"#then this will lead to an error message being returned to the user
-            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:#if the user has filled out only password or only username then return error (if they have not filled out any, it is assumed that they are just loading the page, and so nothing will be done).
+            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:#if the user has filled out only password or only username then
+                #return error (if they have not filled out any, it is assumed that they are just loading the page, and so nothing will be done).
                 flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
         else:#their password is shorter than 7 characters
             flashmessage = "password too short"#therefore return to the user an error telling them to make their password longer.
