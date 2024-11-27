@@ -343,17 +343,17 @@ def sign_up():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    session['alert'] = ""
-    login = False
+    session['alert'] = ""#avoids an error by resetting the global alert variable
+    login = False#avoids errors
     flashmessage = False
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    username = request.form.get('username')
-    password = request.form.get('password')
-    username4len = str(username)
-    password4len = str(password)
-    if username and password:
-        c.execute("SELECT username, password FROM users")
+    username = request.form.get('username')#get username
+    password = request.form.get('password')#get password
+    username4len = str(username)#get the length of the username
+    password4len = str(password)#get length of password
+    if username and password:#if they are both not empty
+        c.execute("SELECT username, password FROM users")#get the username and password
         listofusernames = c.fetchall()
         for item in listofusernames:
             if item[0].lower() == username.lower():#if usernames match
