@@ -673,7 +673,13 @@ li::marker {
 
 .submitsearch {
     position: fixed;
-    right: 1110px;
+    right: 1105px;
     top: 21px;
     width: 57px;
+}
+
+.filtwIng {
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }

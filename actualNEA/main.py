@@ -548,7 +548,7 @@ def home():
                     session['alert'] = 'nocriteria'#return to user that their criteria doesn't match any recipes
                     session['recipesearchname'] = ""#reset
                     session['ingredientsearch'] = ""
-                    return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
+                    return render_template("home.html", recipesToBeDisplayed=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'])
                 else:
                     images = grab_image(altlistofrecipes)
                     times = grab_time(altlistofrecipes)
@@ -557,7 +557,7 @@ def home():
                     cuisine_path = grab_cuisine_path(altlistofrecipes)
                     nutrition = grab_nutrition(altlistofrecipes)
                     url = grab_url(altlistofrecipes)#grab all the information to be displayed on the website
-                    return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                    return render_template("home.html", recipesToBeDisplayed=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
             else:
                 images = grab_image(recipesFilteredByIngredient)
                 times = grab_time(recipesFilteredByIngredient)
@@ -566,7 +566,7 @@ def home():
                 cuisine_path = grab_cuisine_path(recipesFilteredByIngredient)
                 nutrition = grab_nutrition(recipesFilteredByIngredient)
                 url = grab_url(recipesFilteredByIngredient)
-                return render_template("home.html", recipesFilteredByName=recipesFilteredByIngredient, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+                return render_template("home.html", recipesToBeDisplayed=recipesFilteredByIngredient, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
         except:
             pass#if an error is returned then it will pass
 
@@ -612,7 +612,7 @@ def home():
         cuisine_path = grab_cuisine_path(altlistofrecipes)
         nutrition = grab_nutrition(altlistofrecipes)
         url = grab_url(altlistofrecipes)
-        return render_template("home.html", recipesFilteredByName=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+        return render_template("home.html", recipesToBeDisplayed=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
     
     images = grab_image(recipesFilteredByName)
@@ -624,7 +624,7 @@ def home():
     url = grab_url(recipesFilteredByName)
     c.close()
     conn.close()#close database connection to avoid errors from SQLite
-    return render_template("home.html", recipesFilteredByName=recipesFilteredByName, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
+    return render_template("home.html", recipesToBeDisplayed=recipesFilteredByName, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 @app.route('/logout')
 def logout():

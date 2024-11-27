@@ -9,7 +9,7 @@
 <div class="sidebox">
     <form method="GET" action="/home" spellcheck="false">
         <input class="searchwing searchpos" placeholder="Filter with ingredients..." name="ingredientsearch" id="ingredientsearch" autocomplete="off">
-        <input type="submit" hidden>
+        <input type="submit" value="Find" class="reset logout submitsearch filtwIng">
         <button id="reset" name="reset" value="reset" type="submit" class="reset resetbtn">Reset All Filters</button>
         <div class="filtercontainer">
         <p class="ingredients filtertitle">Filtered Ingredients:</p>
@@ -94,7 +94,7 @@
 <div class="temp" id="recipes">
 <form>
 {% set count = namespace(value=-1) %}
-{% for item in recipesFilteredByName %}
+{% for item in recipesToBeDisplayed %}
     {% set count.value = count.value + 1 %}
     <div class="container2" style="overflow:hidden">
         <a class="link" href="/{{ item }}">

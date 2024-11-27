@@ -6,7 +6,7 @@ def loadIngr():
     ...
 def getrecipename(x):
     ...
-def filter_by_ingredient(ingredientsearch):
+def filter_by_ingredient():
     conn = sqlite3.connect("recipe.db")
     c = conn.cursor()
     ingredientlist = loadIngr()#loads the ingredients
@@ -81,9 +81,13 @@ def filter_by_ingredient(ingredientsearch):
         elif noOfPrevIngredients == 1:#if there's only one query item
             for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)#add it to list
+        return recipesFilteredByIngredient
 
-
-ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
-if ingredientsearch:
-    session['ingredientsearch'] = ingredientsearch
-filter_by_ingredient(session['ingredientsearch'])
+def a():
+    if 'ingrsearch_history' not in session:#if it does not already exist
+        session['ingrsearch_history'] = []#then define it as an empty list
+    ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
+    if ingredientsearch:#if they submitted a query
+        session['ingredientsearch'] = ingredientsearch#assign it to a global variable
+    recipesFilteredByIngredient = filter_by_ingredient()
+    return render_template("home.html", recipesToBeDisplayed=recipesFilteredByIngredient, alert=session['alert'])
