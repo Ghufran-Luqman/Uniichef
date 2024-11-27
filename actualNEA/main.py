@@ -382,7 +382,7 @@ def home():
     
     recipesFilteredByName = []#prepare temporary lists
     altlistofrecipes = []
-    recipesearchname = request.args.get("recipesearchname", '')#Query that user has entered for the 'filter by names'
+    recipesearchname = request.args.get("recipesearchname")#Query that user has entered for the 'filter by names'
     ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
 
     images = []
@@ -523,13 +523,13 @@ def home():
                         else:#if the first queried item is not in the recipe list then break
                             break
                     count += 1#cycle to the next ingredient in the recipe ingredient list
-        elif noOfPrevIngredients == 1:#if there's only one recipesearchname item
+        elif noOfPrevIngredients == 1:#if there's only one query item
             for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)#add it to list
         try:
             x = recipesFilteredByIngredient[0]#temporary variable tests if an error will be returned
             if len(recipesFilteredByIngredient) > 0:#if there is more than one recipe filtered by ingredients
-                session['alert'] == ""#reset
+                session['alert'] == ""#reset error message
 
             if recipesFilteredByName:#if there are any recipes filtered by name
                 if recipesFilteredByName == recipesFilteredByIngredient:#if this list is the same as the list of recipes filtered by ingredient
