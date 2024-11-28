@@ -318,10 +318,10 @@ def sign_up():
     username = request.form.get('username')#pull username inputted from user
     password = request.form.get('password')#pull password inputted from user
     confirmpassword = request.form.get('confirmpassword')#pull confirmation password from user
-    if password:#if they have inputted a password - helps check they have inputted everything
+    username4len = str(username)
+    password4len = str(password)#putting both in the right form for comparison
+    if password and username:#if they have inputted all fields
         if len(password) > 6:#checks that password is at least 7 characters
-            username4len = str(username)
-            password4len = str(password)#putting both in the right form for comparison
             if username and password and password == confirmpassword:#check all exist and check that confirmation password matches password
                 password = generate_password_hash(password)#securely hash password to avoid hacking
                 try:
@@ -337,11 +337,11 @@ def sign_up():
                     #front end telling the user that their username is not unique.
             elif password != confirmpassword:#if the password and confirmation password do not match. If confirmation password is empty then it will not match password.
                 flashmessage = "passwords do not match"#then this will lead to an error message being returned to the user
-            elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:#if the user has filled out only password or only username then
-                #return error (if they have not filled out any, it is assumed that they are just loading the page, and so nothing will be done).
-                flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
         else:#their password is shorter than 7 characters
             flashmessage = "password too short"#therefore return to the user an error telling them to make their password longer.
+    elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:#if the user has filled out only password or only username then
+        #return error (if they have not filled out any, it is assumed that they are just loading the page, and so nothing will be done).
+        flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
     return render_template("signup.html", flashmessage=flashmessage)#returns the signup page
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -349,33 +349,34 @@ def login():
     session['alert'] = ""#avoids an error by resetting the global alert variable
     login = False#avoids errors
     flashmessage = False
-    conn = sqlite3.connect("recipes.db")
+    conn = sqlite3.connect("recipes.db")#connects to database
     c = conn.cursor()
     username = request.form.get('username')#get username
     password = request.form.get('password')#get password
-    username4len = str(username)#get the length of the username
-    password4len = str(password)#get length of password
+    username4len = str(username)
+    password4len = str(password)#format both for the length
     if username and password:#if they are both not empty
-        c.execute("SELECT username, password FROM users")#get the username and password
-        listofusernames = c.fetchall()
-        for item in listofusernames:
+        c.execute("SELECT username, password FROM users")#get all usernames and passwords from the database
+        listofaccounts = c.fetchall()#this is a 2D array stuctured like: [(username1, password1), (username2, password2)]
+        for item in listofaccounts:#cycles through all accounts
             if item[0].lower() == username.lower():#if usernames match
-                if check_password_hash(item[1], password):#if passwords of that username match
+                if check_password_hash(item[1], password):#if passwords of that username match. Checked through hashing the submitted password
+                    #the same way as the password in the database
                     login = True
                     break
-                elif item[1] != password:
-                    flashmessage = 'incorrect'
+                elif item[1] != password:#if the password does not match
+                    flashmessage = 'incorrect'#return message to user that they are incorrect
                 else:
                     print("unknown error")
                     flashmessage = 'unknownerror'
-        if login == True:
-            username = username.title()
-            session['username'] = username
-            return redirect(url_for('home'))
-        else:
-            flashmessage = 'incorrect'
+        if login == True:#if they are successful
+            username = username.title()#capitalize username
+            session['username'] = username#assign username to a global variable
+            return redirect(url_for('home'))#redirect to home
+        else:#if they are not successful
+            flashmessage = 'incorrect'#return message to user that they are incorrect
     elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
-        flashmessage = 'notfilledout'
+        flashmessage = 'notfilledout'#return message to user that they must fill out all fields
     return render_template("login.html", flashmessage=flashmessage)
 
 @app.route('/home', methods=['GET', 'POST'])
