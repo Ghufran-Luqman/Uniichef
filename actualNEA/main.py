@@ -314,11 +314,7 @@ def checklength(username, password, confirmpassword):
         count += 1
     if len(confirmpassword) == 0:
         count += 1
-
-    if count == 3:#if none of the fields have been entered, do 
-        #nothing as we are assuming they are loading the page
-        return False
-    elif count == 2 or count == 1:#they havent filled out all fields
+    if count == 3 or count == 2 or count == 1:#they havent filled out all fields
         return True
     else:#they have filled out all fields
         return False
@@ -329,38 +325,40 @@ def index():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    flashmessage = 'False'#avoids error for later
-    conn = sqlite3.connect("recipes.db")#connects to the database
-    c = conn.cursor()#makes it quicker to access database
-    username = request.form.get('username')#pull username inputted from user
-    password = request.form.get('password')#pull password inputted from user
-    confirmpassword = request.form.get('confirmpassword')#pull confirmation password from user
-    username4len = str(username)
-    password4len = str(password)#putting both in the right form for comparison
-    confirmpassword4len = str(confirmpassword)
-    result = checklength(username4len, password4len, confirmpassword4len)
-    if result == True:#if they have filled out at least 1 field but not filled out the rest
-        flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
-    if password and username and confirmpassword:#if they have inputted all fields
-        if len(password) > 6:#checks that password is at least 7 characters
-            if username and password and password == confirmpassword:#check all exist and check that confirmation password matches password
-                password = generate_password_hash(password)#securely hash password to avoid hacking
-                try:
-                    c.execute("""INSERT INTO users (username, password)
-                    VALUES (?, ?)""", (username, password))#at this point all checks have been passed, so 
-                    conn.commit()#save
-                    c.close()
-                    conn.close()#close connection (avoids errors)
-                    return redirect(url_for('login'))#redirect to login page as they are successful
-                except:#if an error occurs then it will move here
-                    flashmessage = 'sameusername'#if an error occurs it will be from inserting the data into the database. since the database is set up to have each username as unique,
-                    #if the username is not unique, then it will return an error, leading here, where a variable is set to a specific string that will trigger a message to popup in the
-                    #front end telling the user that their username is not unique.
-            elif password != confirmpassword:#if the password and confirmation password do not match. If confirmation password is empty then it will not match password.
-                flashmessage = "passwords do not match"#then this will lead to an error message being returned to the user
-        else:#their password is shorter than 7 characters
-            flashmessage = "password too short"#therefore return to the user an error telling them to make their password longer.
-    return render_template("signup.html", flashmessage=flashmessage)#returns the signup page
+    if request.method == "POST":
+        flashmessage = 'False'#avoids error for later
+        conn = sqlite3.connect("recipes.db")#connects to the database
+        c = conn.cursor()#makes it quicker to access database
+        username = request.form.get('username')#pull username inputted from user
+        password = request.form.get('password')#pull password inputted from user
+        confirmpassword = request.form.get('confirmpassword')#pull confirmation password from user
+        username4len = str(username)
+        password4len = str(password)#putting both in the right form for comparison
+        confirmpassword4len = str(confirmpassword)
+        result = checklength(username4len, password4len, confirmpassword4len)
+        if result == True:#if they have filled out at least 1 field but not filled out the rest
+            flashmessage = 'notfilledout'#leads to an error message telling the user to fill out all fields
+        if password and username and confirmpassword:#if they have inputted all fields
+            if len(password) > 6:#checks that password is at least 7 characters
+                if username and password and password == confirmpassword:#check all exist and check that confirmation password matches password
+                    password = generate_password_hash(password)#securely hash password to avoid hacking
+                    try:
+                        c.execute("""INSERT INTO users (username, password)
+                        VALUES (?, ?)""", (username, password))#at this point all checks have been passed, so 
+                        conn.commit()#save
+                        c.close()
+                        conn.close()#close connection (avoids errors)
+                        return redirect(url_for('login'))#redirect to login page as they are successful
+                    except:#if an error occurs then it will move here
+                        flashmessage = 'sameusername'#if an error occurs it will be from inserting the data into the database. since the database is set up to have each username as unique,
+                        #if the username is not unique, then it will return an error, leading here, where a variable is set to a specific string that will trigger a message to popup in the
+                        #front end telling the user that their username is not unique.
+                elif password != confirmpassword:#if the password and confirmation password do not match. If confirmation password is empty then it will not match password.
+                    flashmessage = "passwords do not match"#then this will lead to an error message being returned to the user
+            else:#their password is shorter than 7 characters
+                flashmessage = "password too short"#therefore return to the user an error telling them to make their password longer.
+        return render_template("signup.html", flashmessage=flashmessage)#returns the signup page
+    return render_template("signup.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
