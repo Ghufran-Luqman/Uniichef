@@ -325,7 +325,7 @@ def index():
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    if request.method == "POST":
+    if request.method == "POST":#if the user is submitting any data
         flashmessage = 'False'#avoids error for later
         conn = sqlite3.connect("recipes.db")#connects to the database
         c = conn.cursor()#makes it quicker to access database
@@ -362,38 +362,38 @@ def sign_up():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    session['alert'] = ""#avoids an error by resetting the global alert variable
-    login = False#avoids errors
-    flashmessage = False
-    conn = sqlite3.connect("recipes.db")#connects to database
-    c = conn.cursor()
-    username = request.form.get('username')#get username
-    password = request.form.get('password')#get password
-    username4len = str(username)
-    password4len = str(password)#format both for the length
-    if username and password:#if they are both not empty
-        c.execute("SELECT username, password FROM users")#get all usernames and passwords from the database
-        listofaccounts = c.fetchall()#this is a 2D array stuctured like: [(username1, password1), (username2, password2)]
-        for item in listofaccounts:#cycles through all accounts
-            if item[0].lower() == username.lower():#if usernames match
-                if check_password_hash(item[1], password):#if passwords of that username match. Checked through hashing the submitted password
-                    #the same way as the password in the database
-                    login = True
-                    break
-                elif item[1] != password:#if the password does not match
-                    flashmessage = 'incorrect'#return message to user that they are incorrect
-                else:
-                    print("unknown error")
-                    flashmessage = 'unknownerror'
-        if login == True:#if they are successful
-            username = username.title()#capitalize username
-            session['username'] = username#assign username to a global variable
-            return redirect(url_for('home'))#redirect to home
-        else:#if they are not successful
-            flashmessage = 'incorrect'#return message to user that they are incorrect
-    elif len(username4len) < 1 and len(password4len) >= 1 or len(password4len) < 1 and len(username4len) >= 1:
-        flashmessage = 'notfilledout'#return message to user that they must fill out all fields
-    return render_template("login.html", flashmessage=flashmessage)
+    if request.method == "POST":#if the user is submitting data
+        session['alert'] = ""#avoids an error by resetting the global alert variable
+        login = False#avoids errors
+        flashmessage = False
+        conn = sqlite3.connect("recipes.db")#connects to database
+        c = conn.cursor()
+        username = request.form.get('username')#get username
+        password = request.form.get('password')#get password
+        if username and password:#if they are both not empty
+            c.execute("SELECT username, password FROM users")#get all usernames and passwords from the database
+            listofaccounts = c.fetchall()#this is a 2D array stuctured like: [(username1, password1), (username2, password2)]
+            for item in listofaccounts:#cycles through all accounts
+                if item[0].lower() == username.lower():#if usernames match
+                    if check_password_hash(item[1], password):#if the password of that username matches. Checked through hashing the submitted password
+                        #the same way as the password in the database
+                        login = True#they have successfully logged in
+                        break
+                    elif item[1] != password:#if the password does not match
+                        flashmessage = 'incorrect'#return message to user that they are incorrect
+                    else:
+                        print("unknown error")
+                        flashmessage = 'unknownerror'
+            if login == True:#if they are successful
+                username = username.title()#capitalize username
+                session['username'] = username#assign username to a global variable
+                return redirect(url_for('home'))#redirect to home
+            else:#if they are not successful
+                flashmessage = 'incorrect'#return message to user that they are incorrect
+        else:
+            flashmessage = 'notfilledout'#return message to user that they must fill out all fields
+        return render_template("login.html", flashmessage=flashmessage)
+    return render_template("login.html")#therefore only return the page
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
