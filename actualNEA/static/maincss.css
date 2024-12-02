@@ -536,7 +536,7 @@ li::marker {
 .searchpos {
     position: absolute;
     top: 5px;
-    left: 270px;
+    left: 212px;
 }
 
 .filtingrds {
@@ -680,6 +680,6 @@ li::marker {
 
 .filtwIng {
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 432px;
+    top: 17px;
 }

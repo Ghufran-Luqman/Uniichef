@@ -646,12 +646,12 @@ def home():
     conn.close()#close database connection to avoid errors from SQLite
     return render_template("home.html", recipesToBeDisplayed=recipesFilteredByName, username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
-@app.route('/logout')
+@app.route('/logout')#creates url of /logout
 def logout():
-    session.pop('username')
-    session.pop('ingrsearch_history')
-    session.pop('alert')
-    return redirect(url_for('login'))
+    session.pop('username')#removes username variable from session
+    session.pop('ingrsearch_history')#same but with ingredient filter history
+    session.pop('alert')#same but with alert
+    return redirect(url_for('login'))#redirects to /login (login page)
 
 @app.route('/<recipename>', methods=['GET', 'POST'])
 def item(recipename):
