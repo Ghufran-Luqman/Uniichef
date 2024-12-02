@@ -416,10 +416,10 @@ def home():
     username = session['username']#pull username
 
     if 'ingrsearch_history' not in session or request.args.get('reset') == "reset":#if they click the reset button
-            session['ingrsearch_history'] = []
-            session['alert'] = ""
-            session['recipesearchname'] = ""
-            session['ingredientsearch'] = ""
+            session['ingrsearch_history'] = []#reset the ingredient search history
+            session['alert'] = ""#reset the alert
+            session['recipesearchname'] = ""#reset the filter by name
+            session['ingredientsearch'] = ""#reset the current ingredient search
             #resets all filters
 
     conn = sqlite3.connect("recipes.db")#connect to database
