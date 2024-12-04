@@ -2,92 +2,43 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import ast
-def loadIngr():
-    ...
-def getrecipename(x):
-    ...
-def filter_by_ingredient():
-    conn = sqlite3.connect("recipe.db")
-    c = conn.cursor()
-    ingredientlist = loadIngr()#loads the ingredients
-    temporarylist = []#prepare temporary lists
-    temporaryingredientlist = []
-    recipesFilteredByIngredient = []
-    if session['ingredientsearch']:#if they have searched for recipes by ingredients
-        session['ingrsearch_history'].append(session['ingredientsearch'])#add their query to a list of previously searched ingredients
-        session.modified = True
+import sqlite3
+conn = sqlite3.connect('recipes.db')
+c = conn.cursor()
+recipename=""
+ingredientlist=""
+username=""
 
-        for item in ingredientlist:
-            item = list(item)
-            item = item[0]
-            temporarylist = [ingredient.strip() for ingredient in item.split(',')]
-            temporaryingredientlist.append(temporarylist)#formats ingredients
-        noOfPrevIngredients = len(session['ingrsearch_history'])#takes the number of previously searched for ingredients
-        recipesWMatchingIngs = []#prepare more temporary lists
-        ingredientListWCommas = []
-        if noOfPrevIngredients <= 1:#if they have 1 previously searched for ingredient
-            for previousIngredientFilter in session['ingrsearch_history']:#OR list, cycles through queries
-                for item in temporaryingredientlist:#cycles through ingredients
-                        for ingredient in item:
-                            if previousIngredientFilter.upper() in ingredient.upper():#if ingredient contains query
-                                recipename = getrecipename(item)#pulls recipe name
-                                if recipename == None:#no recipe name
-                                    pass#move onto next ingredient
-                                else:
-                                    recipesWMatchingIngs.append(recipename)#if there is a recipe name, add it to a list to be displayed onto website
-                                break#break from loop
-        elif noOfPrevIngredients > 1:#if they have more than one previously searched for ingredient
-            firstrecipesearch = session['ingrsearch_history'][0]#take the first ingredient they searched for
-            for item in temporaryingredientlist:#cycles through ingredients
-                for ingredient in item:
-                    if firstrecipesearch.upper() in ingredient.upper():#if the ingredient is in the first query
-                        recipename = getrecipename(item)#get the recipe name
-                        if recipename == None:#if no recipe name
-                            pass#move onto next ingredient
-                        else:
-                            recipesWMatchingIngs.append(recipename)#if there is a recipe name then add it to a list to be displayed onto the website
-                            break#break from the loop
-        if noOfPrevIngredients > 1:#continue on
-            for item in recipesWMatchingIngs:#for every recipe in this list of recipes
-                tobreak = False
-                c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (item,))#gets recipes original ingredients
-                recipesings = c.fetchall()[0]
-                recipesings = list(recipesings)
-                recipesings = recipesings[0]#format
-                ingredientListWCommas = [ingredient.strip() for ingredient in recipesings.split(',')]#puts original ings into list separated by the comma
-                #ingredientListWCommas is the ingredient list (all cleaned up) for this specific recipe
-                lengthOfIngList = len(ingredientListWCommas)#length of list of ingredients
-                count = 0#prepare counter
-                while count != lengthOfIngList and tobreak == False:#while all queries have not been matched and there isn't a reason to break
-                    count2 = 0#prepare a second count
-                    queryCount = 0#and a count for queries
-                    while count2 != noOfPrevIngredients and tobreak == False:#noOfPrevIngredients is how many queries there are
-                        if session['ingrsearch_history'][count2].upper() in ingredientListWCommas[count].upper():#if queried ingredient is in an ingredient of the recipe
-                            count2 += 1#increment count
-                            for ingredientrecipesearch in session['ingrsearch_history']:#cycles through all the queries
-                                for aningredient in ingredientListWCommas:
-                                    if ingredientrecipesearch.upper() in aningredient.upper():#if queried ingredient is in the recipe ingredient list
-                                        queryCount += 1#increments query count
-                                        break
 
-                            if queryCount == len(session['ingrsearch_history']):#if all queries are in the recipe ingredients
-                                recipesFilteredByIngredient.append(item)#adds them to be displayed on the website
-                                tobreak = True#no need to cycle anymore therefore break from loop
-                                break
-                                    
-                        else:#if the first queried item is not in the recipe list then break
-                            break
-                    count += 1#cycle to the next ingredient in the recipe ingredient list
-        elif noOfPrevIngredients == 1:#if there's only one query item
-            for recipe in recipesWMatchingIngs:
-                recipesFilteredByIngredient.append(recipe)#add it to list
-        return recipesFilteredByIngredient
 
-def a():
-    if 'ingrsearch_history' not in session:#if it does not already exist
-        session['ingrsearch_history'] = []#then define it as an empty list
-    ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
-    if ingredientsearch:#if they submitted a query
-        session['ingredientsearch'] = ingredientsearch#assign it to a global variable
-    recipesFilteredByIngredient = filter_by_ingredient()
-    return render_template("home.html", recipesToBeDisplayed=recipesFilteredByIngredient, alert=session['alert'])
+savebutton = request.args.get("saverecipe")
+while savebutton == 'button':#if user clicks on this button, since the value of the button is 'button'
+    #if the user is simply loading the page then 'savebutton' will not have any value, whereas if the
+    #user clicks on the button then 'savebutton' will have the value of 'button'.
+
+    #check if the user has previously saved this recipe
+    c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))#get all recipes this
+    #user has saved before
+    name = c.fetchall()
+    duplicates = False#assume they have not saved this recipe before
+    for previousrecipe in name:#cycle through previously saved recipes (this is a 2D array)
+        if previousrecipe[0] == recipename:#if a previously saved recipe is the same as the recipe they are
+            #trying to save then
+            duplicates = True#they have saved this recipe before
+    if duplicates == False:#if they haven't added this recipe before
+        c.execute("""INSERT INTO userspecrecipes (userid, recipe_name)
+                    VALUES (?, ?)""", (username, recipename))#save the recipe as they haven't added this recipe before
+        conn.commit()#save changes
+        c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))#gets ID
+        #of the recipe user just saved to put into the ingredients
+        temporaryvariable = c.fetchall()
+        id = temporaryvariable[0][0]#as it is a 2D array (due to SQLite's formatting)
+        for ingredient in ingredientlist:#cycles through the ingredients in the recipe
+            c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
+                    VALUES (?, ?)""", (id, ingredient))#putting in the recipeid and ingredient name (the state is defaulted to false)
+            conn.commit()#save changes
+        alert = "success"#sets variable that will return message to user that the recipe has successfully been added
+    elif duplicates == True:#they have already saved this recipe before
+        alert = "duplicates"#sets variable that will return message to user that they have saved this recipe before
+    savebutton = ""#resets the value of the button (so that they do not try to add it again accidentally by reloading the page)
+

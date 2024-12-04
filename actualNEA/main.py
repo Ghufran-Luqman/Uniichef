@@ -603,7 +603,7 @@ def home():
     if preptime:
         c.execute("SELECT prep_time FROM tableofrecipes2")
         allpreptime = c.fetchall()
-        print(f"ALLPREPTIME: {allpreptime}")
+        #print(f"ALLPREPTIME: {allpreptime}")
 
     session['search_history'] = session['recipesearchname']
 
@@ -679,38 +679,15 @@ def item(recipename):
 
     savebutton = request.args.get("saverecipe")
     while savebutton == 'button':#if user clicks on this button
-        #print("clicked on button")
         try:
             username = session['username']
         except:
             alert = "nousername"
             break
-        #print(f"username: {username}")
             
         c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
         name = c.fetchall()
-        #print(f"name: {name}")
         duplicates = False
-        '''
-        length = len(name)
-        count = 0
-        duplicates = False
-        while count < length:
-            try:
-                first = name[count][0]
-                print(f"first: {first}")
-                second = name[count+1][0]
-                print(f"second: {second}")
-            except:
-                print("no duplicates")
-                duplicates = False
-                break
-            if first == second:
-                print("there are duplicates")
-                duplicates = True
-                break
-            count += 1
-        '''
         #Cycle through previously saved recipes
         for previousrecipe in name:
             if previousrecipe[0] == recipename:
@@ -727,33 +704,15 @@ def item(recipename):
                         VALUES (?, ?)""", (id, ingredient))
                 conn.commit()
             alert = "success"
-            '''
-            conn = sqlite3.connect('recipes.db')
-            c = conn.cursor()
-            c.execute("SELECT * FROM listofingredients")
-            listt = c.fetchall()
-            list2 = []
-            for item in listt:
-                item1 = f"{item[0]}, {item[1]}, {item[2]}"
-                list2.append(item1)
-            #print(f"list2: {list2}")
-            
-                for item in ingredientlist:
-                c.execute("INSERT INTO listofingredients (user, ingredient, status) VALUES (?, ?, ?)", ('default', item, 'False'))
-            conn.commit()
-            c.execute("SELECT * FROM listofingredients")
-            print(f"SUIIIIIIIIIIIIIIII:{c.fetchall()}")
-            return redirect(url_for('item', recipename=recipename))
-            '''
         elif duplicates == True:
             alert = "duplicates"
         savebutton = ""
+        
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
     if image:
         image = image[0]
         image = image[0]
-    
     c.close()
     conn.close()
     return render_template('recipe.html', ingredients=ingredients, recipename=recipename, item=ingredientlist, image=image, alert=alert, instructions=instructionlist)
@@ -770,9 +729,9 @@ def lists():
     try:
         testvar = recipes[0][0]
         for recipe in recipes:
-            print(recipe[0])
+            #print(recipe[0])
             recipelist.append(recipe[0])
-        print(f"recipelist: {recipelist}")
+        #print(f"recipelist: {recipelist}")
         '''for recipe in recipelist:
             ingredientlist = []
             c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipe,))
@@ -782,7 +741,7 @@ def lists():
             ingredients = c.fetchall()
             print(f"ingredients: {ingredients}")'''
     except:
-        print("no recipes")
+        #print("no recipes")
         alert = "norecipes"
 
     c.close()
@@ -848,17 +807,17 @@ def newrecipe(username, recipename):
         else:
             raise KeyError
 
-    print(f"newinglist: {newingredientlist}")
+    #print(f"newinglist: {newingredientlist}")
 
     ingredientpressed = request.args.get('pressed')
     if ingredientpressed:
         ingredientpressed = ast.literal_eval(ingredientpressed)
-        print(f"ingredientpressed: {ingredientpressed}")
+        #print(f"ingredientpressed: {ingredientpressed}")
         for item in newingredientlist:
             if item[0] == ingredientpressed[0] and ingredientpressed[1] == False:
                 c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
                 temp = c.fetchall()[0][0]
-                print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+                #print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
                 c.execute("""UPDATE ingredients 
                             set state = ?
                             WHERE ingredient_name = ? AND recipeid=?
@@ -866,17 +825,17 @@ def newrecipe(username, recipename):
                 c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
                 t = c.fetchall()
                 conn.commit()
-                print(f"\nALL: {t}\n")
+                #print(f"\nALL: {t}\n")
                 ingredientpressed.pop(1)
                 ingredientpressed.append(True)
-                print(f"newingpressed {ingredientpressed}")
+                #print(f"newingpressed {ingredientpressed}")
                 pos = newingredientlist.index(item)
                 newingredientlist[pos] = ingredientpressed
-                print(f"newinglistmodified: {newingredientlist}")
+                #print(f"newinglistmodified: {newingredientlist}")
             elif item[0] == ingredientpressed[0] and ingredientpressed[1] == True:
                 c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
                 temp = c.fetchall()[0][0]
-                print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+                #print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
                 c.execute("""UPDATE ingredients 
                             set state = ?
                             WHERE ingredient_name = ? AND recipeid=?
@@ -884,13 +843,13 @@ def newrecipe(username, recipename):
                 c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
                 t = c.fetchall()
                 conn.commit()
-                print(f"\nALL: {t}\n")
+                #print(f"\nALL: {t}\n")
                 ingredientpressed.pop(1)
                 ingredientpressed.append(False)
-                print(f"newingpressed {ingredientpressed}")
+                #print(f"newingpressed {ingredientpressed}")
                 pos = newingredientlist.index(item)
                 newingredientlist[pos] = ingredientpressed
-                print(f"newinglistmodified: {newingredientlist}")
+                #print(f"newinglistmodified: {newingredientlist}")
 
             
 
