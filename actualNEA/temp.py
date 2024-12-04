@@ -10,11 +10,19 @@ ingredientlist=""
 username=""
 
 
-
 savebutton = request.args.get("saverecipe")
 while savebutton == 'button':#if user clicks on this button, since the value of the button is 'button'
     #if the user is simply loading the page then 'savebutton' will not have any value, whereas if the
     #user clicks on the button then 'savebutton' will have the value of 'button'.
+
+    try:
+        username = session['username']#if this code produces an error it means session['username'] was not defined
+        #therefore the user is not logged in therefore it will go to the 'except' code. If it does not produce an
+        #error then they are logged in therefore it will continue.
+    except:
+        alert = "nousername"#sets a variable which will lead to an error message being returned telling the user to login,
+        #as well as redirecting them to the login page.
+        break
 
     #check if the user has previously saved this recipe
     c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))#get all recipes this

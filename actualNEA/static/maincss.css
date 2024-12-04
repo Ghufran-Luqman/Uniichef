@@ -367,12 +367,8 @@ li::marker {
     border-color: #317f2f;
     border-style: solid;
     position: absolute;
-    right: 50px;
-}
-
-.title,
-.saverecipe {
-    vertical-align: middle;
+    right: 5px;
+    top: 5px;
 }
 
 .recipetitle {
