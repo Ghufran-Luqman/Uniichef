@@ -745,59 +745,41 @@ def lists():
 def newrecipe(username, recipename):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    ingredientlist = []
-    c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=? AND userid=?", (recipename, username))
-    id = c.fetchall()[0][0]
-    c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
+    alert = ''#prevents error
+    ingredientlist = []#prepare an ingredients list
+    c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=? AND userid=?", (recipename, username))#grab the ID of the saved recipe
+    id = c.fetchall()[0][0]#format as it is a 2D array
+    c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))#from the ID get the ingredients as well as the state
     ingredients = c.fetchall()
-    for item in ingredients:
-        ingredientlist.append(item)
+    print(f"ingredients: {ingredients}")
 
-    c.execute("SELECT directions FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))
+    c.execute("SELECT directions FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))#get instructions of recipe (from main database)
     instructions = c.fetchall()
-    if instructions:
-        instructions = instructions[0][0]
-        splitup = instructions.split('\n')
-        instructionlist = []
-        for string in splitup:
-            if string.strip():
-                instructionlist.append(string)
+    instructions = instructions[0][0]#formats instructions as it is a 2D array
+    splitup = instructions.split('\n')#they are separated by new lines in the database
+    instructionlist = []#prepare an instruction list
+    for string in splitup:
+        if string.strip():
+            instructionlist.append(string)#adds the newly formatted instructions to another list to be displayed on the website
     
-    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
+    c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))#gets the image
     image = c.fetchall()
-    if image:
-        image = image[0]
-        image = image[0]
-    '''
-    newingredientlist = []
-    for item in ingredientlist:
-        newinglist2 = []
-        if item[1] == 0:
-            newinglist2.append(item[0])
-            newinglist2.append(False)
-            newingredientlist.append(newinglist2)
-        elif item[1] == 1:
-            newinglist2.append(item[0])
-            newinglist2.append(True)
-            newingredientlist.append(newinglist2)
-        else:
-            raise KeyError
-    print(f"newingredientlist {newingredientlist}")
-    '''
+    image = image[0]
+    image = image[0]#formats the image as its a 2D array
 
-    newingredientlist = []
-    for item in ingredientlist:
-        newinglist2 = []
-        if item[1] == 0:
-            newinglist2.append(item[0])
-            newinglist2.append(False)
-            newingredientlist.append(newinglist2)
-        elif item[1] == 1:
+    newingredientlist = []#prepare another ingredient list. this will be a 2D array
+    for item in ingredients:#cycle through the ingredients in the original ingredient list
+        newinglist2 = []#prepare yet another list, this will be used multiple times and be placed inside the 'newingredientlist'
+        if item[1] == 0:#if the ingredient's state is unticked
+            newinglist2.append(item[0])#add it to another list
+            newinglist2.append(False)#as well as its state in boolean
+            newingredientlist.append(newinglist2)#add the ingredient's information into another list, as a 2D array
+        elif item[1] == 1:#if the ingredient's state is ticked
             newinglist2.append(item[0])
             newinglist2.append(True)
-            newingredientlist.append(newinglist2)
+            newingredientlist.append(newinglist2)#same as before
         else:
-            raise KeyError
+            raise KeyError#program should not each here, it is to grab my attention as a developer in case the data was incorrectly formatted
 
 
     ingredientpressed = request.args.get('pressed')
@@ -845,7 +827,7 @@ def newrecipe(username, recipename):
 
     c.close()
     conn.close()
-    return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image, instructions=instructionlist)
+    return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image, instructions=instructionlist, alert=alert)
 
 
 if __name__ == "__main__":
