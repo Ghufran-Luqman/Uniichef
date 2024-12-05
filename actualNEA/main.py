@@ -719,31 +719,21 @@ def item(recipename):
 
 @app.route('/lists')
 def lists():
-    username = session['username']
+    username = session['username']#get username from global variable
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
-    c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
-    recipes = c.fetchall()
-    recipelist = []
-    alert = ""
+    c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))#get all recipes which
+    #the user has saved
+    recipes = c.fetchall()#2D array like: [(recipe1,), (recipe2,)]
+    recipelist = []#prepare a list for the website
+    alert = ""#avoids errors
     try:
-        testvar = recipes[0][0]
-        for recipe in recipes:
-            #print(recipe[0])
-            recipelist.append(recipe[0])
-        #print(f"recipelist: {recipelist}")
-        '''for recipe in recipelist:
-            ingredientlist = []
-            c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=?", (recipe,))
-            id = c.fetchall()[0][0]
-            print(f"id: {id}")
-            c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))
-            ingredients = c.fetchall()
-            print(f"ingredients: {ingredients}")'''
-    except:
-        #print("no recipes")
-        alert = "norecipes"
-
+        testvar = recipes[0][0]#if there is an error it means the user has not saved any recipes
+        for recipe in recipes:#cycles through the recipes
+            recipelist.append(recipe[0])#add it to the list
+    except:#if there was an error produced
+        alert = "norecipes"#sets a variable that will later return an error to the user telling them
+        #that they have not saved any recipes
     c.close()
     conn.close()
     return render_template("lists.html", username=username, recipelist=recipelist, alert=alert)
