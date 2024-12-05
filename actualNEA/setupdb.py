@@ -177,14 +177,17 @@ c.execute("""CREATE TABLE ingredients (
           FOREIGN KEY (recipeid) REFERENCES userspecrecipes (id)
           )""")
 '''
+'''
 #c.execute("""INSERT INTO users (username, password)
           #VALUES (?, ?)""", ("test", "test"))
+'''
 '''
 c.execute("DROP TABLE userspecrecipes")
 conn.commit()
 c.execute("DROP TABLE ingredients")
 conn.commit()
 '''
+
 '''
 t = '8 small Granny Smith apples or as needed'
 c.execute("""UPDATE ingredients 
@@ -194,15 +197,13 @@ c.execute("""UPDATE ingredients
 
 c.execute("SELECT * FROM users")
 print(c.fetchall())
+'''
+'''
 c.execute("SELECT * FROM userspecrecipes")
 print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
-a = "Apple Pie by Grandma Ople"
-c.execute("SELECT nutrition FROM tableofrecipes2 WHERE recipe_name=?", (a,))
-t = c.fetchall()
-print(t)
 
 conn.commit()
 conn.close()

@@ -465,6 +465,8 @@ def home():
                 c.execute("SELECT id FROM userspecrecipes WHERE recipe_name = ? AND userid = ?", (recipename, username))#pulls ID for ingredient list
                 temporaryvariable = c.fetchall()
                 id = temporaryvariable[0][0]
+                ingredientlist = ingredientlist[0]
+                ingredientlist = ingredientlist.split(",")
                 for ingredient in ingredientlist:
                     c.execute("""INSERT INTO ingredients (recipeid, ingredient_name)
                             VALUES (?, ?)""", (id, ingredient))#saves ingredient list
@@ -738,6 +740,7 @@ def lists():
     conn.close()
     return render_template("lists.html", username=username, recipelist=recipelist, alert=alert)
 
+
 @app.route('/<username>/<recipename>')
 def newrecipe(username, recipename):
     conn = sqlite3.connect("recipes.db")
@@ -759,7 +762,6 @@ def newrecipe(username, recipename):
         for string in splitup:
             if string.strip():
                 instructionlist.append(string)
-        instructionlist[-1] = f"By: {instructionlist[-1]}"
     
     c.execute("SELECT img_src FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
     image = c.fetchall()
@@ -797,7 +799,6 @@ def newrecipe(username, recipename):
         else:
             raise KeyError
 
-    #print(f"newinglist: {newingredientlist}")
 
     ingredientpressed = request.args.get('pressed')
     if ingredientpressed:
@@ -841,7 +842,6 @@ def newrecipe(username, recipename):
                 newingredientlist[pos] = ingredientpressed
                 #print(f"newinglistmodified: {newingredientlist}")
 
-            
 
     c.close()
     conn.close()
