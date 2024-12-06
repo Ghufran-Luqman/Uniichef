@@ -6,6 +6,8 @@ import ast
 app = Flask(__name__)
 app.secret_key = 'ilikecooking'
 
+alert=''
+
 def loadnames():
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
@@ -405,6 +407,7 @@ def home():
     recipesearchname = request.args.get("recipesearchname")#Query that user has entered for the 'filter by names'
     ingredientsearch = request.args.get("ingredientsearch")#Query that user has entered for the 'filter by ingredients'
 
+
     images = []
     
     if recipesearchname:#if they have not submitted anything then this value will be empty
@@ -636,6 +639,7 @@ def home():
         url = grab_url(altlistofrecipes)
         return render_template("home.html", recipesToBeDisplayed=altlistofrecipes, querying=session['ingrsearch_history'], username=username, alert=session['alert'], search_history=session['search_history'], images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
+
     
     images = grab_image(recipesFilteredByName)
     times = grab_time(recipesFilteredByName)
@@ -686,7 +690,16 @@ def item(recipename):
         except:
             alert = "nousername"
             break
-            
+        
+        #check if this recipe exists
+        c.execute("SELECT ingredients FROM tableofrecipes2 WHERE recipe_name=?", (recipename,))
+        recipeCheck = c.fetchall()
+        if len(recipeCheck) < 1:
+            #recipe does not exist
+            #therefore return an error message telling the user that the recipe does not exist, and redirect them to the home page
+            alert = "non-existent recipe"
+            return render_template("recipe.html", alert=alert)
+
         c.execute("SELECT recipe_name FROM userspecrecipes WHERE userid=?", (username,))
         name = c.fetchall()
         duplicates = False

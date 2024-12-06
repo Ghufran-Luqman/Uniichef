@@ -18,6 +18,11 @@
     <script>
     alert("Added recipe!")
     </script>
+{% elif alert == "non-existent recipe" %}
+    <script>
+    alert("That recipe does not exist.")
+    window.location.href = "/home"
+    </script>
 {% endif %}
 
 <div class="recipetitle">
