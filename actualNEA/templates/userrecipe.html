@@ -12,9 +12,9 @@
 {% for i in item %}
     <li style="text-align:left">
         {% if i[1] == False %}
-            <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }}</span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">+</button>
+            <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">+</button>
         {% elif i[1] == True %}
-            <span class="ingredients ticked ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }}</span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">✓</button>
+            <span class="ingredients ticked ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">✓</button>
         {% endif %}
     </li>
 {% endfor %}

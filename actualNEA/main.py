@@ -746,12 +746,10 @@ def newrecipe(username, recipename):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
     alert = ''#prevents error
-    ingredientlist = []#prepare an ingredients list
     c.execute("SELECT id FROM userspecrecipes WHERE recipe_name=? AND userid=?", (recipename, username))#grab the ID of the saved recipe
     id = c.fetchall()[0][0]#format as it is a 2D array
     c.execute("SELECT ingredient_name, state FROM ingredients WHERE recipeid=?", (id,))#from the ID get the ingredients as well as the state
     ingredients = c.fetchall()
-    print(f"ingredients: {ingredients}")
 
     c.execute("SELECT directions FROM tableofrecipes2 WHERE recipe_name = ?", (recipename,))#get instructions of recipe (from main database)
     instructions = c.fetchall()
@@ -769,9 +767,9 @@ def newrecipe(username, recipename):
 
     newingredientlist = []#prepare another ingredient list. this will be a 2D array
     for item in ingredients:#cycle through the ingredients in the original ingredient list
-        newinglist2 = []#prepare yet another list, this will be used multiple times and be placed inside the 'newingredientlist'
+        newinglist2 = []#prepare yet another list, this will be placed inside the 'newingredientlist' multiple times
         if item[1] == 0:#if the ingredient's state is unticked
-            newinglist2.append(item[0])#add it to another list
+            newinglist2.append(item[0])#add it to the list
             newinglist2.append(False)#as well as its state in boolean
             newingredientlist.append(newinglist2)#add the ingredient's information into another list, as a 2D array
         elif item[1] == 1:#if the ingredient's state is ticked
@@ -779,52 +777,38 @@ def newrecipe(username, recipename):
             newinglist2.append(True)
             newingredientlist.append(newinglist2)#same as before
         else:
-            raise KeyError#program should not each here, it is to grab my attention as a developer in case the data was incorrectly formatted
+            raise ValueError#program should not each here, it is to grab my attention as a developer in case the data was incorrectly formatted
 
 
     ingredientpressed = request.args.get('pressed')
-    if ingredientpressed:
-        ingredientpressed = ast.literal_eval(ingredientpressed)
-        #print(f"ingredientpressed: {ingredientpressed}")
-        for item in newingredientlist:
-            if item[0] == ingredientpressed[0] and ingredientpressed[1] == False:
-                c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
-                temp = c.fetchall()[0][0]
-                #print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+    if ingredientpressed:#if the user has clicked the button
+        ingredientpressed = ast.literal_eval(ingredientpressed)#the value of the button is the ingredient and its state structured like: [ingredient, state]
+        #the value is stored as a string therefore this function is used to convert it to a list securely
+        for item in newingredientlist:#cycles through the saved ingredients
+            if item[0] == ingredientpressed[0] and ingredientpressed[1] == False:#if the ingredient matches the one in the ingredients list and it is unticked
+                #then we must tick it as the user clicked the button whilst it was unticked
+                #ingredientpressed[0] is the ingredient name
+                #ingredientpressed[1] is the state
                 c.execute("""UPDATE ingredients 
                             set state = ?
                             WHERE ingredient_name = ? AND recipeid=?
-                            """, (True, temp, id))
-                c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
-                t = c.fetchall()
-                conn.commit()
-                #print(f"\nALL: {t}\n")
+                            """, (True, ingredientpressed[0], id))#update the state of the ingredient to be true.
+                conn.commit()#save changes
                 ingredientpressed.pop(1)
-                ingredientpressed.append(True)
-                #print(f"newingpressed {ingredientpressed}")
+                ingredientpressed.append(True)#replace the list from the front-end from false to true
                 pos = newingredientlist.index(item)
-                newingredientlist[pos] = ingredientpressed
-                #print(f"newinglistmodified: {newingredientlist}")
-            elif item[0] == ingredientpressed[0] and ingredientpressed[1] == True:
-                c.execute("SELECT ingredient_name FROM ingredients WHERE ingredient_name=?", (ingredientpressed[0],))
-                temp = c.fetchall()[0][0]
-                #print(f"SUIIIIIIIIIIIIIIIIIIIIII: {temp}\n")
+                newingredientlist[pos] = ingredientpressed#update the 2D array that is to be displayed on the website
+            elif item[0] == ingredientpressed[0] and ingredientpressed[1] == True:#if the ingredient matches the one in the ingredients list and it is ticked
+                #then untick the ingredient
                 c.execute("""UPDATE ingredients 
                             set state = ?
                             WHERE ingredient_name = ? AND recipeid=?
-                            """, (False, temp, id))
-                c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
-                t = c.fetchall()
-                conn.commit()
-                #print(f"\nALL: {t}\n")
+                            """, (False, ingredientpressed[0], id))#change the state from true to false in the database
+                conn.commit()#save changes
                 ingredientpressed.pop(1)
-                ingredientpressed.append(False)
-                #print(f"newingpressed {ingredientpressed}")
+                ingredientpressed.append(False)#update list
                 pos = newingredientlist.index(item)
-                newingredientlist[pos] = ingredientpressed
-                #print(f"newinglistmodified: {newingredientlist}")
-
-
+                newingredientlist[pos] = ingredientpressed#update 2D array
     c.close()
     conn.close()
     return render_template('userrecipe.html', recipename=recipename, username=username, item=newingredientlist, image=image, instructions=instructionlist, alert=alert)
