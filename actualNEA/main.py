@@ -95,9 +95,9 @@ def grab_nutrition(altlistofrecipes):
             listofnutritions.append(nutrition[0])
     return listofnutritions
 
-def convert2mins(addTime, minutescheck):
-    #print(f"(convert2mins) passed in number: {addTime}")
-    #print(f"(convert2mins) passed in number LENGTH: {len(str(addTime))}")
+def convert2mins_if_in_hours(addTime, minutescheck):
+    #print(f"(convert2mins_if_in_hours) passed in number: {addTime}")
+    #print(f"(convert2mins_if_in_hours) passed in number LENGTH: {len(str(addTime))}")
     if minutescheck:
         if minutescheck == True:
             #only mins
@@ -131,41 +131,34 @@ def convert2mins(addTime, minutescheck):
     return addTime
 
 def get_additional_time(time4recipe):
-    totaltime = time4recipe[2]
-    #print(f"inital totaltime: {totaltime}")
-    #print(f"lenght: {len(str(totaltime))}")
-    #try:
-        #print(f"{str(totaltime)[3]}")
-    #except:
-        #pass
-    addTime = []
-    for time in totaltime.split():
-        if time.isdigit():
-            addTime.append(int(time))
+    totaltime = time4recipe[2]#as it's structured like (preptime, cooktime, totaltime)
+    addTime = []#prepare list for additional time
+    for time in totaltime.split():#since totaltime is a string, this function splits the string into a list
+        if time.isdigit():#since each time has numbers and letters, e.g. '5 mins', we need only the numbers
+            addTime.append(int(time))#since its a number convert to integer, and add it to a list.
     total = addTime[0]
-    #print(f"addtime: {addTime}")
-    #print(f"total: {total}")
+    print(f"totaltime: {totaltime}")
+    print(f"totaltime.split(): {totaltime.split()}")
+    print(f"addtime: {addTime}")
     try:
-        #print(f"tried")
         if str(totaltime)[3] == 'i':
-            #print(f"its in mins3")
+            print("in minutes")
             minutescheck = True
-            totaltime = convert2mins(total, minutescheck)
+            totaltime = convert2mins_if_in_hours(total, minutescheck)
             pass
         elif str(totaltime)[4] == 'i':
-            #print(f"its in mins4")
+            print("in minutes")
             minutescheck = True
-            totaltime = convert2mins(total, minutescheck)
+            totaltime = convert2mins_if_in_hours(total, minutescheck)
             pass
         else:
-            #print(f"did else")
+            print("in hours")
             minutescheck = False
-            totaltime = convert2mins(total, minutescheck)
+            totaltime = convert2mins_if_in_hours(total, minutescheck)
     
     except:
-        #print(f"excepted")
         minutescheck = False
-        totaltime = convert2mins(total, minutescheck)
+        totaltime = convert2mins_if_in_hours(total, minutescheck)
     #print(f"length of add time: {len(addTime)}")
     if len(addTime) > 1:
         #print(f"bigger than 1")
@@ -191,22 +184,22 @@ def get_additional_time(time4recipe):
         if str(preptime)[3] == 'i':
             #print(f"its in mins3")
             minutescheck = True
-            preptime = convert2mins(temppreptime, minutescheck)
+            preptime = convert2mins_if_in_hours(temppreptime, minutescheck)
             pass
         elif str(preptime)[4] == 'i':
             #print(f"its in mins4")
             minutescheck = True
-            preptime = convert2mins(temppreptime, minutescheck)
+            preptime = convert2mins_if_in_hours(temppreptime, minutescheck)
             pass
         else:
             #print(f"did else")
             minutescheck = False
-            preptime = convert2mins(temppreptime, minutescheck)
+            preptime = convert2mins_if_in_hours(temppreptime, minutescheck)
     
     except:
         #print(f"excepted")
         minutescheck = False
-        preptime = convert2mins(temppreptime, minutescheck)
+        preptime = convert2mins_if_in_hours(temppreptime, minutescheck)
     if len(addTime) > 1:
         preptime = int(preptime) + int(addTime[1])
     #print(f"preptime after conversion: {preptime}")
@@ -229,22 +222,22 @@ def get_additional_time(time4recipe):
         if str(cooktime)[3] == 'i':
             #print(f"its in mins3")
             minutescheck = True
-            cooktime = convert2mins(tempcooktime, minutescheck)
+            cooktime = convert2mins_if_in_hours(tempcooktime, minutescheck)
             pass
         elif str(cooktime)[4] == 'i':
             #print(f"its in mins4")
             minutescheck = True
-            cooktime = convert2mins(tempcooktime, minutescheck)
+            cooktime = convert2mins_if_in_hours(tempcooktime, minutescheck)
             pass
         else:
             #print(f"did else")
             minutescheck = False
-            cooktime = convert2mins(tempcooktime, minutescheck)
+            cooktime = convert2mins_if_in_hours(tempcooktime, minutescheck)
     
     except:
         #print(f"excepted")
         minutescheck = False
-        cooktime = convert2mins(tempcooktime, minutescheck)
+        cooktime = convert2mins_if_in_hours(tempcooktime, minutescheck)
     if len(addTime) > 1:
         cooktime = int(cooktime) + int(addTime[1])
     #print(f"cooktime after conversion: {cooktime}")
@@ -266,20 +259,16 @@ def grab_time(altlistofrecipes):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
 
-    times = []
-    for recipe in altlistofrecipes:
-        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))
+    times = []#prepares list of times to be displayed on website
+    for recipe in altlistofrecipes:#cycles through list of recipes
+        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))#get prep, cook and total time for the recipe
         time4recipe = c.fetchall()#2D array, structured like: [(preptime, cooktime, totaltime)]
         time4recipe = time4recipe[0]# (preptime, cooktime, totaltime)
-        # Calculate additional time
-        #print(f"\n\nrecipename: {recipe}\n\n")
-        #print(f"time4recipe: {time4recipe}")
-        addTime = get_additional_time(time4recipe)
-        #print(f"final additional time: {addTime}")
-        time4recipe = list(time4recipe)
-        time4recipe.insert(2, addTime)# at index 2, insert additional time, so its like (preptime, cooktime, addtime, totaltime)
-        times.append(time4recipe)
-    return times
+        addTime = get_additional_time(time4recipe)#calculates additional time by passing in prep, cook and total time
+        time4recipe = list(time4recipe)#converts tuple to list
+        time4recipe.insert(2, addTime)#at index 2, insert additional time, so its like (preptime, cooktime, addtime, totaltime)
+        times.append(time4recipe)#add it to times to be displayed on website
+    return times#return list of times
 
 def grab_url(altlistofrecipes):
     conn = sqlite3.connect("recipes.db")

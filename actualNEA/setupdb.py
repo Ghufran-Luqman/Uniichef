@@ -204,6 +204,9 @@ print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
+c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
+t = c.fetchone()
+print(t)
 
 conn.commit()
 conn.close()
