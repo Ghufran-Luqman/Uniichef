@@ -95,36 +95,12 @@ def grab_nutrition(altlistofrecipes):
             listofnutritions.append(nutrition[0])
     return listofnutritions
 
-def convert2mins_if_in_hours(addTime):
-    if len(str(addTime)) == 1:
-        #this is hours only
-        #print(f"This is hours only")
-        addTime = addTime * 60# converted into minutes
-    elif len(str(addTime)) == 2:
-        #print(f"alr in mins so dont do anything")
-        #already in minutes therefore we don't need to do anything
-        pass
-    elif len(str(addTime)) == 3:
-        #print(f"first digit is hours, last 2 are mins.")
-        #first digit is hours, last 2 are minutes
-        temp = int(addTime[0]) * 60#hours into mins
-        addTime = int(str(addTime)[1:])
-        addTime = addTime + temp#gets total mins
-    
-    elif len(str(addTime)) == 4:
-        #print(f"first 2 digits are hours, last 2 are mins")
-        temp = int(addTime[0]) + int(addTime[1])
-        temp = temp * 60
-        addTime = int(str(addTime[2:]))
-        addTime = addTime + temp
-    else:
-        #print(f"addTime: {addTime}")
-        #print(f"length: {len(str(addTime))}")
-        raise ValueError#shouldnt happen but if it does then programmer/user will be alerted
+def convert2mins(addTime):
+    addTime = addTime * 60# converted into minutes
     return addTime
 
 def get_additional_time(time4recipe):
-    print(f"\n\n\nall: {time4recipe}")
+    #print(f"\n\n\nall: {time4recipe}")
     totaltime = time4recipe[2]#as it's structured like (preptime, cooktime, totaltime)
     addTime = []#prepare list for additional time
     for time in totaltime.split():#since totaltime is a string, this function splits the string into a list
@@ -133,22 +109,22 @@ def get_additional_time(time4recipe):
     #addTime contains all the digits. If there are two numbers then it's in hours and minutes, if there is one then
     #it may only be in hours, or may only be in minutes
     total = addTime[0]#grabs the hours (if any)
-    print(f"totaltime: {totaltime}")
-    print(f"totaltime.split(): {totaltime.split()}")
-    print(f"addtime: {addTime}")
-    print(f"total: {total}")
+    #print(f"totaltime: {totaltime}")
+    #print(f"totaltime.split(): {totaltime.split()}")
+    #print(f"addtime: {addTime}")
+    #print(f"total: {total}")
     if str(totaltime)[3] == 'i' or str(totaltime)[4] == 'i':#checks if 'total' is in mins
-        print("in minutes")
+        #print("in minutes")
         #as its in minutes total time is equal to this amount of mins
         totaltime = addTime[0]
     else:
-        print("in hours")
-        totaltime = convert2mins_if_in_hours(total)#it's in hours therefore convert to minutes
+        #print("in hours")
+        totaltime = convert2mins(total)#it's in hours therefore convert to minutes
     
     if len(addTime) > 1:#if there are any minutes. if the length is 1 then it's in either minutes or hours only
         #otherwise, it is in hours and minutes.
         totaltime = int(totaltime) + int(addTime[1])#adds the hours and minutes to determine total time in minutes.
-    print(f"totaltime: {totaltime}\n")
+    #print(f"totaltime: {totaltime}\n")
 
     #now we've converted total time to minutes
     #repeat for preptime
@@ -164,11 +140,11 @@ def get_additional_time(time4recipe):
         preptime = addTime[0]
     else:
         #in hours
-        preptime = convert2mins_if_in_hours(temppreptime)
+        preptime = convert2mins(temppreptime)
     
     if len(addTime) > 1:
         preptime = int(preptime) + int(addTime[1])
-    print(f"final preptime in minutes: {preptime}")
+    #print(f"final preptime in minutes: {preptime}")
 
     #repeat for cook time
     cooktime = time4recipe[1]
@@ -182,25 +158,24 @@ def get_additional_time(time4recipe):
         cooktime = addTime[0]
     else:
         #in hours
-        cooktime = convert2mins_if_in_hours(tempcooktime)
+        cooktime = convert2mins(tempcooktime)
     
     if len(addTime) > 1:
         cooktime = int(cooktime) + int(addTime[1])
-    print(f"final cooktime in mins: {cooktime}")
+    #print(f"final cooktime in mins: {cooktime}")
 
     cookAndPrep = int(cooktime) + int(preptime)
-    print(f"cooktime and preptime added: {cookAndPrep}")
-    totaltime = int(totaltime)
-    print(f"totaltime: {totaltime}")
+    #print(f"cooktime and preptime added together: {cookAndPrep}")
+    #print(f"totaltime: {totaltime}")
     addTime = totaltime - cookAndPrep
-    print(f"therefore additional time = totaltime - (cooktime + preptime) = {addTime}")
+    #print(f"therefore additional time = totaltime - (cooktime + preptime) = {addTime}")
 
     #convert addTime to hours and minutes
-    if addTime/60 > 1:
+    if addTime/60 >= 1:#if additional time is more than an hour
         hours = addTime // 60
         mins = addTime % 60
         addTime = f"{hours} hrs {mins}"
-    print(f"addTime in hours and mins: {addTime}")
+    #print(f"addTime in hours and mins: {addTime}")
     return addTime
 
 def grab_time(altlistofrecipes):

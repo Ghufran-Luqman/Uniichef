@@ -204,9 +204,16 @@ print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
-c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2")
-t = c.fetchone()
-print(t)
+def grab_category(category):
+    conn = sqlite3.connect("recipes.db")
+    c = conn.cursor()
+    c.execute("SELECT ? FROM tableofrecipes2", (category))
+    result = c.fetchall()
+    return result
+
+category = "recipe_name"
+result = grab_category(category)
+print(result)
 
 conn.commit()
 conn.close()
