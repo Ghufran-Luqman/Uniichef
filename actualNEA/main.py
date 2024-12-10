@@ -171,10 +171,10 @@ def get_additional_time(time4recipe):
     #print(f"therefore additional time = totaltime - (cooktime + preptime) = {addTime}")
 
     #convert addTime to hours and minutes
-    if addTime/60 >= 1:#if additional time is more than an hour
-        hours = addTime // 60
-        mins = addTime % 60
-        addTime = f"{hours} hrs {mins}"
+    if addTime/60 >= 1:#if additional time is more than or equal to an hour
+        hours = addTime // 60#divide but discard remainder
+        mins = addTime % 60#gets remainder of additional time divided by 60 (so the minutes)
+        addTime = f"{hours} hrs {mins}"#concatenates the strings
     #print(f"addTime in hours and mins: {addTime}")
     return addTime
 
