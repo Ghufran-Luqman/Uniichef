@@ -513,14 +513,6 @@ def home():
         session['alert'] = "norecipes"#alert to the user there are no recipes which match their criteria
         session['ingrsearch_history'] = []#reset the ingredient search history
     
-    preptime = request.args.get('preptime')
-    cooktime = request.args.get('cooktime')
-    totaltime = request.args.get('totaltime')
-
-    if preptime:
-        c.execute("SELECT prep_time FROM tableofrecipes2")
-        allpreptime = c.fetchall()
-        #print(f"ALLPREPTIME: {allpreptime}")
 
     session['search_history'] = session['recipesearchname']
 
