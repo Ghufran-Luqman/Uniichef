@@ -19,6 +19,7 @@ body {
 }
 
 .temp {
+    border: 2px solid yellow;
     margin-top: 65px;
     border-radius: 24px;
 }
@@ -44,6 +45,7 @@ body {
 }
 
 .recipebutton {
+    border: 2px solid orange;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -561,6 +563,7 @@ li::marker {
 }
 
 .tempp {
+    border: 2px solid purple;
     position: relative;
     text-align: center;
 }
@@ -662,10 +665,17 @@ li::marker {
 }
 
 .savedlists {
-    position: absolute;
-    top: -20px;
+    color: #033201;
+    font-size: 30px;
+    font-family: Helvetica;
+    font-weight: 400;
+    position: relative;
+    top: 0px;
+    left: 0px;
     text-align: center;
+    z-index: 99999999px;
 }
+
 
 .submitsearch {
     position: fixed;
@@ -678,4 +688,23 @@ li::marker {
     position: absolute;
     left: 432px;
     top: 17px;
+}
+
+.savedrecipes {
+    border: 2px solid blue;
+    position: absolute;
+    top: 0px;
+    width: 1880px;
+}
+
+.savedlisttitle {
+    position: absolute;
+    top: -35px;
+    right: 580px;
+}
+
+.biggerwidth {
+    border: 2px solid red;
+    left: 0px;
+    width: 5000px;
 }

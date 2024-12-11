@@ -653,9 +653,16 @@ def lists():
     except:#if there was an error produced
         alert = "norecipes"#sets a variable that will later return an error to the user telling them
         #that they have not saved any recipes
+    images = grab_image(recipelist)
+    times = grab_time(recipelist)
+    servings = grab_servings(recipelist)
+    rating = grab_rating(recipelist)
+    cuisine_path = grab_cuisine_path(recipelist)
+    nutrition = grab_nutrition(recipelist)
+    url = grab_url(recipelist)
     c.close()
     conn.close()
-    return render_template("lists.html", username=username, recipelist=recipelist, alert=alert)
+    return render_template("lists.html", username=username, recipelist=recipelist, alert=alert, images=images, times=times, servings=servings, rating=rating, cuisine_path=cuisine_path, nutrition=nutrition, url=url)
 
 
 @app.route('/<username>/<recipename>')
