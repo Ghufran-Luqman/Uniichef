@@ -19,7 +19,6 @@ body {
 }
 
 .temp {
-    border: 2px solid yellow;
     margin-top: 65px;
     border-radius: 24px;
 }
@@ -45,7 +44,6 @@ body {
 }
 
 .recipebutton {
-    border: 2px solid orange;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -563,7 +561,6 @@ li::marker {
 }
 
 .tempp {
-    border: 2px solid purple;
     position: relative;
     text-align: center;
 }
@@ -691,7 +688,6 @@ li::marker {
 }
 
 .savedrecipes {
-    border: 2px solid blue;
     position: absolute;
     top: 0px;
     width: 1880px;
@@ -701,10 +697,4 @@ li::marker {
     position: absolute;
     top: -35px;
     right: 580px;
-}
-
-.biggerwidth {
-    border: 2px solid red;
-    left: 0px;
-    width: 5000px;
 }

@@ -463,11 +463,16 @@ def home():
         elif noOfPrevIngredients == 1:#if there's only one query item
             for recipe in recipesWMatchingIngs:
                 recipesFilteredByIngredient.append(recipe)#add it to list
+
+        temporarySet = set(session['ingrsearch_history'])
+        temporarySet = list(temporarySet)
+        session['ingrsearch_history'] = temporarySet
         try:
             x = recipesFilteredByIngredient[0]#temporary variable tests if an error will be returned
             if len(recipesFilteredByIngredient) > 0:#if there is more than one recipe filtered by ingredients
                 session['alert'] == ""#reset error message
 
+            session['search_history'] = session['recipesearchname']
             if recipesFilteredByName:#if there are any recipes filtered by name
                 if recipesFilteredByName == recipesFilteredByIngredient:#if this list is the same as the list of recipes filtered by ingredient
                     altlistofrecipes = recipesFilteredByName#put it into list to be displayed onto website
@@ -507,14 +512,13 @@ def home():
         except:
             pass#if an error is returned then it will pass
 
+    session['search_history'] = session['recipesearchname']
     if len(recipesFilteredByIngredient) > 0:
         session['alert'] = ""#reset
     elif len(recipesFilteredByIngredient) < 1 and request.args.get('reset') != "reset" and request.args.get('querying') != None:#if they havent clicked the reset button and they havent just loaded the page
         session['alert'] = "norecipes"#alert to the user there are no recipes which match their criteria
         session['ingrsearch_history'] = []#reset the ingredient search history
     
-
-    session['search_history'] = session['recipesearchname']
 
     #same code as before, used again to check if there are any matching recipes between the filters in case an error was returned before.
     if recipesFilteredByIngredient:
