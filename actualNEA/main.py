@@ -184,13 +184,16 @@ def grab_time(altlistofrecipes):
 
     times = []#prepares list of times to be displayed on website
     for recipe in altlistofrecipes:#cycles through list of recipes
-        c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))#get prep, cook and total time for the recipe
-        time4recipe = c.fetchall()#2D array, structured like: [(preptime, cooktime, totaltime)]
-        time4recipe = time4recipe[0]# (preptime, cooktime, totaltime)
-        addTime = get_additional_time(time4recipe)#calculates additional time by passing in prep, cook and total time
-        time4recipe = list(time4recipe)#converts tuple to list
-        time4recipe.insert(2, addTime)#at index 2, insert additional time, so its like (preptime, cooktime, addtime, totaltime)
-        times.append(time4recipe)#add it to times to be displayed on website
+        try:
+            c.execute("SELECT prep_time, cook_time, total_time FROM tableofrecipes2 WHERE recipe_name=?", (recipe,))#get prep, cook and total time for the recipe
+            time4recipe = c.fetchall()#2D array, structured like: [(preptime, cooktime, totaltime)]
+            time4recipe = time4recipe[0]# (preptime, cooktime, totaltime)
+            addTime = get_additional_time(time4recipe)#calculates additional time by passing in prep, cook and total time
+            time4recipe = list(time4recipe)#converts tuple to list
+            time4recipe.insert(2, addTime)#at index 2, insert additional time, so its like (preptime, cooktime, addtime, totaltime)
+            times.append(time4recipe)#add it to times to be displayed on website
+        except:
+            times = "unknown"
     return times#return list of times
 
 def grab_url(altlistofrecipes):
