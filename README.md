@@ -11,4 +11,4 @@ Below is the login page
 ![image](https://github.com/user-attachments/assets/05fb6f32-b427-4f40-937b-ee0dbe885edf)
 
 The latest version is on branch 'zz1'.
-To run, make sure your environment has Flask and SQLite installed, and simply run `python main.py`.
+To run enter the 'actualNEA' directory and make sure your environment has Flask and SQLite installed. Then, simply run `python main.py`.
