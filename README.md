@@ -1,10 +1,10 @@
 A recipe website application which eases the difficulties of cooking with a tight schedule and budget.
 Recipes sourced from Kaggle: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life/data
 
-below is an image of the home page, using some filters
+Below is an image of the home page, using some filters
 ![image](https://github.com/user-attachments/assets/db473965-423b-4756-abd4-4165db8e00b7)
 
-below is an image of the interactive shopping list
+Below is an image of the interactive shopping list
 ![image](https://github.com/user-attachments/assets/c1f91e2c-a2a5-4d9e-b884-38e06d2362c2)
 
 
