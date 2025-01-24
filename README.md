@@ -1,4 +1,3 @@
-A recipe website application which eases the difficulties of cooking with a tight schedule and budget.
 Recipes sourced from Kaggle: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life/data
 
 Below is the home page
