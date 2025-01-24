@@ -204,6 +204,7 @@ print(c.fetchall())
 c.execute("SELECT * FROM ingredients")
 print(c.fetchall())
 '''
+'''
 def grab_category(category):
     conn = sqlite3.connect("recipes.db")
     c = conn.cursor()
@@ -214,6 +215,23 @@ def grab_category(category):
 category = "recipe_name"
 result = grab_category(category)
 print(result)
+'''
+'''
+c.execute("SELECT * FROM users WHERE username=?", ("user1",))
+a = c.fetchall()
+print(f"users table:{a}\n")
 
+c.execute("SELECT * FROM userspecrecipes WHERE userid=?", ("User1",))
+b = c.fetchall()
+print(f"user specific recipes table:{b}\n")
+
+c.execute("SELECT id FROM userspecrecipes WHERE userid=?", ("User1",))
+cc = c.fetchall()
+for id in cc:
+    id = id[0]
+    c.execute("SELECT * FROM ingredients WHERE recipeid=?", (id,))
+    d = c.fetchall()
+    print(f"ingredient list: {d}\n")
+'''
 conn.commit()
 conn.close()
