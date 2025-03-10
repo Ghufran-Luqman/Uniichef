@@ -6,41 +6,45 @@
 
 {% block body %}
 
-<div class="sidebox">
-    <form method="GET" action="/home" spellcheck="false">
+<div class="sidebox"><!--The box on the left side of the page-->
+    <form method="GET" action="/home" spellcheck="false"><!--Allows interaction with backend-->
         <input class="searchwing searchpos" placeholder="Filter with ingredients..." name="ingredientsearch" id="ingredientsearch" autocomplete="off">
+        <!--Above is the input field for the 'filter-by-ingredient' filter-->
         <input type="submit" value="Find" class="reset logout submitsearch filtwIng">
+        <!--Submit button-->
+
         <button id="reset" name="reset" value="reset" type="submit" class="reset resetbtn">Reset All Filters</button>
-        <div class="filtercontainer">
-        <p class="ingredients filtertitle">Filtered Ingredients:</p>
-        <ul>
-        <div class="filtingrds">
-        {% for filter in querying %}
-            <li><p class="ingredients querying">{{ filter }}</p></li>
-        {% endfor %}
-        </div>
-        </ul>
+        <!--Reset button (for all filters)-->
+
+        <div class="filtercontainer"><!--Container with the filtered ingredients list-->
+            <p class="ingredients filtertitle">Filtered Ingredients:</p>
+            <ul><!--Make unordered list (so they will appear as bullet points)-->
+                <div class="filtingrds">
+                    {% for filter in querying %}<!--Query through each ingredient-->
+                        <li><p class="ingredients querying">{{ filter }}</p></li>
+                    {% endfor %}
+                </div>
+            </ul>
         </div>
 
-        <div class="namescontainer">
-        <p class="ingredients filtertitle names">Filtered Names:</p>
-        <div class="historysearch">
-        <ul>
-        {% if search_history %}
-        <li><p class="ingredients querying">{{ search_history }}</p></li>
-        {% endif %}
-        </ul>
+        <div class="namescontainer"><!--Container with the filtered recipe names list-->
+            <p class="ingredients filtertitle names">Filtered Names:</p>
+            <div class="historysearch">
+                <ul>
+                    {% if search_history %}
+                    <li><p class="ingredients querying">{{ search_history }}</p></li><!--Display the recipe name being filtered-->
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        </div>
-
     </form>
-    <form action="/lists">
+    
+    <form action="/lists"><!--Button to redirect the user-->
         <button class="reset seelists">View Saved Recipes</button>
     </form>
-
-
 </div>
 
+<!--Below is checking for errors-->
 {% if alert == "norecipes" %}
 <script>
     alert("There are no recipes with that ingredient.")
@@ -79,30 +83,30 @@
 {% endif %}
 
 
-<input type="checkbox" id="toggler" class="invis"/>
 <form method="GET" action="/home" spellcheck="false">
     <input type="text" id="recipesearchname" autocomplete="off" name="recipesearchname" class="search" placeholder="Search recipe...">
-    <input type="submit" value="Find" class="reset logout submitsearch">
+    <!--Above is the input field for the 'filter-by-name' filter-->
+    <input type="submit" value="Find" class="reset logout submitsearch"><!--Submit button-->
 </form>
 
-<p class="ingredients username">Welcome, {{ username }}!</p>
+<p class="ingredients username">Welcome, {{ username }}!</p><!--User welcome message-->
 
-<form action="logout">
-<button class="reset logout" id="logout" type='submit' name="logout">Logout</button>
+<form action="logout"><!--Redirects user to logout URL when clicked (which logs them out)-->
+    <button class="reset logout" id="logout" type='submit' name="logout">Logout</button><!--Logout button-->
 </form>
 
-<div class="temp" id="recipes">
+<div class="temp" id="recipes"><!--Container with the recipes-->
 <form>
-{% set count = namespace(value=-1) %}
-{% for item in recipesToBeDisplayed %}
-    {% set count.value = count.value + 1 %}
-    <div class="container2" style="overflow:hidden">
-        <a class="link" href="/{{ item }}">
-            <div class="tempp">
-                <button class="recipebutton" type="button">
-                    <p class="biggertext">{{ item }}</p>
-                    <img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100">
-                    <p class="customfont preptime">Preparation Time: {{ times[count.value][0] }}</p>
+{% set count = namespace(value=-1) %}<!--Set a count-->
+{% for item in recipesToBeDisplayed %}<!--Query through recipes to be displayed-->
+    {% set count.value = count.value + 1 %}<!--Increment count-->
+    <div class="container2" style="overflow:hidden"><!--Another container for the green border of the recipe-->
+        <a class="link" href="/{{ item }}"><!--When the user clicks on a recipe, it will redirect them to the recipe's page-->
+            <div class="tempp"><!--Another container for the transparent button and the recipe details on the button-->
+                <button class="recipebutton" type="button"><!--Transparent button-->
+                    <p class="biggertext">{{ item }}</p><!--Name of recipe-->
+                    <img class='image' src="{{ images[count.value] }}" alt="not working" width="100" height="100"><!--Image of recipe-->
+                    <p class="customfont preptime">Preparation Time: {{ times[count.value][0] }}</p><!--Preparation time of recipe (the rest of these are self-explanatory)-->
                     <p class="customfont cooktime">Cooking Time: {{ times[count.value][1] }}</p>
                     <p class="customfont addtime">Additional Time: {{ times[count.value][2] }} mins</p>
                     <p class="customfont totaltime">Total Time: {{ times[count.value][3] }}</p>
@@ -111,14 +115,16 @@
                     <p class="customfont cuisinepath">Category: {{ cuisine_path[count.value] }}</p>
                     <p class="customfont nutrition">Nutrition: {{ nutrition[count.value] }}</p>
                     <a href="#" onclick="window.open('{{ url[count.value] }}');return false;" class="source"><button class="reset sourcebtn">Source</button></a>
+                    <!--Above is the source button. Using JavaScript it is set to open the link in another tab-->
                     <form>
-                    <button class="reset saveonhomepage" id="saveonhomepage" name="saveonhomepage" value="{{ item }}">Save Recipe</button>
+                        <button class="reset saveonhomepage" id="saveonhomepage" name="saveonhomepage" value="{{ item }}">Save Recipe</button><!--Recipe save button-->
                     </form>
-                </button></div>
+                </button>
+            </div>
         </a>
     </div>
-    <br>
-{% endfor %}
+    <br><!--Gap between recipes-->
+{% endfor %}<!--End the FOR loop-->
 </form>
 </div>
 {% endblock %}

@@ -26,26 +26,29 @@
 {% endif %}
 
 <div class="recipetitle">
-<form>
-<p class="title">{{ recipename }}:</p><button class="reset saverecipe" name="saverecipe" id="saverecipe" value="button"><span class="ingredients buttontext">Add recipe</span></button>
-</form>
+    <form>
+        <p class="title">{{ recipename }}:</p><!--Title of recipe-->
+        <button class="reset saverecipe" name="saverecipe" id="saverecipe" value="button"><!--Recipe save button-->
+            <span class="ingredients buttontext">Add recipe</span>
+        </button>
+    </form>
 </div>
 
-<div class="ingredientlist">
-<p class="ingredients">Ingredients:</p>
-<form method="POST" action="">
-    {% for i in item %}
-    <li style="text-align:left">
-        <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i }}</span>
-    </li>
-{% endfor %}
-</form>
+<div class="ingredientlist"><!--Container of ingredient list-->
+    <p class="ingredients">Ingredients:</p>
+    <form method="POST" action="">
+        {% for i in item %}<!--Cycles through ingredients and displays them individually-->
+        <li style="text-align:left">
+            <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i }}</span>
+        </li>
+    {% endfor %}
+    </form>
 </div>
 
-<div class="ingredientlist instructions">
+<div class="ingredientlist instructions"><!--Container of instructions-->
 <p class="ingredients">Instructions:</p>
 <form method="POST" action="">
-    <ol>
+    <ol><!--Ordered list, so instructions will have a number in front of them that will automatically increment-->
     {% for step in instructions %}
     <li style="text-align:left">
         <span class="ingredients ingrlistitem">{{ step }}</span>
@@ -55,9 +58,10 @@
 </form>
 </div>
 
-<form action="/home">
+<form action="/home"><!--Redirect button-->
     <button class="defaultbutton pos">Home</button>
 </form>
-<img class="recipeimg" src="{{ image }}" alt="NOT WORKING">
+
+<img class="recipeimg" src="{{ image }}" alt="NOT WORKING"><!--Image of recipe-->
 
 {% endblock %}

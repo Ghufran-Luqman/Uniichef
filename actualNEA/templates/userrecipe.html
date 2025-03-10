@@ -5,22 +5,23 @@
 {% endblock %}
 
 {% block body %}
-<p class="title">{{ recipename }}:</p>
-<div class="ingredientlist saved">
-<p class="ingredients">Ingredients:</p>
-<form>
-{% for i in item %}
-    <li style="text-align:left">
-        {% if i[1] == False %}
-            <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">+</button>
-        {% elif i[1] == True %}
-            <span class="ingredients ticked ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">✓</button>
-        {% endif %}
-    </li>
-{% endfor %}
-</form>
+<p class="title">{{ recipename }}:</p><!--Title of recipe-->
+<div class="ingredientlist saved"><!--Same format as recipe.html apart from buttons on the end of ingredients-->
+    <p class="ingredients">Ingredients:</p>
+    <form>
+    {% for i in item %}<!--Cycles through ingredients-->
+        <li style="text-align:left">
+            {% if i[1] == False %}<!--Checks state of ingredient, if it is false (unticked) then ingredient displayed and button displayed with '+'-->
+                <span class="ingredients ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">+</button>
+            {% elif i[1] == True %}<!--if true (ticked), ingredient is displayed as ticked (through the 'ticked' class) and button displayed with tick-->
+                <span class="ingredients ticked ingrlistitem" id="ingredient" name="ingredient">{{ i[0] }} </span><button class="roundbutton" id="pressed" name="pressed" value="{{ i }}">✓</button>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </form>
 </div>
 
+<!--Below is same as recipe.html except recipe save button (as this is an already saved recipe)-->
 <div class="ingredientlist instructions">
     <p class="ingredients">Instructions:</p>
     <form method="POST" action="">
@@ -34,7 +35,7 @@
     </form>
 </div>
 
-<form action="/lists">
+<form action="/lists"><!--Redirect button to previous page (all saved recipes page)-->
     <button class="defaultbutton leftt">Saved Recipes</button>
 </form>
 

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<!--this page will be the basis of all the HTML pages. This way, I don't have to rewrite all of this as it will apply to each page.
+For example, I have set the background colour of this file and this will apply to all pages that use this page using Jinja2-->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        {% block head %}{% endblock %}
+        {% block head %}{% endblock %}<!--this is where the head will be in other pages when they link using Jinja2-->
     </head>
-    <body style="background-color: #EDE6D6;"><!--#252525-->
-        {% block body %}{% endblock %}
+    <body style="background-color: #EDE6D6;">
+        {% block body %}{% endblock %}<!--this is where the body will be in other pages again when they link using Jinja2-->
     </body>
 </html>

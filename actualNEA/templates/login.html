@@ -20,20 +20,21 @@
   alert("Unknown Error")
 </script>
 {% endif %}
+
+<!--Same structure as sign-up page-->
 <div class="container">
-  <p class="title index">Login</p>
-  <div class="loginandsignup fields">
-    <form action="/login" method="POST">
-      <input type="text" id="username" autocomplete="off" name="username" class="signin" placeholder="Username" autofocus><br>
-      <input type="password" id="password" autocomplete="off" name="password" class="signin" placeholder="Password"><br><br>
-      <input type="submit" class="defaultbutton submit"><br>
-    </form>
-</div>
+    <p class="title index">Login</p>
+    <div class="loginandsignup fields">
+      <form action="/login" method="POST">
+        <input type="text" id="username" autocomplete="off" name="username" class="signin" placeholder="Username" autofocus><br>
+        <input type="password" id="password" autocomplete="off" name="password" class="signin" placeholder="Password"><br><br>
+        <input type="submit" class="defaultbutton submit"><br>
+      </form>
+  </div>
 
-
-<div class="loginandsignup">
-<a href="/sign-up"><button class="defaultbutton signupbtn">Sign-Up</button></a>
-<a href="/"><button class="defaultbutton signupbtn">Index</button></a>
-</div>
+  <div class="loginandsignup">
+    <a href="/sign-up"><button class="defaultbutton signupbtn">Sign-Up</button></a>
+    <a href="/"><button class="defaultbutton signupbtn">Index</button></a>
+  </div>
 </div>
 {% endblock %}

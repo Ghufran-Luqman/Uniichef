@@ -7,10 +7,10 @@
 
 
 {% block body %}
-{% if flashmessage == 'notfilledout' %}
+{% if flashmessage == 'notfilledout' %}<!--IF statements using Jinja2 to display errors-->
   <script>
     alert("Please fully fill out all fields.")
-  </script>
+  </script><!--Using the JavaScript alert box as an error-->
 {% elif flashmessage == 'sameusername' %}
   <script>
     alert("There is another account with the same username. Please choose another username.")
@@ -24,21 +24,23 @@
   alert("The passwords do not match.")
 </script>
 {% endif %}
-<div class="container">
-<p class="title index">Sign-Up</p>
-<div class="loginandsignup fields">
-  <form action="/sign-up" method="POST">
-  <input type="text" id="username" name="username" class="signin" autocomplete="off" placeholder="Username" autofocus><br>
-  <input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br>
-  <input type="password" id="confirmpassword" name="confirmpassword" autofill="off" class="signin" placeholder="Confirm password"><br><br>
-  <input type="submit" class="defaultbutton submit"><br>
-  </form>
-</div>
 
-<div class="loginandsignup">
-  <a href="/login"><button class="defaultbutton signupbtn">Login</button></a>
-  <a href="/"><button class="defaultbutton signupbtn">Index</button></a>
-</div>
+
+<div class="container"><!--Container with all the content of the webpage-->
+  <p class="title index">Sign-Up</p><!--Title-->
+  <div class="loginandsignup fields"><!--Container with main input fields (username, password, confirmation password, submit button)-->
+    <form action="/sign-up" method="POST">
+      <input type="text" id="username" name="username" class="signin" autocomplete="off" placeholder="Username" autofocus><br>
+      <input type="password" id="password" name="password" autofill="off" class="signin" placeholder="Password"><br>
+      <input type="password" id="confirmpassword" name="confirmpassword" autofill="off" class="signin" placeholder="Confirm password"><br><br>
+      <input type="submit" class="defaultbutton submit"><br>
+    </form>
+  </div>
+
+  <div class="loginandsignup"><!--Container containing the redirect buttons-->
+    <a href="/login"><button class="defaultbutton signupbtn">Login</button></a>
+    <a href="/"><button class="defaultbutton signupbtn">Index</button></a>
+  </div>
 </div>
 
 {% endblock %}

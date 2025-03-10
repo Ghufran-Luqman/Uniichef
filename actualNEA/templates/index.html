@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
-
-{% block head %}
+<!--The line above takes everything from layout.html so I don't have to rewrite everything from there-->
+{% block head %}<!--This is to put content in the head tag (in the layout.html file)-->
 <link rel="stylesheet" href="../static/maincss.css">
 <title>Uniichef</title>
 {% endblock %}
 
 
-{% block body %}
+{% block body %}<!--This puts content inside the body tag inside the layout.html file-->
 <div class="container">
-<p class="title index">Uniichef</p>
-<p class="title index paragraph">A simple and easy-to-use recipe app, targeted towards busy people who have to cook on a tight schedule and budget.</p>
-<div class="loginandsignup">
-<a href="/sign-up"><button class="defaultbutton">Sign-Up</button></a>
-<a href="/login"><button class="defaultbutton">Login</button></a>
-</div>
+    <p class="title index">Uniichef</p>
+    <p class="title index paragraph">A simple and easy-to-use recipe app, targeted towards busy people who have to cook on a tight schedule and budget.</p>
+    <div class="loginandsignup">
+        <a href="/sign-up"><button class="defaultbutton">Sign-Up</button></a>
+        <a href="/login"><button class="defaultbutton">Login</button></a>
+    </div>
 </div>
 {% endblock %}
